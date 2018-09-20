@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">Car Byke</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+    <string name="error_while_loading_image">Error While loading image</string>
+    <string name="rent_car_bike">RENT CAR / BIKE</string>
+    <string name="car">CAR</string>
+    <string name="bike">BIKE</string>
+    <string name="search_for_cars">Search For Cars</string>
+    <string name="select_your_starting_point">Select your starting point</string>
+    <string name="choose_from">Choose from variety of unique cars for rent</string>
+    <string name="where">Where</string>
+    <string name="from">From</string>
+    <string name="pick_up">Pick up</string>
+    <string name="drop_off">Drop off</string>
+    <string name="until">Until</string>
+</resources>

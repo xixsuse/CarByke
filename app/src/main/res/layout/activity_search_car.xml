@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:fancy="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".SearchCar">
+
+
+    <!--background image with fading effect-->
+    <ImageView
+        android:id="@+id/sc_background_iv"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:background="@drawable/search_car_background_fade"
+        android:scaleX="1.5"
+        android:contentDescription="@string/error_while_loading_image"/>
+
+<!--back button-->
+    <ImageButton
+        android:id="@+id/sc_back_b"
+        android:background="@drawable/ic_return_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:contentDescription="@string/error_while_loading_image" />
+
+    <!--heading-->
+    <TextView
+        android:id="@+id/sc_heading_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/search_for_cars"
+        android:textAllCaps="true"
+        android:textStyle="bold"
+        android:gravity="center"
+        style="@style/CustomTextStyle20Headings"
+        android:textColor="@color/dark_black"
+        android:layout_marginTop="40dp"
+        android:layout_centerHorizontal="true"
+        />
+
+    <!--sub heading-->
+    <TextView
+        android:id="@+id/sc_sub_heading_tv"
+        android:layout_below="@+id/sc_heading_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/choose_from"
+        android:textStyle="bold"
+        android:gravity="center"
+        style="@style/CustomTextStyle16"
+        android:textColor="@color/dark_black"
+        android:layout_marginTop="7dp"
+        android:layout_centerHorizontal="true"
+        />
+
+
+    <!--search car card view-->
+    <android.support.v7.widget.CardView
+        android:layout_below="@+id/sc_sub_heading_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        app:cardBackgroundColor="#90FFFFFF"
+        app:cardCornerRadius="7dp"
+        >
+        <!--relative lay inside card view-->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/cardViewSearchCarPadding"
+            >
+            <!--where-->
+            <TextView
+                android:id="@+id/sc_where_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/where"
+                style="@style/CustomTextStyle12"
+                android:textStyle="bold"
+                />
+            <!--enter location-->
+            <TextView
+                android:id="@+id/sc_set_location_tv"
+                android:layout_below="@+id/sc_where_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/select_your_starting_point"
+                android:textColorHint="@color/black90"
+                style="@style/CustomTextStyle16"
+                android:drawableEnd="@drawable/ic_location"
+                android:layout_marginTop="@dimen/marginTopSearchCarTextView"
+                android:background="@drawable/under_line_textview"
+                android:paddingBottom="@dimen/textViewPaddingBottom"
+                />
+
+
+            <RelativeLayout
+                android:id="@+id/sc_set_time_rl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/sc_set_location_tv"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                >
+
+
+
+                <!--pick up date time relative layout-->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    >
+                    <!--from-->
+                    <TextView
+                        android:id="@+id/sc_from_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/from"
+                        style="@style/CustomTextStyle12"
+                        android:textStyle="bold"
+                        />
+                    <!--pick up date and time-->
+                    <TextView
+                        android:id="@+id/sc_pick_up_time_tv"
+                        android:layout_below="@+id/sc_from_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/pick_up"
+                        style="@style/CustomTextStyle16"
+                        android:padding="@dimen/textViewPaddingBottom"
+                        android:layout_marginTop="@dimen/marginTopSearchCarTextView"
+                        android:background="@drawable/under_line_textview"
+                        android:drawableStart="@drawable/ic_start_date"
+                        android:drawablePadding="@dimen/textViewPaddingBottom"
+                        android:paddingEnd="@dimen/textViewPadding"
+                        tools:ignore="RtlSymmetry" />
+
+                </RelativeLayout>
+
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ic_right_arrow"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerInParent="true"
+                    android:contentDescription="@string/error_while_loading_image" />
+
+
+                <!--drop off date time relative layout-->
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    >
+                    <!--until-->
+                    <TextView
+                        android:id="@+id/sc_until_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/until"
+                        style="@style/CustomTextStyle12"
+                        android:textStyle="bold"
+                        android:layout_alignParentEnd="true"
+                        />
+                    <!--pick up date and time-->
+                    <TextView
+                        android:id="@+id/sc_drop_off_time_tv"
+                        android:layout_below="@+id/sc_until_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/drop_off"
+                        style="@style/CustomTextStyle16"
+                        android:padding="@dimen/textViewPaddingBottom"
+                        android:layout_marginTop="@dimen/marginTopSearchCarTextView"
+                        android:background="@drawable/under_line_textview"
+                        android:drawableStart="@drawable/ic_time_end_disabled"
+                        android:drawablePadding="@dimen/textViewPaddingBottom"
+                        android:paddingEnd="@dimen/textViewPadding"
+                        android:layout_alignParentEnd="true"
+                        tools:ignore="RtlSymmetry"
+                        android:textColorHint="@color/lightCoral"
+                        android:enabled="false"
+                        />
+
+                </RelativeLayout>
+
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/sc_calculated_days_tv"
+                android:layout_below="@+id/sc_set_time_rl"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/CustomTextStyle12"
+                android:textColor="@color/black90"
+                android:visibility="gone"
+                />
+
+            <!--find cars button-->
+            <mehdi.sakout.fancybuttons.FancyButton
+                android:id="@+id/btn_spotify"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="10dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:paddingTop="10dp"
+                fancy:fb_borderColor="#FFFFFF"
+                fancy:fb_borderWidth="1dp"
+                fancy:fb_defaultColor="@color/googleGreen"
+                fancy:fb_focusColor="#9bd823"
+                fancy:fb_iconPosition="left"
+                fancy:fb_radius="4dp"
+                fancy:fb_text="Find Cars"
+                style="@style/CustomTextStyle16"
+                app:fb_textColor="@color/black"
+                android:layout_below="@+id/sc_calculated_days_tv"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                />
+
+
+
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+
+
+
+</RelativeLayout>

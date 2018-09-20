@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".Home"
+    android:background="@color/white"
+    tools:showIn="@layout/app_bar_home">
+
+    <!--background image with fading effect-->
+    <ImageView
+        android:id="@+id/ch_background_iv"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:background="@drawable/home_fade_background"
+        android:scaleType="center"
+        android:contentDescription="@string/error_while_loading_image"/>
+
+    <!--car bike-->
+    <TextView
+        android:id="@+id/ch_carBike_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/CustomTextStyle18"
+        android:textColor="@color/black90"
+        android:textStyle="bold"
+        android:text="@string/rent_car_bike"
+        android:layout_marginTop="130dp"
+        android:layout_marginStart="18dp"
+        />
+
+    <!--card view rent-->
+
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ch_carBike_tv"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        app:cardBackgroundColor="#00000000"
+        app:cardCornerRadius="7dp"
+        >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+
+            <!--centre horizontal line to align both images-->
+            <View
+                android:id="@+id/ch_rent_view"
+                android:layout_width="1dp"
+                android:layout_height="100dp"
+                android:layout_centerInParent="true"
+                android:background="@color/black50"
+                />
+
+            <!--car relative layout-->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toStartOf="@+id/ch_rent_view"
+                android:paddingBottom="12dp"
+                >
+                <!--car image-->
+                <ImageButton
+                    android:id="@+id/ch_car_ib"
+                    android:layout_width="125dp"
+                    android:layout_height="70dp"
+                    android:background="@drawable/car"
+                    android:layout_centerInParent="true"
+                    android:contentDescription="@string/error_while_loading_image" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/car"
+                    style="@style/CustomTextStyle12"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@+id/ch_car_ib"
+                    android:layout_marginTop="32dp"
+                    />
+
+            </RelativeLayout>
+
+            <!--bike relative layout-->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@+id/ch_rent_view"
+                android:paddingBottom="12dp"
+                >
+                <!--bike image-->
+                <ImageButton
+                    android:id="@+id/ch_bike_ib"
+                    android:layout_width="120dp"
+                    android:layout_height="70dp"
+                    android:background="@drawable/bike"
+                    android:layout_centerInParent="true"
+                    android:contentDescription="@string/error_while_loading_image" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/bike"
+                    style="@style/CustomTextStyle12"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@+id/ch_bike_ib"
+                    android:layout_marginTop="32dp"
+                    />
+
+            </RelativeLayout>
+
+
+
+
+        </RelativeLayout>
+
+
+    </android.support.v7.widget.CardView>
+
+        <!--<RelativeLayout-->
+            <!--android:layout_below="@+id/ch_carBike_tv"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:background="@drawable/corner_rectangle_rent_home"-->
+            <!--android:layout_marginStart="@dimen/activity_horizontal_margin"-->
+            <!--android:layout_marginEnd="@dimen/activity_horizontal_margin"-->
+            <!--&gt;-->
+
+            <!--&lt;!&ndash;centre horizontal line to align both images&ndash;&gt;-->
+           <!--<View-->
+               <!--android:id="@+id/ch_rent_view"-->
+               <!--android:layout_width="1dp"-->
+               <!--android:layout_height="100dp"-->
+               <!--android:layout_centerInParent="true"-->
+               <!--android:background="@color/black50"-->
+               <!--/>-->
+
+            <!--&lt;!&ndash;car relative layout&ndash;&gt;-->
+            <!--<RelativeLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_toStartOf="@+id/ch_rent_view"-->
+                <!--android:paddingBottom="12dp"-->
+                <!--&gt;-->
+                <!--&lt;!&ndash;car image&ndash;&gt;-->
+                <!--<ImageButton-->
+                    <!--android:id="@+id/ch_car_iv"-->
+                    <!--android:layout_width="100dp"-->
+                    <!--android:layout_height="100dp"-->
+                    <!--android:background="@drawable/ic_automobile"-->
+                    <!--android:layout_centerInParent="true"-->
+                    <!--android:contentDescription="@string/error_while_loading_image" />-->
+
+                <!--<TextView-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:text="@string/car"-->
+                    <!--style="@style/CustomTextStyle12"-->
+                    <!--android:layout_centerHorizontal="true"-->
+                    <!--android:layout_below="@+id/ch_car_iv"-->
+                    <!--/>-->
+
+            <!--</RelativeLayout>-->
+
+            <!--&lt;!&ndash;bike relative layout&ndash;&gt;-->
+            <!--<RelativeLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_toEndOf="@+id/ch_rent_view"-->
+                <!--android:paddingBottom="12dp"-->
+                <!--&gt;-->
+                <!--&lt;!&ndash;bike image&ndash;&gt;-->
+                <!--<ImageButton-->
+                    <!--android:id="@+id/ch_bike_iv"-->
+                    <!--android:layout_width="100dp"-->
+                    <!--android:layout_height="100dp"-->
+                    <!--android:background="@drawable/ic_motor_sports"-->
+                    <!--android:layout_centerInParent="true"-->
+                    <!--android:contentDescription="@string/error_while_loading_image" />-->
+
+                <!--<TextView-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:text="@string/bike"-->
+                    <!--style="@style/CustomTextStyle12"-->
+                    <!--android:layout_centerHorizontal="true"-->
+                    <!--android:layout_below="@+id/ch_bike_iv"-->
+                    <!--/>-->
+
+            <!--</RelativeLayout>-->
+
+
+
+
+        <!--</RelativeLayout>-->
+
+
+
+</RelativeLayout>

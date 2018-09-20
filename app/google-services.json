@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "646736605644",
+    "firebase_url": "https://carbyke-a3301.firebaseio.com",
+    "project_id": "carbyke-a3301",
+    "storage_bucket": "carbyke-a3301.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:646736605644:android:bf65d6fe46dec0b7",
+        "android_client_info": {
+          "package_name": "com.carbyke.carbyke"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "646736605644-72mf47u55c292tn5sv0k55v7cv8l6rk7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.carbyke.carbyke",
+            "certificate_hash": "a137f9181f9925423b3b865bfac3df4d7d487955"
+          }
+        },
+        {
+          "client_id": "646736605644-s7sbm551sham2813rdq6qhsvs0130fdi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAfEnF7djopdrL_zwpDglgqxyvdD44S4Co"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "646736605644-s7sbm551sham2813rdq6qhsvs0130fdi.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
