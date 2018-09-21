@@ -18,4 +18,9 @@
     <string name="pick_up">Pick up</string>
     <string name="drop_off">Drop off</string>
     <string name="until">Until</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="select_your_location">Select your location</string>
+    <string name="search">Search pick-up location</string>
 </resources>

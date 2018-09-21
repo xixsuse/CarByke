@@ -15,10 +15,9 @@
         android:layout_width="match_parent"
         android:layout_height="300dp"
         android:background="@drawable/search_car_background_fade"
-        android:scaleX="1.5"
         android:contentDescription="@string/error_while_loading_image"/>
 
-<!--back button-->
+    <!--back button-->
     <ImageButton
         android:id="@+id/sc_back_b"
         android:background="@drawable/ic_return_back"
@@ -204,20 +203,20 @@
 
             <!--find cars button-->
             <mehdi.sakout.fancybuttons.FancyButton
-                android:id="@+id/btn_spotify"
+                android:id="@+id/sc_search_b"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingBottom="10dp"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
                 android:paddingTop="10dp"
-                fancy:fb_borderColor="#FFFFFF"
+                fancy:fb_borderColor="@color/light_steel_blue"
                 fancy:fb_borderWidth="1dp"
-                fancy:fb_defaultColor="@color/googleGreen"
+                fancy:fb_defaultColor="@color/light_steel_blue"
                 fancy:fb_focusColor="#9bd823"
                 fancy:fb_iconPosition="left"
                 fancy:fb_radius="4dp"
-                fancy:fb_text="Find Cars"
+                fancy:fb_text="FIND CARS"
                 style="@style/CustomTextStyle16"
                 app:fb_textColor="@color/black"
                 android:layout_below="@+id/sc_calculated_days_tv"

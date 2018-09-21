@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".PickUpLocation"
+    android:background="@color/white"
+    >
+
+   <EditText
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       style="@style/CustomTextStyle16"
+       android:padding="@dimen/textViewPadding"
+       android:hint="@string/search"
+       android:background="@color/black10"
+       android:inputType="text"
+       />
+
+
+
+</FrameLayout>

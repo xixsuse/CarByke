@@ -24,7 +24,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         style="@style/CustomTextStyle18"
-        android:textColor="@color/black90"
+        android:textColor="@color/dark_black"
         android:textStyle="bold"
         android:text="@string/rent_car_bike"
         android:layout_marginTop="130dp"
@@ -68,11 +68,13 @@
                 <!--car image-->
                 <ImageButton
                     android:id="@+id/ch_car_ib"
-                    android:layout_width="125dp"
-                    android:layout_height="70dp"
+                    android:layout_width="150dp"
+                    android:layout_height="65dp"
                     android:background="@drawable/car"
                     android:layout_centerInParent="true"
-                    android:contentDescription="@string/error_while_loading_image" />
+                    android:contentDescription="@string/error_while_loading_image"
+                    android:layout_marginTop="5dp"
+                    />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -81,7 +83,8 @@
                     style="@style/CustomTextStyle12"
                     android:layout_centerHorizontal="true"
                     android:layout_below="@+id/ch_car_ib"
-                    android:layout_marginTop="32dp"
+                    android:layout_marginTop="44dp"
+                    android:textStyle="bold"
                     />
 
             </RelativeLayout>
@@ -109,7 +112,8 @@
                     style="@style/CustomTextStyle12"
                     android:layout_centerHorizontal="true"
                     android:layout_below="@+id/ch_bike_ib"
-                    android:layout_marginTop="32dp"
+                    android:layout_marginTop="44dp"
+                    android:textStyle="bold"
                     />
 
             </RelativeLayout>

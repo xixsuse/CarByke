@@ -1,6 +1,7 @@
 package com.carbyke.carbyke;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -16,12 +17,16 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
+import mehdi.sakout.fancybuttons.FancyButton;
+
 public class SearchCar extends AppCompatActivity implements View.OnClickListener {
 
     private ImageView background_iv;
     private ImageButton back_btn;
+    FancyButton search_b;
     private TextView pick_up_time_tv, drop_off_time_tv, calculated_days_or_hours;
     Date date_to_be_set_for_drop_off, date_to_be_set_for_pick_up;
+    private TextView set_location_tv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +38,8 @@ public class SearchCar extends AppCompatActivity implements View.OnClickListener
         pick_up_time_tv = findViewById(R.id.sc_pick_up_time_tv);
         drop_off_time_tv = findViewById(R.id.sc_drop_off_time_tv);
         calculated_days_or_hours = findViewById(R.id.sc_calculated_days_tv);
+        search_b = findViewById(R.id.sc_search_b);
+        set_location_tv = findViewById(R.id.sc_set_location_tv);
 
         date_to_be_set_for_pick_up = new Date();
 
@@ -41,6 +48,8 @@ public class SearchCar extends AppCompatActivity implements View.OnClickListener
         back_btn.setOnClickListener(this);
         pick_up_time_tv.setOnClickListener(this);
         drop_off_time_tv.setOnClickListener(this);
+        search_b.setOnClickListener(this);
+        set_location_tv.setOnClickListener(this);
 
     }
 
@@ -61,6 +70,11 @@ public class SearchCar extends AppCompatActivity implements View.OnClickListener
 
         int id = view.getId();
         switch (id){
+//            search button
+            case R.id.sc_set_location_tv:
+                startActivity(new Intent(SearchCar.this, ChooseLocation.class));
+                break;
+
 //            back button
             case R.id.sc_back_b:
                 super.onBackPressed();
@@ -135,7 +149,7 @@ public class SearchCar extends AppCompatActivity implements View.OnClickListener
                         drop_off_time_tv.setBackgroundResource(R.drawable.corner_rectangle_rent_home);
                         drop_off_time_tv.setText(day.format(date_to_be_set_for_drop_off)+"\n"+dateMonthYear.format(date_to_be_set_for_drop_off)+"\n"+time.format(date_to_be_set_for_drop_off));
 
-                        Toast.makeText(SearchCar.this, "drop off time updated.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(SearchCar.this, "drop off time updated...", Toast.LENGTH_LONG).show();
                     }
                 }
 
@@ -160,19 +174,20 @@ public class SearchCar extends AppCompatActivity implements View.OnClickListener
                 if (!TextUtils.isEmpty(pick_up_time_tv.getText().toString()) && !TextUtils.isEmpty(drop_off_time_tv.getText().toString())){
                     SetCalculatedDaysOrHours();
                 }
-            }
+            } // onPos ends
 
+//            function
             private boolean checkIfPickTimeIsNotLessThanCurrentTime(Date date) {
                 return date.compareTo(new Date()) < 0;
             }
-
+// function
             private boolean checkIfPickTimeIsNotGreaterThanDropOffTime(Date date) {
                 return date.compareTo(date_to_be_set_for_drop_off) > 0;
             }
 
             @Override
             public void onNegativeButtonClick(Date date) {
-                date_to_be_set_for_pick_up = new Date();
+                //date_to_be_set_for_pick_up = new Date();
                 // Date is get on negative button click
             }
 
@@ -209,7 +224,7 @@ public class SearchCar extends AppCompatActivity implements View.OnClickListener
 
                 if (checkIfDropOffTimeIsNotLessThanPickUpTime(date)){
                     drop_off_time_tv.callOnClick();
-                    Toast.makeText(SearchCar.this, "Drop off time can not be earlier than Pick up Time...", Toast.LENGTH_LONG).show();
+                    Toast.makeText(SearchCar.this, "Drop off time can not be earlier/equal to pick-up time...", Toast.LENGTH_LONG).show();
                     return;
                 }
 
@@ -228,7 +243,7 @@ public class SearchCar extends AppCompatActivity implements View.OnClickListener
             }
 
             private boolean checkIfDropOffTimeIsNotLessThanPickUpTime(Date date) {
-                return date.compareTo(date_to_be_set_for_pick_up) < 0;
+                return date.compareTo(date_to_be_set_for_pick_up) < 0 || date.compareTo(date_to_be_set_for_pick_up) == 0;
             }
 
 
@@ -241,6 +256,7 @@ public class SearchCar extends AppCompatActivity implements View.OnClickListener
     }
 //    drop off time
 
+    @SuppressLint("SetTextI18n")
     private void SetCalculatedDaysOrHours(){
         try {
              int time;
