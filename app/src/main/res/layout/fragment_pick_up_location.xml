@@ -5,9 +5,15 @@
     android:layout_height="match_parent"
     tools:context=".PickUpLocation"
     android:background="@color/white"
+    android:orientation="horizontal"
     >
 
+   <RelativeLayout
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content">
+   <!--search-->
    <EditText
+       android:id="@+id/ul_search_et"
        android:layout_width="match_parent"
        android:layout_height="wrap_content"
        style="@style/CustomTextStyle16"
@@ -17,6 +23,13 @@
        android:inputType="text"
        />
 
+   <!--recycler view-->
+   <android.support.v7.widget.RecyclerView
+       android:id="@+id/ch_recyclerView"
+       android:layout_below="@+id/ul_search_et"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+       />
 
-
+   </RelativeLayout>
 </FrameLayout>

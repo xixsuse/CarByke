@@ -1,7 +1,9 @@
 package com.carbyke.carbyke;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -21,6 +23,11 @@ import com.squareup.picasso.Picasso;
 public class Home extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
+
+    SharedPreferences sharedPreferencesAnonymousAuth;
+    private static final String PREF_AU = "pref_au";
+    private static final String STATUS = "status";
+
     private ImageView background_iv;
     private ImageButton car_ib, bike_ib;
 
@@ -29,26 +36,15 @@ public class Home extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-
-
         background_iv = findViewById(R.id.ch_background_iv);
         car_ib = findViewById(R.id.ch_car_ib);
         bike_ib = findViewById(R.id.ch_bike_ib);
 
-       // setBackGroundImage(); //setting background image
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar =  findViewById(R.id.toolbar);
         toolbar.setTitle(""); // setting title to null
         setSupportActionBar(toolbar);
-//
-//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -63,9 +59,22 @@ public class Home extends AppCompatActivity
         bike_ib.setOnClickListener(this);
     }
 
-//    on start
+//    logging in
+    private void AnonymousAuth() {
+        //        anonymously logging in for security and better user experience
+        FirebaseAnonymousAuth firebaseAnonymousAuth = new FirebaseAnonymousAuth(Home.this);
+        firebaseAnonymousAuth.Auth();
+    }
+    //    logging in
+
+
+    //    on start
     public void onStart(){
         super.onStart();
+        sharedPreferencesAnonymousAuth = getSharedPreferences(PREF_AU, MODE_PRIVATE);
+        if (!TextUtils.equals(sharedPreferencesAnonymousAuth.getString(STATUS, ""), "success")){
+            AnonymousAuth();
+        }
 
     }
 //    on Start
