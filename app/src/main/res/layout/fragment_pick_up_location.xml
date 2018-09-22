@@ -20,16 +20,31 @@
        android:padding="@dimen/textViewPadding"
        android:hint="@string/search"
        android:background="@color/black10"
-       android:inputType="text"
+       android:inputType="textCapWords"
+       android:drawableStart="@drawable/ic_search"
+       android:drawablePadding="7dp"
        />
 
    <!--recycler view-->
    <android.support.v7.widget.RecyclerView
-       android:id="@+id/ch_recyclerView"
+       android:id="@+id/ul_recyclerView"
        android:layout_below="@+id/ul_search_et"
        android:layout_width="match_parent"
        android:layout_height="match_parent"
        />
+
+      <Button
+          android:id="@+id/ul_continue_b"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_alignParentBottom="true"
+          android:text="@string/cont"
+          style="@style/CustomTextStyle18"
+          android:gravity="center"
+          android:padding="@dimen/textViewPadding"
+          android:enabled="false"
+          android:background="@color/gray"
+          />
 
    </RelativeLayout>
 </FrameLayout>

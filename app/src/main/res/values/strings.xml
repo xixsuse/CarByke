@@ -24,4 +24,5 @@
     <string name="select_your_location">Select your location</string>
     <string name="search">Search pick-up location</string>
     <string name="ok" />
+    <string name="cont">CONTINUE</string>
 </resources>

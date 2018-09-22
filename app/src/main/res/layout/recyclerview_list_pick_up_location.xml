@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/rlo_relativeLayout"
+        android:background="@color/white"
+
+        xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--station name-->
+    <TextView
+        android:id="@+id/rul_base_name_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/CustomTextStyle16"
+        android:textColor="@color/gray"
+        android:padding="@dimen/pickUpTextViewPadding"
+        android:paddingEnd="8dp"
+        tools:ignore="RelativeOverlap,RtlSymmetry" />
+
+    <ImageButton
+        android:id="@+id/rul_tick_ib"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        android:background="@drawable/tick"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:contentDescription="@string/error_while_loading_image"
+        android:visibility="gone"
+        />
+
+    <!--horizontal line-->
+   <View
+       android:layout_below="@+id/rul_base_name_tv"
+       android:layout_width="match_parent"
+       android:layout_height="1dp"
+       android:background="@color/gray10"
+       />
+
+
+</RelativeLayout>
+

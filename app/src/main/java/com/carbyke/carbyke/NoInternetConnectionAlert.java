@@ -24,9 +24,8 @@ public class NoInternetConnectionAlert {
                     .icon(context.getResources().getDrawable(R.drawable.ic_no_internet_connection))
                     .contentColor(context.getResources().getColor(R.color.black))
                     .backgroundColor(context.getResources().getColor(R.color.white))
-                    .positiveColor(context.getResources().getColor(R.color.red))
-                    .positiveText(R.string.ok)
-                    .cancelable(false)
+                    .positiveColor(context.getResources().getColor(R.color.black))
+                    .positiveText("Okay")
                     .show();
         }
         catch (Exception e){

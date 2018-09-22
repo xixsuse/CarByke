@@ -96,7 +96,7 @@
                 android:drawableEnd="@drawable/ic_location"
                 android:layout_marginTop="@dimen/marginTopSearchCarTextView"
                 android:background="@drawable/under_line_textview"
-                android:paddingBottom="@dimen/textViewPaddingBottom"
+                android:padding="@dimen/textViewPadding"
                 />
 
 

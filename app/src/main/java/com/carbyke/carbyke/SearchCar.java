@@ -1,15 +1,21 @@
 package com.carbyke.carbyke;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.kunzisoft.switchdatetime.SwitchDateTimeDialogFragment;
 import com.squareup.picasso.Picasso;
 import java.text.SimpleDateFormat;
@@ -28,6 +34,10 @@ public class SearchCar extends AppCompatActivity implements View.OnClickListener
     Date date_to_be_set_for_drop_off, date_to_be_set_for_pick_up;
     private TextView set_location_tv;
 
+    SharedPreferences sharedPreferencesLocation;
+    private static final String LOCATION = "location";
+    private static final String STATION = "station";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +53,8 @@ public class SearchCar extends AppCompatActivity implements View.OnClickListener
 
         date_to_be_set_for_pick_up = new Date();
 
+        sharedPreferencesLocation = getSharedPreferences(LOCATION, Context.MODE_PRIVATE);
+
         //setImages();
 
         back_btn.setOnClickListener(this);
@@ -53,7 +65,22 @@ public class SearchCar extends AppCompatActivity implements View.OnClickListener
 
     }
 
-//    setting images
+    public void onStart(){
+        super.onStart();
+        setLocation();
+    }
+
+//    setting location from shared pref
+    private void setLocation() {
+        String station = sharedPreferencesLocation.getString(STATION, "");
+        if (!TextUtils.isEmpty(station)){
+            set_location_tv.setBackgroundResource(R.drawable.corner_rectangle_rent_home);
+            set_location_tv.setText(station);
+        }
+    }
+//
+
+    //    setting images
     private void setImages() {
         Picasso.with(SearchCar.this)
                 .load(R.drawable.search_car_background_fade)
@@ -71,6 +98,13 @@ public class SearchCar extends AppCompatActivity implements View.OnClickListener
         int id = view.getId();
         switch (id){
 //            search button
+            case R.id.sc_search_b:
+                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+                String key = databaseReference.push().getKey();
+                Log.w("mypushkey", "key: "+key);
+                break;
+
+//            set location
             case R.id.sc_set_location_tv:
                 startActivity(new Intent(SearchCar.this, ChooseLocation.class));
                 break;
