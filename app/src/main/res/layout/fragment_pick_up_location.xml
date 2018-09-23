@@ -18,7 +18,7 @@
        android:layout_height="wrap_content"
        style="@style/CustomTextStyle16"
        android:padding="@dimen/textViewPadding"
-       android:hint="@string/search"
+       android:hint="@string/search_pick_up"
        android:background="@color/black10"
        android:inputType="textCapWords"
        android:drawableStart="@drawable/ic_search"

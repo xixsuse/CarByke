@@ -1,12 +1,15 @@
 package com.carbyke.carbyke;
 
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +26,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.roger.catloadinglibrary.CatLoadingView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -30,6 +34,12 @@ import java.util.List;
  * A simple {@link Fragment} subclass.
  */
 public class PickUpLocation extends Fragment{
+
+    private SharedPreferences sharedPreferencesStationDataOffline;
+    private static final String STATION_DATA_PREF = "station_data_pref";
+    private static final String STATION_NAME = "name";
+    private static final String COUNT = "count";
+    int station_count = 0;
 
     private RecyclerView recyclerView;
     private View view;
@@ -65,6 +75,14 @@ public class PickUpLocation extends Fragment{
         // Setting RecyclerView layout as LinearLayout.
         recyclerView.setLayoutManager(mLayoutManager);
         catLoadingView = new CatLoadingView();
+
+        try {
+            sharedPreferencesStationDataOffline = getActivity().getSharedPreferences(STATION_DATA_PREF, Context.MODE_PRIVATE);
+        }
+        catch (NullPointerException e){
+            e.printStackTrace();
+        }
+
 
 
         continue_b.setOnClickListener(new View.OnClickListener() {
@@ -109,7 +127,8 @@ public class PickUpLocation extends Fragment{
 //    on start
     public void onStart(){
         super.onStart();
-        LoadData();
+        LoadStationDataFromPrefs();
+       // LoadData();
     }
 //    on start
 
@@ -154,23 +173,24 @@ public class PickUpLocation extends Fragment{
 
     //check internet connection and load data
     private void LoadData() {
+        FetchData();
         //catLoadingView.show(getActivity().getSupportFragmentManager(), "");
-        new CheckNetworkConnection(getActivity(), new CheckNetworkConnection.OnConnectionCallback() {
-            @Override
-            public void onConnectionSuccess() {
-
-                FetchData();
-            //    myLoadingCat.dismissCat();
-                //catLoadingView.dismiss();
-            }
-            @Override
-            public void onConnectionFail(String msg) {
-                //catLoadingView.dismiss();
-                NoInternetConnectionAlert noInternetConnectionAlert = new NoInternetConnectionAlert(getActivity());
-                noInternetConnectionAlert.DisplayNoInternetConnection();
-            }
-        }).execute();
-    }
+//        new CheckNetworkConnection(getActivity(), new CheckNetworkConnection.OnConnectionCallback() {
+//            @Override
+//            public void onConnectionSuccess() {
+//
+//                FetchData();
+//            //    myLoadingCat.dismissCat();
+//                //catLoadingView.dismiss();
+//            }
+//            @Override
+//            public void onConnectionFail(String msg) {
+//                //catLoadingView.dismiss();
+//                NoInternetConnectionAlert noInternetConnectionAlert = new NoInternetConnectionAlert(getActivity());
+//                noInternetConnectionAlert.DisplayNoInternetConnection();
+//            }
+//        }).execute();
+   }
 
 //    fetch data if internet is available
     private void FetchData() {
@@ -181,16 +201,30 @@ public class PickUpLocation extends Fragment{
                     list.clear();  // v v v v important (eliminate duplication of data)
                 }
 
+                SharedPreferences.Editor editor = sharedPreferencesStationDataOffline.edit();
                 for (DataSnapshot postSnapshot : snapshot.getChildren()) {
                     DataForRecyclerView data = postSnapshot.getValue(DataForRecyclerView.class);
                     list.add(data);
+
+                    // storing data in shared pref for offline
+                    try {
+                        editor.putString(String.valueOf(station_count), data.getStation());
+                        station_count++;
+                    }
+                    catch (NullPointerException e){
+                        //
+                    }
+
                 }
+
+                editor.putString(COUNT, String.valueOf(station_count));
+                editor.apply();
 
                 adapter = new PickUpLocationRecyclerViewAdapter(getContext(), list);
                 recyclerView.setAdapter(adapter);
 
                 if (list.isEmpty()){
-
+                    Toast.makeText(getActivity(), "No pick up place available", Toast.LENGTH_SHORT).show();
                 }
                  //   showEmptyPage();
                 //progressDialog.dismiss();
@@ -204,6 +238,29 @@ public class PickUpLocation extends Fragment{
         });
 
     }//    fetch data if internet is available
+
+//    loading data from
+    private void LoadStationDataFromPrefs(){
+        String station;
+        String cs;
+        int ci;
+        cs = sharedPreferencesStationDataOffline.getString(COUNT, "");
+        if (TextUtils.isEmpty(cs)){
+            LoadData();
+            return;
+        }
+        ci = Integer.parseInt(cs);
+        for (int i=0 ; i<= ci ; i++){
+            station = sharedPreferencesStationDataOffline.getString(String.valueOf(ci),"");
+            DataForRecyclerView dataForRecyclerView = new DataForRecyclerView();
+            dataForRecyclerView.setStation(station);
+            list.add(dataForRecyclerView);
+            }
+        Toast.makeText(getContext(), "", Toast.LENGTH_SHORT).show();
+        adapter = new PickUpLocationRecyclerViewAdapter(getContext(), list);
+        recyclerView.setAdapter(adapter);
+        LoadData();
+    }
 
 }//    end
 

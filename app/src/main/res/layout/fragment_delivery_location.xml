@@ -7,9 +7,58 @@
 
 
     <com.google.android.gms.maps.MapView
-        android:id="@+id/mapView"
+        android:id="@+id/dl_mapview"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="2"
+        android:padding="@dimen/textViewPadding"
+        >
+
+
+
+        <EditText
+            android:id="@+id/dl_search_et"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            style="@style/CustomTextStyle16"
+            android:hint="@string/search_location_here"
+            android:textColorHint="@color/gray"
+            android:background="@drawable/rectangle_rent_home"
+            android:padding="7dp"
+            android:layout_weight="1.6"
+            android:drawableStart="@drawable/ic_search"
+            android:drawablePadding="@dimen/textViewPadding"
+            />
+
+
+        <TextView
+            android:id="@+id/dl_search_btn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rectangle_search"
+            style="@style/CustomTextStyle16"
+            android:text="@string/search"
+            android:padding="7dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_weight="0.4"
+            />
+
+    </LinearLayout>
+
+    <!--<fragment-->
+        <!--android:id="@+id/place_autocomplete_fragment"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="50dp"-->
+        <!--android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"-->
+        <!--/>-->
 
 
     <!--<fragment xmlns:android="http://schemas.android.com/apk/res/android"-->
