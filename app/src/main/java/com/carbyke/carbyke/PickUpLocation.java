@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,16 +19,16 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.ybq.android.spinkit.SpinKitView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.roger.catloadinglibrary.CatLoadingView;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 
 /**
@@ -51,8 +52,9 @@ public class PickUpLocation extends Fragment{
     private DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
 
     private static final String PICK_UP_BASE = "pick_up_base";
-    private CatLoadingView catLoadingView;
     public static Button continue_b;
+
+    SpinKitView sv;
 
     public PickUpLocation() {
         // Required empty public constructor
@@ -67,6 +69,7 @@ public class PickUpLocation extends Fragment{
 
         TextView search_et = view.findViewById(R.id.ul_search_et);
         continue_b = view.findViewById(R.id.ul_continue_b);
+        sv = view.findViewById(R.id.dl_spin);
 
         recyclerView = view.findViewById(R.id.ul_recyclerView);
         recyclerView.setHasFixedSize(true);
@@ -74,17 +77,14 @@ public class PickUpLocation extends Fragment{
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         // Setting RecyclerView layout as LinearLayout.
         recyclerView.setLayoutManager(mLayoutManager);
-        catLoadingView = new CatLoadingView();
-
-        try {
-            sharedPreferencesStationDataOffline = getActivity().getSharedPreferences(STATION_DATA_PREF, Context.MODE_PRIVATE);
-        }
-        catch (NullPointerException e){
-            e.printStackTrace();
-        }
 
 
 
+        sharedPreferencesStationDataOffline = Objects.requireNonNull(getActivity()).getSharedPreferences(STATION_DATA_PREF, Context.MODE_PRIVATE);
+
+
+
+//  continue button
         continue_b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -127,7 +127,9 @@ public class PickUpLocation extends Fragment{
 //    on start
     public void onStart(){
         super.onStart();
-        LoadStationDataFromPrefs();
+        CheckConnection();
+        FetchDataOnline();
+      //  LoadStationDataFromPrefs();
        // LoadData();
     }
 //    on start
@@ -156,14 +158,12 @@ public class PickUpLocation extends Fragment{
                 if (list.isEmpty()){
                     Toast.makeText(getContext(), "No Station Available", Toast.LENGTH_SHORT).show();
                 }
-                //   showEmptyPage();
-                //progressDialog.dismiss();
+
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                // Hiding the progress dialog.
-                // progressDialog.dismiss();
+
             }
         });
     }
@@ -172,28 +172,22 @@ public class PickUpLocation extends Fragment{
 
 
     //check internet connection and load data
-    private void LoadData() {
-        FetchData();
-        //catLoadingView.show(getActivity().getSupportFragmentManager(), "");
+    private void CheckConnection() {
 //        new CheckNetworkConnection(getActivity(), new CheckNetworkConnection.OnConnectionCallback() {
 //            @Override
 //            public void onConnectionSuccess() {
 //
-//                FetchData();
-//            //    myLoadingCat.dismissCat();
-//                //catLoadingView.dismiss();
 //            }
 //            @Override
 //            public void onConnectionFail(String msg) {
-//                //catLoadingView.dismiss();
-//                NoInternetConnectionAlert noInternetConnectionAlert = new NoInternetConnectionAlert(getActivity());
-//                noInternetConnectionAlert.DisplayNoInternetConnection();
+//                showNoInternetToast();
 //            }
 //        }).execute();
    }
 
 //    fetch data if internet is available
-    private void FetchData() {
+    private void FetchDataOnline() {
+        show();
         databaseReference.child(PICK_UP_BASE).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -201,24 +195,24 @@ public class PickUpLocation extends Fragment{
                     list.clear();  // v v v v important (eliminate duplication of data)
                 }
 
-                SharedPreferences.Editor editor = sharedPreferencesStationDataOffline.edit();
+                //SharedPreferences.Editor editor = sharedPreferencesStationDataOffline.edit();
                 for (DataSnapshot postSnapshot : snapshot.getChildren()) {
                     DataForRecyclerView data = postSnapshot.getValue(DataForRecyclerView.class);
                     list.add(data);
 
                     // storing data in shared pref for offline
-                    try {
-                        editor.putString(String.valueOf(station_count), data.getStation());
-                        station_count++;
-                    }
-                    catch (NullPointerException e){
-                        //
-                    }
+//                    try {
+//                        editor.putString(String.valueOf(station_count), data.getStation());
+//                        station_count++;
+//                    }
+//                    catch (NullPointerException e){
+//                        //
+//                    }
 
                 }
 
-                editor.putString(COUNT, String.valueOf(station_count));
-                editor.apply();
+//                editor.putString(COUNT, String.valueOf(station_count));
+//                editor.apply();
 
                 adapter = new PickUpLocationRecyclerViewAdapter(getContext(), list);
                 recyclerView.setAdapter(adapter);
@@ -226,12 +220,13 @@ public class PickUpLocation extends Fragment{
                 if (list.isEmpty()){
                     Toast.makeText(getActivity(), "No pick up place available", Toast.LENGTH_SHORT).show();
                 }
-                 //   showEmptyPage();
-                //progressDialog.dismiss();
+            dismiss();
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
+              //  avi.hide();
+
                 // Hiding the progress dialog.
                // progressDialog.dismiss();
             }
@@ -240,27 +235,37 @@ public class PickUpLocation extends Fragment{
     }//    fetch data if internet is available
 
 //    loading data from
-    private void LoadStationDataFromPrefs(){
-        String station;
-        String cs;
-        int ci;
-        cs = sharedPreferencesStationDataOffline.getString(COUNT, "");
-        if (TextUtils.isEmpty(cs)){
-            LoadData();
-            return;
+//    private void LoadStationDataFromPrefs(){
+//        String station;
+//        String cs;
+//        int ci;
+//        cs = sharedPreferencesStationDataOffline.getString(COUNT, "");
+//        if (TextUtils.isEmpty(cs)){
+//            FetchDataOnline();
+//            return;
+//        }
+//        ci = Integer.parseInt(cs);
+//        for (int i=0 ; i < ci ; i++){
+//            station = sharedPreferencesStationDataOffline.getString(String.valueOf(i),"");
+//            DataForRecyclerView dataForRecyclerView = new DataForRecyclerView();
+//            dataForRecyclerView.setStation(station);
+//            list.add(dataForRecyclerView);
+//            }
+//        adapter = new PickUpLocationRecyclerViewAdapter(getContext(), list);
+//        recyclerView.setAdapter(adapter);
+//        FetchDataOnline();
+//    }
+//
+    private void showNoInternetToast(){
+        Toast.makeText(getContext(), "No internet connection detected", Toast.LENGTH_SHORT).show();
         }
-        ci = Integer.parseInt(cs);
-        for (int i=0 ; i<= ci ; i++){
-            station = sharedPreferencesStationDataOffline.getString(String.valueOf(ci),"");
-            DataForRecyclerView dataForRecyclerView = new DataForRecyclerView();
-            dataForRecyclerView.setStation(station);
-            list.add(dataForRecyclerView);
-            }
-        Toast.makeText(getContext(), "", Toast.LENGTH_SHORT).show();
-        adapter = new PickUpLocationRecyclerViewAdapter(getContext(), list);
-        recyclerView.setAdapter(adapter);
-        LoadData();
-    }
+
+        private void show(){
+        sv.setVisibility(View.VISIBLE);
+        }
+        private void dismiss(){
+        sv.setVisibility(View.GONE);
+        }
 
 }//    end
 

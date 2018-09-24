@@ -99,27 +99,27 @@ class NetWorkInfoUtility {
         return isNetworkAvailable;
     }
 
-    private boolean isOnline() {
-        try {
-            HttpURLConnection httpURLConnection =
-                    (HttpURLConnection)(new URL("http://www.google.com").openConnection());
-            httpURLConnection.setRequestProperty("User-Agent", "Test");
-            httpURLConnection.setRequestProperty("Connection", "close");
-            httpURLConnection.setConnectTimeout(5000);
-            httpURLConnection.setReadTimeout(5000);
-            httpURLConnection.connect();
-            return (httpURLConnection.getResponseCode() == 200); // 200 is for success
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
+//    private boolean isOnline() {
+//        try {
+//            HttpURLConnection httpURLConnection =
+//                    (HttpURLConnection)(new URL("http://www.firebase.com").openConnection());
+//            httpURLConnection.setRequestProperty("User-Agent", "Test");
+//            httpURLConnection.setRequestProperty("Connection", "close");
+//            httpURLConnection.setConnectTimeout(7000);
+//            httpURLConnection.setReadTimeout(7000);
+//            httpURLConnection.connect();
+//            return (httpURLConnection.getResponseCode() == 200); // 200 is for success
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            return false;
+//        }
+//    }
 
-  /*  public boolean isOnline() {
-        /*Just to check Time delay
+    private boolean isOnline() {
+       // Just to check Time delay
         Runtime runtime = Runtime.getRuntime();
         try {
-            /*Pinging to Google server
+            //Pinging to Google server
             Process ipProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8");
             int exitValue = ipProcess.waitFor();
             return (exitValue == 0);
@@ -127,5 +127,5 @@ class NetWorkInfoUtility {
             e.printStackTrace();
         }
         return false;
-    }*/
+    }
 }

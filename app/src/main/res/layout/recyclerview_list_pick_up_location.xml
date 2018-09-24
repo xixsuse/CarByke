@@ -22,7 +22,7 @@
         android:id="@+id/rul_tick_ib"
         android:layout_width="18dp"
         android:layout_height="18dp"
-        android:background="@drawable/tick"
+        android:background="@drawable/ic_checked"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
         android:layout_marginEnd="@dimen/activity_horizontal_margin"

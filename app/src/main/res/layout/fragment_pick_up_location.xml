@@ -3,10 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".PickUpLocation"
     android:background="@color/white"
-    android:orientation="horizontal"
-    >
+    android:orientation="horizontal">
 
    <RelativeLayout
        android:layout_width="match_parent"
@@ -45,6 +45,17 @@
           android:enabled="false"
           android:background="@color/gray"
           />
+
+       <!--loading view-->
+       <com.github.ybq.android.spinkit.SpinKitView
+           xmlns:app="http://schemas.android.com/apk/res-auto"
+           android:id="@+id/dl_spin"
+           style="@style/SpinKitView.Small.Circle"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_gravity="center"
+           android:layout_centerInParent="true"
+           app:SpinKit_Color="@color/googleGreen" />
 
    </RelativeLayout>
 </FrameLayout>
