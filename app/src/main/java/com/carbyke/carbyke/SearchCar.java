@@ -80,7 +80,7 @@ public class SearchCar extends AppCompatActivity implements View.OnClickListener
             set_location_tv.setBackgroundResource(R.drawable.corner_rectangle_rent_home);
             set_location_tv.setText(station);
             set_location_tv.setCompoundDrawablesWithIntrinsicBounds(null,null,null,null);
-            where_tv.setTextColor(getResources().getColor(R.color.bookBlue));
+            where_tv.setTextColor(getResources().getColor(R.color.black));
             where_tv.setText(type);
             where_tv.setCompoundDrawablesWithIntrinsicBounds(null,null,getResources().getDrawable(R.drawable.ic_drop_down_arrow),null);
         }

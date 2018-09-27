@@ -55,7 +55,7 @@ public class PickUpLocationRecyclerViewAdapter extends RecyclerView.Adapter<Pick
             holder.base_name_tv.setTextColor(context.getResources().getColor(R.color.black));
             holder.tick_ib.setVisibility(View.VISIBLE);
             PickUpLocation.continue_b.setEnabled(true);
-            PickUpLocation.continue_b.setBackgroundResource(R.color.paleGreen);
+            PickUpLocation.continue_b.setBackgroundResource(R.color.lightGreen);
             sharedPreferencesLocation = context.getSharedPreferences(LOCATION, Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferencesLocation.edit();
             editor.putString(STATION, info.getStation());

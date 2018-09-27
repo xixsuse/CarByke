@@ -15,7 +15,7 @@
         android:id="@+id/dl_charge_extra_tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/black50"
+        android:background="#90323A44"
         style="@style/CustomTextStyle12"
         android:textSize="14sp"
         android:textColor="@color/white"
@@ -92,7 +92,7 @@
         android:textStyle="bold"
         android:gravity="center"
         android:enabled="false"
-        android:background="@color/gray"
+        android:background="@color/buttonDisabledColor"
         />
 
 </RelativeLayout>

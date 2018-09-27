@@ -18,16 +18,27 @@
         android:scaleType="center"
         android:contentDescription="@string/error_while_loading_image"/>
 
+    <!--make your trip-->
+    <TextView
+        android:layout_width="150dp"
+        android:layout_height="43dp"
+        style="@style/CustomTextStyle18"
+        android:background="@drawable/make_your_trip"
+        android:textColor="@color/white"
+        android:layout_marginStart="52dp"
+        android:layout_marginTop="24dp"
+        />
+
     <!--car bike-->
     <TextView
         android:id="@+id/ch_carBike_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         style="@style/CustomTextStyle18"
-        android:textColor="@color/dark_black"
+        android:textColor="@color/darkBlack"
         android:textStyle="bold"
         android:text="@string/rent_car_bike"
-        android:layout_marginTop="130dp"
+        android:layout_marginTop="170dp"
         android:layout_marginStart="@dimen/activity_horizontal_margin"
         />
 

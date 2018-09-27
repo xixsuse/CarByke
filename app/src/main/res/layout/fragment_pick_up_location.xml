@@ -42,7 +42,7 @@
           style="@style/CustomTextStyle18"
           android:gravity="center"
           android:enabled="false"
-          android:background="@color/gray"
+          android:background="@color/buttonDisabledColor"
           android:textColor="@color/white"
           android:textStyle="bold"
           />

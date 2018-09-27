@@ -134,7 +134,7 @@ public class DeliveryLocation extends Fragment {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (!TextUtils.isEmpty(s)){
                     continue_b.setEnabled(true);
-                    continue_b.setBackgroundResource(R.color.paleGreen);
+                    continue_b.setBackgroundResource(R.color.lightGreen);
                 }
                 else continue_b.setEnabled(false);
             }

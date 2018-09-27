@@ -6,8 +6,9 @@
 
 
     <!--My colors-->
-
-    <color name="appColor">#000</color>
+<!--app color blue gray 900-->
+    <color name="appColor">#252B32</color>
+    <color name="chooseLocationBarColor">#323A44</color>
     <color name="transparent">#00000000</color>
     <color name="linen">#FAF0E6</color>
     <color name="whiteSmoke">#F5F5F5</color>
@@ -15,12 +16,12 @@
     <color name="gray">#808080</color>
     <color name="gray10">#10808080</color>
     <color name="dark_gray">#A9A9A9</color>
-    <color name="navajo_white">#90FFDEAD</color>
+    <color name="navajoWhite">#90FFDEAD</color>
     <color name="lavender">#E6E6FA</color>
     <color name="light_steel_blue">#B0C4DE</color>
-    <color name="dim_gray">#696969</color>
+    <color name="dimGray">#696969</color>
     <color name="black90">#90000000</color>
-    <color name="dark_black">#1C1818</color>
+    <color name="darkBlack">#1C1818</color>
     <color name="black10">#10000000</color>
     <color name="black50">#50000000</color>
     <color name="carrot">#ED9121</color>
@@ -32,6 +33,7 @@
     <color name="pink">#FFC0CB</color>
     <color name="lightCoral">#F08080</color>
     <color name="paleGreen">#98FB98</color>
+    <color name="lightGreen">#75B84D</color>
     <color name="oliveDrab">#9ACD32</color>
     <color name="loginButtonColors">#FFFFFF</color>
     <color name="googleGreen">#B6E9B5</color>
@@ -46,5 +48,7 @@
     <color name="green">#3dbb93</color>
     <color name="green80">#803dbb93</color>
     <color name="red">#e25b68</color>
+    <color name="grey200">#f1f1f0</color>
+    <color name="buttonDisabledColor">#9B9B9B</color>
 
 </resources>

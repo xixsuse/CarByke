@@ -12,7 +12,7 @@
     <style name="MyCustomAppTheme" parent="Theme.AppCompat.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/gray</item>
+        <item name="colorPrimaryDark">@color/appColor</item>
         <item name="colorAccent">@color/white</item>
     </style>
 

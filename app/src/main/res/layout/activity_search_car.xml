@@ -14,13 +14,13 @@
         android:id="@+id/sc_background_iv"
         android:layout_width="match_parent"
         android:layout_height="300dp"
-        android:background="@drawable/search_car_background_fade"
+        android:background="@drawable/rig"
         android:contentDescription="@string/error_while_loading_image"/>
 
     <!--back button-->
     <ImageButton
         android:id="@+id/sc_back_b"
-        android:background="@drawable/ic_return_back"
+        android:background="@drawable/ic_return_back_white_smoke"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/activity_vertical_margin"
@@ -37,7 +37,7 @@
         android:textStyle="bold"
         android:gravity="center"
         style="@style/CustomTextStyle20Headings"
-        android:textColor="@color/dark_black"
+        android:textColor="@color/white"
         android:layout_marginTop="40dp"
         android:layout_centerHorizontal="true"
         />
@@ -52,7 +52,7 @@
         android:textStyle="bold"
         android:gravity="center"
         style="@style/CustomTextStyle16"
-        android:textColor="@color/dark_black"
+        android:textColor="@color/white"
         android:layout_marginTop="7dp"
         android:layout_centerHorizontal="true"
         />
@@ -64,8 +64,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:layout_marginStart="@dimen/activity_horizontal_margin"
-        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:layout_marginStart="@dimen/search_module_horizontal_padding"
+        android:layout_marginEnd="@dimen/search_module_horizontal_padding"
         app:cardBackgroundColor="#90FFFFFF"
         app:cardCornerRadius="7dp"
         >
