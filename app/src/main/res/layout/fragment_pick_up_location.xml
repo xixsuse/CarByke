@@ -41,9 +41,10 @@
           android:text="@string/cont"
           style="@style/CustomTextStyle18"
           android:gravity="center"
-          android:padding="@dimen/textViewPadding"
           android:enabled="false"
           android:background="@color/gray"
+          android:textColor="@color/white"
+          android:textStyle="bold"
           />
 
        <!--loading view-->
@@ -55,7 +56,7 @@
            android:layout_height="wrap_content"
            android:layout_gravity="center"
            android:layout_centerInParent="true"
-           app:SpinKit_Color="@color/googleGreen" />
+           app:SpinKit_Color="@color/black" />
 
    </RelativeLayout>
 </FrameLayout>

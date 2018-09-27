@@ -160,6 +160,7 @@ public class Home extends AppCompatActivity
                 startActivity(new Intent(Home.this, SearchCar.class));
                 break;
             case R.id.ch_bike_ib:
+                startActivity(new Intent(Home.this, SearchBike.class));
                 break;
         }
 

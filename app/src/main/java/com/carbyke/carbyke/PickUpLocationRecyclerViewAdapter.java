@@ -23,6 +23,7 @@ public class PickUpLocationRecyclerViewAdapter extends RecyclerView.Adapter<Pick
     SharedPreferences sharedPreferencesLocation;
     private static final String LOCATION = "location";
     private static final String STATION = "station";
+    private static final String TYPE = "type";
     private int selectedPos = RecyclerView.NO_POSITION;
 
     PickUpLocationRecyclerViewAdapter(Context context, List<DataForRecyclerView> TempList) {
@@ -54,10 +55,11 @@ public class PickUpLocationRecyclerViewAdapter extends RecyclerView.Adapter<Pick
             holder.base_name_tv.setTextColor(context.getResources().getColor(R.color.black));
             holder.tick_ib.setVisibility(View.VISIBLE);
             PickUpLocation.continue_b.setEnabled(true);
-            PickUpLocation.continue_b.setBackgroundResource(R.color.googleGreen);
+            PickUpLocation.continue_b.setBackgroundResource(R.color.paleGreen);
             sharedPreferencesLocation = context.getSharedPreferences(LOCATION, Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferencesLocation.edit();
             editor.putString(STATION, info.getStation());
+            editor.putString(TYPE, "SELF PICK-UP");
             editor.apply();
         }
 

@@ -31,7 +31,7 @@
             android:text="@string/select_your_location"
             style="@style/CustomTextStyle16"
             android:textStyle="bold"
-            android:textColor="@color/whiteSmoke"
+            android:textColor="@color/white"
             android:paddingStart="@dimen/activity_horizontal_margin"
             tools:ignore="RtlSymmetry" />
 

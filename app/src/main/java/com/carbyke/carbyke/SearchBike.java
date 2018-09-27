@@ -18,6 +18,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.kunzisoft.switchdatetime.SwitchDateTimeDialogFragment;
 import com.squareup.picasso.Picasso;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -25,7 +26,7 @@ import java.util.concurrent.TimeUnit;
 
 import mehdi.sakout.fancybuttons.FancyButton;
 
-public class SearchCar extends AppCompatActivity implements View.OnClickListener {
+public class SearchBike extends AppCompatActivity implements View.OnClickListener {
 
     private ImageView background_iv;
     private ImageButton back_btn;
@@ -42,16 +43,16 @@ public class SearchCar extends AppCompatActivity implements View.OnClickListener
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search_car);
+        setContentView(R.layout.activity_search_bike);
 
-        background_iv = findViewById(R.id.sc_background_iv);
-        back_btn = findViewById(R.id.sc_back_b);
-        pick_up_time_tv = findViewById(R.id.sc_pick_up_time_tv);
-        drop_off_time_tv = findViewById(R.id.sc_drop_off_time_tv);
-        calculated_days_or_hours = findViewById(R.id.sc_calculated_days_tv);
-        search_b = findViewById(R.id.sc_search_b);
-        set_location_tv = findViewById(R.id.sc_set_location_tv);
-        where_tv = findViewById(R.id.sc_where_tv);
+        background_iv = findViewById(R.id.sb_background_iv);
+        back_btn = findViewById(R.id.sb_back_b);
+        pick_up_time_tv = findViewById(R.id.sb_pick_up_time_tv);
+        drop_off_time_tv = findViewById(R.id.sb_drop_off_time_tv);
+        calculated_days_or_hours = findViewById(R.id.sb_calculated_days_tv);
+        search_b = findViewById(R.id.sb_search_b);
+        set_location_tv = findViewById(R.id.sb_set_location_tv);
+        where_tv = findViewById(R.id.sb_where_tv);
 
         date_to_be_set_for_pick_up = new Date();
 
@@ -64,7 +65,6 @@ public class SearchCar extends AppCompatActivity implements View.OnClickListener
         drop_off_time_tv.setOnClickListener(this);
         search_b.setOnClickListener(this);
         set_location_tv.setOnClickListener(this);
-
     }
 
     public void onStart(){
@@ -72,7 +72,7 @@ public class SearchCar extends AppCompatActivity implements View.OnClickListener
         setLocation();
     }
 
-//    setting location from shared pref
+    //    setting location from shared pref
     private void setLocation() {
         String station = sharedPreferencesLocation.getString(STATION, "");
         if (!TextUtils.isEmpty(station)){
@@ -89,7 +89,7 @@ public class SearchCar extends AppCompatActivity implements View.OnClickListener
 
     //    setting images
     private void setImages() {
-        Picasso.with(SearchCar.this)
+        Picasso.with(SearchBike.this)
                 .load(R.drawable.search_car_background_fade)
                 .fit()
                 .centerCrop()
@@ -98,31 +98,31 @@ public class SearchCar extends AppCompatActivity implements View.OnClickListener
     //    setting images
 
 
-//    onclick
+    //    onclick
     @Override
     public void onClick(View view) {
 
         int id = view.getId();
         switch (id){
 //            search button
-            case R.id.sc_search_b:
+            case R.id.sb_search_b:
                 DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
                 String key = databaseReference.push().getKey();
                 Log.w("mypushkey", "key: "+key);
                 break;
 
 //            set location
-            case R.id.sc_set_location_tv:
-                startActivity(new Intent(SearchCar.this, ChooseLocation.class));
+            case R.id.sb_set_location_tv:
+                startActivity(new Intent(SearchBike.this, ChooseLocation.class));
                 break;
 
 //            back button
-            case R.id.sc_back_b:
+            case R.id.sb_back_b:
                 super.onBackPressed();
                 break;
 
 //                pick up date and time
-            case R.id.sc_pick_up_time_tv:
+            case R.id.sb_pick_up_time_tv:
                 final SwitchDateTimeDialogFragment dateTimeDialogFragment = new SwitchDateTimeDialogFragment();
                 dateTimeDialogFragment.setHighlightAMPMSelection(true);
                 dateTimeDialogFragment.startAtCalendarView();
@@ -144,10 +144,10 @@ public class SearchCar extends AppCompatActivity implements View.OnClickListener
                 }
                 handlePickUpTime(dateTimeDialogFragment);
                 break;
-                //pick up date time
+            //pick up date time
 
             //                drop off date and time
-            case R.id.sc_drop_off_time_tv:
+            case R.id.sb_drop_off_time_tv:
                 if (TextUtils.isEmpty(pick_up_time_tv.getText().toString())){
                     Toast.makeText(this, "Please Select Pick up time first", Toast.LENGTH_SHORT).show();
                 }
@@ -155,14 +155,14 @@ public class SearchCar extends AppCompatActivity implements View.OnClickListener
                     handleDropOffTime();
                 }
                 break;
-                //drop off date time
+            //drop off date time
         }
         //switch
     }
     //   onclick
 
 
-//    pick up time
+    //    pick up time
     private void handlePickUpTime(final SwitchDateTimeDialogFragment dateTimeDialogFragment) {
         dateTimeDialogFragment.setOnButtonClickListener(new SwitchDateTimeDialogFragment.OnButtonClickListener() {
             @SuppressLint({"SetTextI18n", "SimpleDateFormat"})
@@ -171,7 +171,7 @@ public class SearchCar extends AppCompatActivity implements View.OnClickListener
 
                 if (checkIfPickTimeIsNotLessThanCurrentTime(date)){
                     pick_up_time_tv.callOnClick();
-                    Toast.makeText(SearchCar.this, "Pick time can not be earlier than current time...", Toast.LENGTH_LONG).show();
+                    Toast.makeText(SearchBike.this, "Pick time can not be earlier than current time...", Toast.LENGTH_LONG).show();
                     //if (TextUtils.isEmpty(pick_up_time_tv.getText().toString())) date_to_be_set_for_pick_up = new Date();
                     return;
                 }
@@ -190,7 +190,7 @@ public class SearchCar extends AppCompatActivity implements View.OnClickListener
                         drop_off_time_tv.setBackgroundResource(R.drawable.corner_rectangle_rent_home);
                         drop_off_time_tv.setText(day.format(date_to_be_set_for_drop_off)+"\n"+dateMonthYear.format(date_to_be_set_for_drop_off)+"\n"+time.format(date_to_be_set_for_drop_off));
 
-                        Toast.makeText(SearchCar.this, "drop off time updated...", Toast.LENGTH_LONG).show();
+                        Toast.makeText(SearchBike.this, "drop off time updated...", Toast.LENGTH_LONG).show();
                     }
                 }
 
@@ -217,11 +217,11 @@ public class SearchCar extends AppCompatActivity implements View.OnClickListener
                 }
             } // onPos ends
 
-//            function
+            //            function
             private boolean checkIfPickTimeIsNotLessThanCurrentTime(Date date) {
                 return date.compareTo(new Date()) < 0;
             }
-// function
+            // function
             private boolean checkIfPickTimeIsNotGreaterThanDropOffTime(Date date) {
                 return date.compareTo(date_to_be_set_for_drop_off) > 0;
             }
@@ -238,7 +238,7 @@ public class SearchCar extends AppCompatActivity implements View.OnClickListener
 //    pick up time
 
 
-//    drop off time
+    //    drop off time
     private void handleDropOffTime() {
         final SwitchDateTimeDialogFragment dateTimeDialogFragment = new SwitchDateTimeDialogFragment();
         dateTimeDialogFragment.setHighlightAMPMSelection(true);
@@ -265,7 +265,7 @@ public class SearchCar extends AppCompatActivity implements View.OnClickListener
 
                 if (checkIfDropOffTimeIsNotLessThanPickUpTime(date)){
                     drop_off_time_tv.callOnClick();
-                    Toast.makeText(SearchCar.this, "Drop off time can not be earlier/equal to pick-up time...", Toast.LENGTH_LONG).show();
+                    Toast.makeText(SearchBike.this, "Drop off time can not be earlier/equal to pick-up time...", Toast.LENGTH_LONG).show();
                     return;
                 }
 
@@ -300,15 +300,15 @@ public class SearchCar extends AppCompatActivity implements View.OnClickListener
     @SuppressLint("SetTextI18n")
     private void SetCalculatedDaysOrHours(){
         try {
-             int time;
-             String days, hours, minutes;
-             time = (int) TimeUnit.MINUTES.convert(date_to_be_set_for_drop_off.getTime() - date_to_be_set_for_pick_up.getTime(), TimeUnit.MILLISECONDS);
-             days = String.valueOf(time/(24*60));
-             hours = String.valueOf((time%(24*60)) / 60);
-             minutes = String.valueOf((time%(24*60)) % 60);
+            int time;
+            String days, hours, minutes;
+            time = (int) TimeUnit.MINUTES.convert(date_to_be_set_for_drop_off.getTime() - date_to_be_set_for_pick_up.getTime(), TimeUnit.MILLISECONDS);
+            days = String.valueOf(time/(24*60));
+            hours = String.valueOf((time%(24*60)) / 60);
+            minutes = String.valueOf((time%(24*60)) % 60);
 
-             calculated_days_or_hours.setVisibility(View.VISIBLE);
-             calculated_days_or_hours.setText("Note: Car will be rented for "+days+" days, "+ hours+" hours and "+minutes+" minutes.");
+            calculated_days_or_hours.setVisibility(View.VISIBLE);
+            calculated_days_or_hours.setText("Note: Car will be rented for "+days+" days, "+ hours+" hours and "+minutes+" minutes.");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -316,3 +316,4 @@ public class SearchCar extends AppCompatActivity implements View.OnClickListener
 
 //    end
 }
+

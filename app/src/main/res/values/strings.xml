@@ -11,8 +11,10 @@
     <string name="car">CAR</string>
     <string name="bike">BIKE</string>
     <string name="search_for_cars">Search For Cars</string>
+    <string name="search_for_bikes">Search For Bikes</string>
     <string name="select_your_starting_point">Select your starting point</string>
     <string name="choose_from">Choose from variety of unique cars for rent</string>
+    <string name="choose_from_bikes">Choose from variety of unique bikes for rent</string>
     <string name="where">Where</string>
     <string name="from">From</string>
     <string name="pick_up">Pick up</string>

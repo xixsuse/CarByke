@@ -65,6 +65,7 @@ public class DeliveryLocation extends Fragment {
     SharedPreferences sharedPreferencesLocation;
     private static final String LOCATION = "location";
     private static final String STATION = "station";
+    private static final String TYPE = "type";
 
     public DeliveryLocation() {
         // Required empty public constructor
@@ -133,7 +134,7 @@ public class DeliveryLocation extends Fragment {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (!TextUtils.isEmpty(s)){
                     continue_b.setEnabled(true);
-                    continue_b.setBackgroundResource(R.color.googleGreen);
+                    continue_b.setBackgroundResource(R.color.paleGreen);
                 }
                 else continue_b.setEnabled(false);
             }
@@ -184,6 +185,7 @@ public class DeliveryLocation extends Fragment {
                                 sharedPreferencesLocation = getActivity().getSharedPreferences(LOCATION, Context.MODE_PRIVATE);
                                 SharedPreferences.Editor editor = sharedPreferencesLocation.edit();
                                 editor.putString(STATION, address);
+                                editor.putString(TYPE, "DELIVERY");
                                 editor.apply();
                                 getActivity().finish();
                             }
@@ -218,11 +220,12 @@ public class DeliveryLocation extends Fragment {
 
 
                 CameraPosition cameraPosition = new CameraPosition.Builder().target(
-                        new LatLng(31.3260, 75.5762)).zoom(10).build();
+                        new LatLng(31.3260, 75.5762)).zoom(15).build();
                 googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
                 googleMap.getUiSettings().setZoomControlsEnabled(false);
                 googleMap.getUiSettings().setRotateGesturesEnabled(true);
                 googleMap.getUiSettings().setCompassEnabled(true);
+                googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
             }
         });
     }
@@ -253,6 +256,7 @@ public class DeliveryLocation extends Fragment {
                     //.icon(BitmapDescriptorFactory.fromBitmap(resizedBitmap)));
 
         } catch (IOException | ArrayIndexOutOfBoundsException e) {
+            Toast.makeText(getActivity(), ""+e.getMessage(), Toast.LENGTH_SHORT).show();
             e.printStackTrace();
         }
 
@@ -268,7 +272,7 @@ public class DeliveryLocation extends Fragment {
         }else{
 
             try {
-                googleMap.setMyLocationEnabled(true);
+               // googleMap.setMyLocationEnabled(true);
                 String latitude = String.valueOf(getLatitude());
                 String longitude = String.valueOf(getLongitude());
 
@@ -283,7 +287,7 @@ public class DeliveryLocation extends Fragment {
                 googleMap.clear();
                 googleMap.addMarker(new MarkerOptions().position(new LatLng(lat, log)).title(gps_address));
                 googleMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(lat, log)));
-                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat, log), 15.0f));
+                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat, log), 18.0f));
             } catch (IOException | IndexOutOfBoundsException | NullPointerException e) {
                 e.printStackTrace();
                // Toast.makeText(getActivity(), "Something went wrong", Toast.LENGTH_SHORT).show();
@@ -296,7 +300,6 @@ public class DeliveryLocation extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
-                Toast.makeText(getActivity(), "hit", Toast.LENGTH_SHORT).show();
                 Place place = PlaceAutocomplete.getPlace(Objects.requireNonNull(getActivity()), data);
                 search_tv.setText(place.getAddress());
                 googleMap.clear();
@@ -312,9 +315,6 @@ public class DeliveryLocation extends Fragment {
                 // TODO: Handle the error.
               //  Log.i(TAG, status.getStatusMessage());
 
-            } else if (resultCode == RESULT_CANCELED) {
-                // The user canceled the operation.
-                Toast.makeText(getActivity(), "Something unexpected happened", Toast.LENGTH_SHORT).show();
             }
         }
     }
