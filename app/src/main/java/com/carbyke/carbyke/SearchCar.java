@@ -1,9 +1,13 @@
 package com.carbyke.carbyke;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.provider.Settings;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -21,6 +25,7 @@ import com.squareup.picasso.Picasso;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import mehdi.sakout.fancybuttons.FancyButton;
@@ -80,7 +85,7 @@ public class SearchCar extends AppCompatActivity implements View.OnClickListener
             set_location_tv.setBackgroundResource(R.drawable.corner_rectangle_rent_home);
             set_location_tv.setText(station);
             set_location_tv.setCompoundDrawablesWithIntrinsicBounds(null,null,null,null);
-            where_tv.setTextColor(getResources().getColor(R.color.black));
+            where_tv.setTextColor(getResources().getColor(R.color.delPickIndicatorColor));
             where_tv.setText(type);
             where_tv.setCompoundDrawablesWithIntrinsicBounds(null,null,getResources().getDrawable(R.drawable.ic_drop_down_arrow),null);
         }
@@ -123,6 +128,10 @@ public class SearchCar extends AppCompatActivity implements View.OnClickListener
 
 //                pick up date and time
             case R.id.sc_pick_up_time_tv:
+//                if (Settings.Global.getInt(getContentResolver(), Settings.Global.AUTO_TIME, 0) != 1){
+//                    Toast.makeText(this, "Automatic date time disabled", Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
                 final SwitchDateTimeDialogFragment dateTimeDialogFragment = new SwitchDateTimeDialogFragment();
                 dateTimeDialogFragment.setHighlightAMPMSelection(true);
                 dateTimeDialogFragment.startAtCalendarView();

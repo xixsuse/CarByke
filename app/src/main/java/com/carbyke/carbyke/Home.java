@@ -1,5 +1,7 @@
 package com.carbyke.carbyke;
 
+import android.app.Activity;
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -13,8 +15,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
@@ -30,6 +35,7 @@ public class Home extends AppCompatActivity
 
     private ImageView background_iv;
     private ImageButton car_ib, bike_ib;
+    private TextView login_sign_tv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,9 +47,11 @@ public class Home extends AppCompatActivity
         bike_ib = findViewById(R.id.ch_bike_ib);
 
 
+
         Toolbar toolbar =  findViewById(R.id.toolbar);
         toolbar.setTitle(""); // setting title to null
         setSupportActionBar(toolbar);
+
 
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -55,8 +63,12 @@ public class Home extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+//        getting id of nav bar
+        login_sign_tv = navigationView.getHeaderView(0).findViewById(R.id.hh_login_sign);
+
         car_ib.setOnClickListener(this);
         bike_ib.setOnClickListener(this);
+        login_sign_tv.setOnClickListener(this);
     }
 
 //    logging in
@@ -156,11 +168,20 @@ public class Home extends AppCompatActivity
         int id = view.getId();
 
         switch (id){
+//            open search car activity
             case R.id.ch_car_ib:
                 startActivity(new Intent(Home.this, SearchCar.class));
                 break;
+//            open search bike activity
             case R.id.ch_bike_ib:
                 startActivity(new Intent(Home.this, SearchBike.class));
+                break;
+//                sign up or login
+            case R.id.hh_login_sign:
+               // Bundle animation = ActivityOptions.makeCustomAnimation(Home.this, R.anim.fade_in, R.anim.fade_out).toBundle();
+               // startActivity(new Intent(Home.this, Login.class), animation);
+                startActivity(new Intent(Home.this, Login.class));
+                //  getSupportFragmentManager().beginTransaction().add(R.id.fragment_layout_home, new Login()).addToBackStack("login").commit();
                 break;
         }
 

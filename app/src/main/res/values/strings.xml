@@ -31,4 +31,6 @@
     <string name="search">Search</string>
     <string name="rs_300_extra_for_car_delivery_and_collection">Rs 300 extra for car delivery and collection</string>
     <string name="make_your_trip"><i>MAKE YOUR TRIP</i></string>
+    <string name="login_or_sign_up">Login or Sign up</string>
+    <string name="continue_with">Continue with</string>
 </resources>

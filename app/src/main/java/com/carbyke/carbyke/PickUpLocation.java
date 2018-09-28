@@ -225,10 +225,7 @@ public class PickUpLocation extends Fragment{
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-              //  avi.hide();
-
-                // Hiding the progress dialog.
-               // progressDialog.dismiss();
+              dismiss();
             }
         });
 
@@ -260,6 +257,7 @@ public class PickUpLocation extends Fragment{
         Toast.makeText(getContext(), "No internet connection detected", Toast.LENGTH_SHORT).show();
         }
 
+//        spin kit loading methods
         private void show(){
         sv.setVisibility(View.VISIBLE);
         }

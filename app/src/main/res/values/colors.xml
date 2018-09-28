@@ -50,5 +50,7 @@
     <color name="red">#e25b68</color>
     <color name="grey200">#f1f1f0</color>
     <color name="buttonDisabledColor">#9B9B9B</color>
+    <color name="delPickIndicatorColor">#4A90E2</color>
+    <color name="loginBackgroundColor">#F3F3F3</color>
 
 </resources>

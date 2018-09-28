@@ -7,6 +7,7 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".Home"
     android:background="@color/white"
+    android:id="@+id/fragment_layout_home"
     tools:showIn="@layout/app_bar_home">
 
     <!--background image with fading effect-->

@@ -265,11 +265,12 @@ public class DeliveryLocation extends Fragment {
 
 
 
-    //    permission to get user location
+    //    permission to get user location, if permitted then get user location from gps
     private void GetUserLocationPermissionThenSetLocation() {
         if (ActivityCompat.checkSelfPermission(Objects.requireNonNull(getActivity()), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-        }else{
+        }
+        else{
 
             try {
                // googleMap.setMyLocationEnabled(true);
@@ -334,8 +335,6 @@ public class DeliveryLocation extends Fragment {
 
 
     }
-
-
     public double getLongitude(){
         // construct a new instance of SimpleLocation
         SimpleLocation  location = new SimpleLocation(Objects.requireNonNull(getActivity()));
