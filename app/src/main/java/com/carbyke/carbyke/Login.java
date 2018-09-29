@@ -49,9 +49,7 @@ public class Login extends AppCompatActivity implements  GoogleApiClient.OnConne
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
         fetchIDs();
-
     }
 
 //    getting ids
@@ -97,7 +95,8 @@ public class Login extends AppCompatActivity implements  GoogleApiClient.OnConne
                 // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = result.getSignInAccount();
                 Toast.makeText(this, "Success "+ Objects.requireNonNull(account).getDisplayName(), Toast.LENGTH_SHORT).show();
-               // firebaseAuthWithGoogle(account);
+                getSupportFragmentManager().beginTransaction().add(R.id.fragment_container_login, new PhoneLogin()).addToBackStack("phoneLogin").commit();
+                // firebaseAuthWithGoogle(account);
             } else {
                 // Google Sign In failed, update UI appropriately
                 // [START_EXCLUDE]

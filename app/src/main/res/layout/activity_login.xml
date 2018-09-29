@@ -19,8 +19,8 @@
         <!--cancel-->
         <ImageButton
             android:id="@+id/al_cancel_ib"
-            android:layout_width="18dp"
-            android:layout_height="18dp"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
             android:background="@drawable/ic_cancel"
             android:layout_marginEnd="@dimen/activity_vertical_margin"
             android:layout_alignParentEnd="true"
@@ -76,7 +76,7 @@
             fancy:fb_fontIconSize="18dp"
             android:layout_marginStart="@dimen/activity_horizontal_margin"
             android:layout_marginEnd="@dimen/activity_horizontal_margin"
-            android:elevation="5dp"
+            android:elevation="@dimen/fancy_button_elevation"
             tools:targetApi="lollipop" />
 
         <!--with phone-->
@@ -105,7 +105,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginStart="@dimen/activity_horizontal_margin"
             android:layout_marginEnd="@dimen/activity_horizontal_margin"
-            android:elevation="5dp"
+            android:elevation="@dimen/fancy_button_elevation"
             tools:targetApi="lollipop" />
 
 

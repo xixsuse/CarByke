@@ -24,5 +24,6 @@
     <dimen name="pickUpTextViewPadding">8dp</dimen>
     <dimen name="home_card_view_horizontal_margin">32dp</dimen>
     <dimen name="search_module_horizontal_padding">8dp</dimen>
+    <dimen name="fancy_button_elevation">2dp</dimen>
 
 </resources>

@@ -223,7 +223,7 @@
                 app:fb_textColor="@color/black"
                 android:layout_below="@+id/sc_calculated_days_tv"
                 android:layout_marginTop="@dimen/activity_vertical_margin"
-                android:elevation="5dp"
+                android:elevation="@dimen/fancy_button_elevation"
                 tools:targetApi="lollipop" />
         </RelativeLayout>
 

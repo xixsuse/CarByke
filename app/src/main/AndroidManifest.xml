@@ -47,9 +47,11 @@
         <activity android:name=".SearchCar" />
         <activity
             android:name=".ChooseLocation"
-            android:windowSoftInputMode="stateHidden|adjustResize" />
+            android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity android:name=".SearchBike" />
-        <activity android:name=".Login"></activity>
+        <activity android:name=".Login"
+            android:windowSoftInputMode="adjustResize|stateHidden"
+            />
     </application>
 
 </manifest>

@@ -33,4 +33,6 @@
     <string name="make_your_trip"><i>MAKE YOUR TRIP</i></string>
     <string name="login_or_sign_up">Login or Sign up</string>
     <string name="continue_with">Continue with</string>
+    <string name="nineOne">+91</string>
+    <string name="enter_phone_number">Enter Phone Number</string>
 </resources>

@@ -39,9 +39,11 @@ dependencies {
     implementation 'com.github.medyo:fancybuttons:1.9.0' //fancy buttons
     implementation 'com.afollestad.material-dialogs:core:0.9.6.0' // material dialogs
     implementation 'com.github.ybq:Android-SpinKit:1.1.0' //loading
+    implementation 'com.chaos.view:pinview:1.4.1' //otp view
     implementation 'com.afollestad.material-dialogs:commons:0.9.6.0'
     implementation 'com.daimajia.easing:library:2.0@aar'
     implementation 'com.daimajia.androidanimations:library:2.3@aar'
+    implementation 'com.serhatsurguvec.libraries:continuablecirclecountdownview:1.2' // otp countdown
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
