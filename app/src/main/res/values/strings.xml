@@ -35,4 +35,5 @@
     <string name="continue_with">Continue with</string>
     <string name="nineOne">+91</string>
     <string name="enter_phone_number">Enter Phone Number</string>
+    <string name="wrong_number">wrong number?</string>
 </resources>

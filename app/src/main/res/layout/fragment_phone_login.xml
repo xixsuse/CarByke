@@ -20,8 +20,8 @@
         <!--cancel-->
         <ImageButton
             android:id="@+id/al_cancel_ib"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
+            android:layout_width="14dp"
+            android:layout_height="14dp"
             android:background="@drawable/ic_cancel"
             android:layout_marginEnd="@dimen/activity_vertical_margin"
             android:layout_alignParentEnd="true"
@@ -61,6 +61,20 @@
         android:layout_height="match_parent"
         >
 
+        <!--wrong number-->
+        <TextView
+            android:id="@+id/pl_wrong_number_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:text="@string/wrong_number"
+            style="@style/CustomTextStyle12"
+            android:textColor="@color/googleRed"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="7dp"
+            android:visibility="gone"
+            />
+
 
         <LinearLayout
             android:id="@+id/pl_linear3"
@@ -93,7 +107,7 @@
                 android:hint="@string/enter_phone_number"
                 android:background="@drawable/corner_rectangle_rent_home"
                 android:padding="@dimen/textViewPadding"
-                android:drawableEnd="@drawable/ic_phone_number"
+                android:drawableEnd="@drawable/ic_mobile"
                 android:inputType="phone"
                 android:textStyle="bold"
                 android:maxLength="10"
@@ -161,24 +175,40 @@
 
         </LinearLayout>
 
+
+
 <!--countdown-->
         <com.serhatsurguvec.continuablecirclecountdownview.ContinuableCircleCountDownView
             android:id="@+id/pl_circleCountDownView"
             android:layout_below="@+id/pl_linear1"
-            android:layout_width="42dp"
-            android:layout_height="42dp"
+            android:layout_width="52dp"
+            android:layout_height="52dp"
             android:layout_alignParentEnd="true"
             android:layout_marginEnd="@dimen/activity_horizontal_margin"
             app:shapeRate="15"
             app:shadowEnabled="false"
-            app:innerColor="#02ADC6"
-            app:outerColor="#02ADC6"
-            app:progress="180"
+            app:innerColor="@color/white"
+            app:outerColor="@color/white"
+            app:progress="0"
             app:textColor="#FF000000"
-            app:progressColor="#FFFF0000"
+            app:progressColor="@color/lightGreen"
             app:textSize="12sp"
             android:visibility="gone"
             />
+
+        <!--loading view-->
+        <com.github.ybq.android.spinkit.SpinKitView
+            android:visibility="gone"
+            android:layout_below="@+id/pl_linear1"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/pl_spin_kit"
+            style="@style/SpinKitView.Small.Circle"
+            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="8dp"
+            app:SpinKit_Color="@color/black" />
 
 
         <!--otp sent message-->
@@ -191,7 +221,7 @@
             android:layout_marginEnd="@dimen/activity_horizontal_margin"
             style="@style/CustomTextStyle12"
             android:textColor="@color/gray"
-            android:layout_marginTop="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="12dp"
             />
 
 
@@ -271,16 +301,7 @@
         </RelativeLayout>
     </android.support.v4.widget.NestedScrollView>
 
-    <com.github.ybq.android.spinkit.SpinKitView
-        android:visibility="gone"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/pl_spin_kit"
-        style="@style/SpinKitView.Small.Circle"
-        android:layout_centerInParent="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        app:SpinKit_Color="@color/black" />
+
 
 
 

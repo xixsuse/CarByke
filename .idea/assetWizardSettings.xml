@@ -19,11 +19,11 @@
                         <option name="values">
                           <map>
                             <entry key="assetSourceType" value="FILE" />
-                            <entry key="height" value="20" />
-                            <entry key="outputName" value="ic_india_flag" />
+                            <entry key="height" value="512" />
+                            <entry key="outputName" value="ic_warning" />
                             <entry key="overrideSize" value="true" />
-                            <entry key="sourceFile" value="C:\Users\Dell\Downloads\india (1).svg" />
-                            <entry key="width" value="20" />
+                            <entry key="sourceFile" value="C:\Users\Dell\Downloads\warning (2).svg" />
+                            <entry key="width" value="512" />
                           </map>
                         </option>
                       </PersistentState>
