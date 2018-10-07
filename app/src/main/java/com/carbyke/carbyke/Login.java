@@ -1,6 +1,5 @@
 package com.carbyke.carbyke;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
@@ -18,7 +17,6 @@ import com.github.ybq.android.spinkit.SpinKitView;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
@@ -41,24 +39,46 @@ public class Login extends AppCompatActivity implements  GoogleApiClient.OnConne
     private static final int RC_SIGN_IN = 9001;
     private FirebaseAuth mAuth;
     private static final String TAG = "GoogleActivity";
-    private FancyButton google_fb;
+    private FancyButton google_fb, phone_fb;
     private ImageButton cancel_ib;
     private SpinKitView sv;
+    private SharedPreferences sharedPreferencesLoginMode;
+    private final static String MODE = "mode";
+    private final static String LOGIN_MODE = "login_mode";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         fetchIDs();
+
+        initialiseFirebaseAuth();
+        initialiseSharedPrefs();
+
     }
+
+//    initializing firebase auth
+    private void initialiseFirebaseAuth(){
+        mAuth = FirebaseAuth.getInstance();
+    }
+    //    initializing firebase auth
+
+
+//    initialising shared preferences
+    private void initialiseSharedPrefs(){
+        sharedPreferencesLoginMode = getSharedPreferences(MODE, MODE_PRIVATE);
+    }
+    //    initialising shared preferences
 
 //    getting ids
     private void fetchIDs() {
         google_fb = findViewById(R.id.al_google_fb);
+        phone_fb = findViewById(R.id.al_phone_fb);
         cancel_ib = findViewById(R.id.al_cancel_ib);
 
         google_fb.setOnClickListener(Login.this);
         cancel_ib.setOnClickListener(Login.this);
+        phone_fb.setOnClickListener(Login.this);
     }
 
     protected void onStart(){
@@ -94,9 +114,7 @@ public class Login extends AppCompatActivity implements  GoogleApiClient.OnConne
             if (result.isSuccess()) {
                 // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = result.getSignInAccount();
-                Toast.makeText(this, "Success "+ Objects.requireNonNull(account).getDisplayName(), Toast.LENGTH_SHORT).show();
-                getSupportFragmentManager().beginTransaction().add(R.id.fragment_container_login, new PhoneLogin()).addToBackStack("phoneLogin").commit();
-                // firebaseAuthWithGoogle(account);
+                firebaseAuthWithGoogle(Objects.requireNonNull(account));
             } else {
                 // Google Sign In failed, update UI appropriately
                 // [START_EXCLUDE]
@@ -119,13 +137,19 @@ public class Login extends AppCompatActivity implements  GoogleApiClient.OnConne
         // [END_EXCLUDE]
 
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
+
         mAuth.signInWithCredential(credential)
+        //Objects.requireNonNull(mAuth.getCurrentUser()).linkWithCredential(credential)
                 .addOnCompleteListener(Login.this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             //  updateUI(user);
                             Toast.makeText(Login.this, "Success", Toast.LENGTH_SHORT).show();
+                            SharedPreferences.Editor editor = sharedPreferencesLoginMode.edit();
+                            editor.putString(LOGIN_MODE, "google");
+                            editor.apply();
+                            getSupportFragmentManager().beginTransaction().add(R.id.fragment_container_login, new PhoneLogin()).addToBackStack("phoneLogin").commit();
                         } else {
                             // If sign in fails, display a message to the user.
                             showSignInFailedMessage((Objects.requireNonNull(task.getException())).getLocalizedMessage());
@@ -189,6 +213,18 @@ public class Login extends AppCompatActivity implements  GoogleApiClient.OnConne
             Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
             startActivityForResult(signInIntent, RC_SIGN_IN);
         }
+
+
+        //        phone login
+        if (id == R.id.al_phone_fb){
+            SharedPreferences.Editor editor = sharedPreferencesLoginMode.edit();
+            editor.putString(LOGIN_MODE, "phone");
+            editor.apply();
+            // sign out if any previous user logged in
+            mAuth.signOut();
+            getSupportFragmentManager().beginTransaction().add(R.id.fragment_container_login, new PhoneLogin()).addToBackStack("phoneLogin").commit();
+        }
+
 
 //        cancel button
         else if (id == R.id.al_cancel_ib){

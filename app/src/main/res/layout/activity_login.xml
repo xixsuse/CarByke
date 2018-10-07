@@ -63,7 +63,7 @@
             fancy:fb_borderColor="#F34541"
             fancy:fb_borderWidth="1dp"
             fancy:fb_defaultColor="#F34541"
-            fancy:fb_focusColor="#F34541"
+            fancy:fb_focusColor="@color/white"
             fancy:fb_fontIconResource="&#xf0d4;"
             fancy:fb_iconPaddingRight="12dp"
             fancy:fb_iconPosition="left"
@@ -92,7 +92,7 @@
             fancy:fb_borderColor="#3B5998"
             fancy:fb_borderWidth="1dp"
             fancy:fb_defaultColor="#3B5998"
-            fancy:fb_focusColor="#3B5998"
+            fancy:fb_focusColor="@color/white"
             fancy:fb_iconPaddingRight="12dp"
             fancy:fb_fontIconResource="&#xf098;"
             fancy:fb_iconPosition="left"
@@ -107,6 +107,19 @@
             android:layout_marginEnd="@dimen/activity_horizontal_margin"
             android:elevation="@dimen/fancy_button_elevation"
             tools:targetApi="lollipop" />
+
+        <!--message for no need to sign up-->
+        <TextView
+            android:layout_below="@+id/al_phone_fb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            android:text="@string/no_need_to_sign_up"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            style="@style/CustomTextStyle12"
+            android:textColor="#9B9B9B"
+            />
 
 
     </RelativeLayout>

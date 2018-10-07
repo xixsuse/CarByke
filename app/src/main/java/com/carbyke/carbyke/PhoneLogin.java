@@ -1,11 +1,13 @@
 package com.carbyke.carbyke;
 
 
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -13,10 +15,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.chaos.view.PinView;
 import com.daimajia.androidanimations.library.Techniques;
@@ -32,11 +36,11 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
 import com.serhatsurguvec.continuablecirclecountdownview.ContinuableCircleCountDownView;
-
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
-
 import mehdi.sakout.fancybuttons.FancyButton;
+
+import static android.content.Context.MODE_PRIVATE;
 
 
 /**
@@ -53,18 +57,22 @@ public class PhoneLogin extends Fragment implements View.OnClickListener{
     private FancyButton verifyButton;
     private FancyButton sendButton;
     private FancyButton resendButton;
-    private TextView statusText, wrong_number_tv;
+    private TextView statusText, wrong_number_tv, signed_in_as;
     private RelativeLayout otpRelativeLayout;
     private SpinKitView spinKitView;
     private static final String countryCode = "+91";
     private ContinuableCircleCountDownView continuableCircleCountDownView;
     private static final int OTP_TIME = 60000;
     private FirebaseAuth firebaseAuth;
-
+    private ImageButton cancel_ib, info_ib;
     private String phoneVerificationId;
     private PhoneAuthProvider.OnVerificationStateChangedCallbacks
             verificationCallbacks;
     private PhoneAuthProvider.ForceResendingToken resendToken;
+
+    private SharedPreferences sharedPreferencesLoginMode;
+    private final static String MODE = "mode";
+    private final static String LOGIN_MODE = "login_mode";
 
 
     public PhoneLogin() {
@@ -73,15 +81,46 @@ public class PhoneLogin extends Fragment implements View.OnClickListener{
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_phone_login, container, false);
         fetchIDs();
         TextWatcher();
-        firebaseAuth = FirebaseAuth.getInstance();
+        initialiseFirebaseAuth();
+        initialiseSharedPrefs();
+        showSignInModeMessage();
+        //Toast.makeText(getActivity(), ""+ Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid(), Toast.LENGTH_SHORT).show();
         return view;
     }
+
+//    show <!--signed as google acc info, when first logged in by google-->
+    private void showSignInModeMessage() {
+        String mode = sharedPreferencesLoginMode.getString(LOGIN_MODE, "");
+        if (TextUtils.equals(mode, "google")){
+            String mail_id = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getEmail();
+            signed_in_as.setVisibility(View.VISIBLE);
+            signed_in_as.setText("You're signed-in as "+mail_id+". Link your primary phone number.");
+        }
+        else {
+            info_ib.setVisibility(View.GONE);
+        }
+    }
+    //    show <!--signed as google acc info, when first logged in by google-->
+
+
+    //    initializing firebase auth
+    private void initialiseFirebaseAuth(){
+        firebaseAuth = FirebaseAuth.getInstance();
+    }
+    //    initializing firebase auth
+
+
+    //    initialising shared preferences
+    private void initialiseSharedPrefs(){
+        sharedPreferencesLoginMode = Objects.requireNonNull(getActivity()).getSharedPreferences(MODE, MODE_PRIVATE);
+    }
+    //    initialising shared preferences
 
 //    text watcher
     private void TextWatcher() {
@@ -132,9 +171,6 @@ public class PhoneLogin extends Fragment implements View.OnClickListener{
                 // TODO Auto-generated method stub
             }
         });
-
-
-
     }
 //    text watcher
 
@@ -150,6 +186,9 @@ public class PhoneLogin extends Fragment implements View.OnClickListener{
         otpRelativeLayout = view.findViewById(R.id.pl_otpRelativeLayout);
         spinKitView = view.findViewById(R.id.pl_spin_kit);
         continuableCircleCountDownView = view.findViewById(R.id.pl_circleCountDownView);
+        cancel_ib = view.findViewById(R.id.pl_cancel_ib);
+        signed_in_as = view.findViewById(R.id.pl_signed_in_as);
+        info_ib = view.findViewById(R.id.pl_info_ib);
 
         sendButton.setEnabled(false);
         verifyButton.setEnabled(false);
@@ -159,6 +198,7 @@ public class PhoneLogin extends Fragment implements View.OnClickListener{
         resendButton.setOnClickListener(this);
         verifyButton.setOnClickListener(this);
         wrong_number_tv.setOnClickListener(this);
+        cancel_ib.setOnClickListener(this);
     }
 
     public void onStart(){
@@ -189,8 +229,7 @@ public class PhoneLogin extends Fragment implements View.OnClickListener{
 
     }
 
-
-//    to avoid abuse
+    //    to avoid abuse
     //when send button is used
     private void setUpVerificationCallbacksSendCode() {
 
@@ -201,13 +240,20 @@ public class PhoneLogin extends Fragment implements View.OnClickListener{
                     public void onVerificationCompleted(
                             PhoneAuthCredential credential) {
 
-                        // signoutButton.setEnabled(true);
+                        // sign out Button.setEnabled(true);
                         // statusText.setText("Signed In");
                         resendButton.setEnabled(false);
                         verifyButton.setEnabled(false);
                         codeText.setText("");
 
-                        signInWithPhoneAuthCredential(credential);
+                        // firebase login
+                        String mode = sharedPreferencesLoginMode.getString(LOGIN_MODE, "");
+                        if (TextUtils.equals(mode, "google")){
+                            signInWithPhoneAuthCredentialMergeGoogle_Phone(credential);
+                        }
+                        else {
+                            signInWithPhoneAuthCredentialPhone(credential);
+                        }
                     }
 
                     @Override
@@ -302,7 +348,7 @@ public class PhoneLogin extends Fragment implements View.OnClickListener{
                     public void onVerificationCompleted(
                             PhoneAuthCredential credential) {
 
-                        // signoutButton.setEnabled(true);
+                        // sign out Button.setEnabled(true);
                         // statusText.setText("Signed In");
                         resendButton.setEnabled(false);
                         phone_number_et.setEnabled(false);
@@ -310,7 +356,14 @@ public class PhoneLogin extends Fragment implements View.OnClickListener{
                         wrong_number_tv.setVisibility(View.GONE);
                         codeText.setText("");
 
-                        signInWithPhoneAuthCredential(credential);
+                        // firebase login
+                        String mode = sharedPreferencesLoginMode.getString(LOGIN_MODE, "");
+                        if (TextUtils.equals(mode, "google")){
+                            signInWithPhoneAuthCredentialMergeGoogle_Phone(credential);
+                        }
+                        else {
+                            signInWithPhoneAuthCredentialPhone(credential);
+                        }
                     }
 
                     @Override
@@ -385,29 +438,36 @@ public class PhoneLogin extends Fragment implements View.OnClickListener{
                 };
     }
 
-
-
-
-
-
+    
     public void verifyCode() {
         //ic
                 String code = codeText.getText().toString();
-                PhoneAuthCredential credential =
-                        PhoneAuthProvider.getCredential(phoneVerificationId, code);
-                signInWithPhoneAuthCredential(credential);
+                PhoneAuthCredential credential = PhoneAuthProvider.getCredential(phoneVerificationId, code);
+
+                // firebase login
+                String mode = sharedPreferencesLoginMode.getString(LOGIN_MODE, "");
+                if (TextUtils.equals(mode, "google")){
+                    signInWithPhoneAuthCredentialMergeGoogle_Phone(credential);
+                }
+                else {
+                    signInWithPhoneAuthCredentialPhone(credential);
+                }
+
+
 
 
     }
 
 //    after verification, login with firebase with phone auth
-    private void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
-        firebaseAuth.signInWithCredential(credential)
+    private void signInWithPhoneAuthCredentialMergeGoogle_Phone(PhoneAuthCredential credential) {
+
+        Objects.requireNonNull(firebaseAuth.getCurrentUser()).linkWithCredential(credential)
+        //firebaseAuth.signInWithCredential(credential)
                 .addOnCompleteListener(Objects.requireNonNull(getActivity()), new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // signoutButton.setEnabled(true);
+                            // sign out Button.setEnabled(true);
                             codeText.setText("");
                             //  statusText.setText("Signed In");
                             resendButton.setEnabled(false);
@@ -420,25 +480,101 @@ public class PhoneLogin extends Fragment implements View.OnClickListener{
 
 
                         } else {
-                            if (task.getException() instanceof
-                                    FirebaseAuthInvalidCredentialsException) {
-                                //Toast.makeText(PhoneLogin.this, "Error: "+task.getException().toString(), Toast.LENGTH_SHORT).show();
-                                new MaterialDialog.Builder(Objects.requireNonNull(getActivity()))
-                                        .title("Error")
-                                        .titleColor(getResources().getColor(R.color.black))
-                                        .content(task.getException().getLocalizedMessage())
-                                        .contentColorRes(R.color.black)
-                                        .positiveText("Okay")
-                                        .positiveColorRes(R.color.green)
-                                        .backgroundColor(getResources().getColor(R.color.white))
-                                        .icon(getResources().getDrawable(R.drawable.ic_warning))
-                                        .show();
-                                // The verification code entered was invalid
-                            }
+                            showSignInFailedMessage((Objects.requireNonNull(task.getException())).getLocalizedMessage());
+//                            if (task.getException() instanceof
+//                                    FirebaseAuthInvalidCredentialsException) {
+//                                //Toast.makeText(PhoneLogin.this, "Error: "+task.getException().toString(), Toast.LENGTH_SHORT).show();
+//                                new MaterialDialog.Builder(Objects.requireNonNull(getActivity()))
+//                                        .title("Error")
+//                                        .titleColor(getResources().getColor(R.color.black))
+//                                        .content(task.getException().getLocalizedMessage())
+//                                        .contentColorRes(R.color.black)
+//                                        .positiveText("Okay")
+//                                        .positiveColorRes(R.color.green)
+//                                        .backgroundColor(getResources().getColor(R.color.white))
+//                                        .icon(getResources().getDrawable(R.drawable.ic_warning))
+//                                        .show();
+//                                // The verification code entered was invalid
+//                            }
                         }
                     }
                 });
     }
+
+
+
+    //   firebase sign in with phone
+    private void signInWithPhoneAuthCredentialPhone(PhoneAuthCredential credential) {
+
+                firebaseAuth.signInWithCredential(credential)
+                .addOnCompleteListener(Objects.requireNonNull(getActivity()), new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // sign out Button.setEnabled(true);
+                            codeText.setText("");
+                            //  statusText.setText("Signed In");
+                            resendButton.setEnabled(false);
+                            verifyButton.setEnabled(false);
+                            //FirebaseUser user = task.getResult().getUser();
+                            String user_uid = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
+                            String phone_number = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getPhoneNumber();
+
+                            Toast.makeText(getActivity(), "Congratulations! Login Successful.", Toast.LENGTH_SHORT).show();
+
+
+                        } else {
+                            showSignInFailedMessage((Objects.requireNonNull(task.getException())).getLocalizedMessage());
+//                            if (task.getException() instanceof
+//                                    FirebaseAuthInvalidCredentialsException) {
+//                                //Toast.makeText(PhoneLogin.this, "Error: "+task.getException().toString(), Toast.LENGTH_SHORT).show();
+//                                new MaterialDialog.Builder(Objects.requireNonNull(getActivity()))
+//                                        .title("Error")
+//                                        .titleColor(getResources().getColor(R.color.black))
+//                                        .content(task.getException().getLocalizedMessage())
+//                                        .contentColorRes(R.color.black)
+//                                        .positiveText("Okay")
+//                                        .positiveColorRes(R.color.green)
+//                                        .backgroundColor(getResources().getColor(R.color.white))
+//                                        .icon(getResources().getDrawable(R.drawable.ic_warning))
+//                                        .show();
+//                                // The verification code entered was invalid
+//                            }
+                        }
+                    }
+                });
+    }
+    //   firebase sign in with phone
+
+
+//    firebase login failed message
+    private void showSignInFailedMessage(String errorMessage){
+        try{
+            new MaterialDialog.Builder(Objects.requireNonNull(getActivity()))
+                    .title("Sign in failed")
+                    .content(Objects.requireNonNull(errorMessage))
+                    .contentColorRes(R.color.black)
+                    .titleColor(getResources().getColor(R.color.googleRed))
+                    .titleColor(getResources().getColor(R.color.black))
+                    .inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_POSTAL_ADDRESS)
+                    .positiveText("Okay")
+                    .positiveColorRes(R.color.black)
+                    .backgroundColor(getResources().getColor(R.color.white))
+                    .icon(getResources().getDrawable(R.drawable.ic_cancel))
+                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                        }
+                    })
+                    .show();
+        }
+        catch (NullPointerException e) { e.printStackTrace(); }
+
+    }
+//    firebase login failed message
+
+
 
     public void resendCode() {
         //ic
@@ -491,6 +627,22 @@ public class PhoneLogin extends Fragment implements View.OnClickListener{
                 phone_number_et.setTextColor(Color.BLACK);
                 continuableCircleCountDownView.cancel();
                 continuableCircleCountDownView.setVisibility(View.GONE);
+                break;
+//                cancel button
+            case R.id.pl_cancel_ib:
+                Objects.requireNonNull(getActivity()).finish();
+//                Objects.requireNonNull(firebaseAuth.getCurrentUser()).unlink("phone")
+//                        .addOnCompleteListener(Objects.requireNonNull(getActivity()), new OnCompleteListener<AuthResult>() {
+//                            @Override
+//                            public void onComplete(@NonNull Task<AuthResult> task) {
+//                                if (task.isSuccessful()) {
+//                                    // Auth provider unlinked from account
+//                                    // ...
+//                                    Toast.makeText(getActivity(), "Unlinked", Toast.LENGTH_SHORT).show();
+//                                }
+//                                else Toast.makeText(getActivity(), ""+ Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
+//                            }
+//                        });
                 break;
 
         }
