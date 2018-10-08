@@ -27,14 +27,18 @@ import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.github.ybq.android.spinkit.SpinKitView;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseException;
 import com.google.firebase.FirebaseTooManyRequestsException;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.serhatsurguvec.continuablecirclecountdownview.ContinuableCircleCountDownView;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
@@ -62,7 +66,7 @@ public class PhoneLogin extends Fragment implements View.OnClickListener{
     private SpinKitView spinKitView;
     private static final String countryCode = "+91";
     private ContinuableCircleCountDownView continuableCircleCountDownView;
-    private static final int OTP_TIME = 60000;
+    private static final int OTP_TIME = 30000;
     private FirebaseAuth firebaseAuth;
     private ImageButton cancel_ib, info_ib;
     private String phoneVerificationId;
@@ -73,6 +77,14 @@ public class PhoneLogin extends Fragment implements View.OnClickListener{
     private SharedPreferences sharedPreferencesLoginMode;
     private final static String MODE = "mode";
     private final static String LOGIN_MODE = "login_mode";
+
+    private final static String USER_PROFILES = "user_profiles";
+    private final static String PHONE_NUMBER = "phone_number";
+    private final static String PRIMARY_ACCOUNT = "primary_account";
+
+    private SharedPreferences sharedPreferencesLogin;
+    private final static String LOGIN = "login";
+    private final static String LOGGED_IN_OR_NOT = "logged_in";
 
 
     public PhoneLogin() {
@@ -221,7 +233,7 @@ public class PhoneLogin extends Fragment implements View.OnClickListener{
 
                 PhoneAuthProvider.getInstance().verifyPhoneNumber(
                         phoneNumber,        // Phone number to verify
-                        60,                 // Timeout duration
+                        30,                 // Timeout duration
                         TimeUnit.SECONDS,   // Unit of timeout
                         Objects.requireNonNull(getActivity()),               // Activity (for callback binding)
                         verificationCallbacks);
@@ -304,8 +316,7 @@ public class PhoneLogin extends Fragment implements View.OnClickListener{
 
                         statusText.setVisibility(View.VISIBLE);
 
-                        statusText.setText("OTP has been sent to "+phoneNumber+". " +
-                                "App will automatically detect the OTP if not please enter manually and verify.");
+                        statusText.setText(String.format("OTP has been sent to %s. App will automatically detect the OTP if not please enter manually and verify.", phoneNumber));
 
 
                         phoneVerificationId = verificationId;
@@ -406,8 +417,7 @@ public class PhoneLogin extends Fragment implements View.OnClickListener{
 
                         continuableCircleCountDownView.cancel();
                         resendButton.setEnabled(false);
-                        statusText.setText("New OTP has been re-sent to "+phoneNumber+". " +
-                                "App will automatically detect the OTP if not please enter manually and verify.");
+                        statusText.setText(String.format("New OTP has been re-sent to %s. App will automatically detect the OTP if not please enter manually and verify.", phoneNumber));
 
                         phoneVerificationId = verificationId;
                         resendToken = token;
@@ -438,7 +448,7 @@ public class PhoneLogin extends Fragment implements View.OnClickListener{
                 };
     }
 
-    
+    //verify code
     public void verifyCode() {
         //ic
                 String code = codeText.getText().toString();
@@ -452,17 +462,35 @@ public class PhoneLogin extends Fragment implements View.OnClickListener{
                 else {
                     signInWithPhoneAuthCredentialPhone(credential);
                 }
-
-
-
-
     }
+    //verify code
+
+
+// resend code
+    public void resendCode() {
+        //ic
+        String phoneNumber = phone_number_et.getText().toString();
+
+        spinKitView.setVisibility(View.VISIBLE);
+
+        phoneNumber = countryCode+phoneNumber;
+        setUpVerificationCallbacksReSendCode();
+
+        PhoneAuthProvider.getInstance().verifyPhoneNumber(
+                phoneNumber,
+                30,
+                TimeUnit.SECONDS,
+                Objects.requireNonNull(getActivity()),
+                verificationCallbacks,
+                resendToken);
+    }
+    // resend code
+
 
 //    after verification, login with firebase with phone auth
     private void signInWithPhoneAuthCredentialMergeGoogle_Phone(PhoneAuthCredential credential) {
 
         Objects.requireNonNull(firebaseAuth.getCurrentUser()).linkWithCredential(credential)
-        //firebaseAuth.signInWithCredential(credential)
                 .addOnCompleteListener(Objects.requireNonNull(getActivity()), new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
@@ -472,38 +500,20 @@ public class PhoneLogin extends Fragment implements View.OnClickListener{
                             //  statusText.setText("Signed In");
                             resendButton.setEnabled(false);
                             verifyButton.setEnabled(false);
-                            //FirebaseUser user = task.getResult().getUser();
-                            String user_uid = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
-                            String phone_number = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getPhoneNumber();
+                            saveUserProfileDataInFirebaseDataBaseGOOGLE_PHONE(task.getResult().getUser());
 
                             Toast.makeText(getActivity(), "Congratulations! Login Successful.", Toast.LENGTH_SHORT).show();
 
-
                         } else {
                             showSignInFailedMessage((Objects.requireNonNull(task.getException())).getLocalizedMessage());
-//                            if (task.getException() instanceof
-//                                    FirebaseAuthInvalidCredentialsException) {
-//                                //Toast.makeText(PhoneLogin.this, "Error: "+task.getException().toString(), Toast.LENGTH_SHORT).show();
-//                                new MaterialDialog.Builder(Objects.requireNonNull(getActivity()))
-//                                        .title("Error")
-//                                        .titleColor(getResources().getColor(R.color.black))
-//                                        .content(task.getException().getLocalizedMessage())
-//                                        .contentColorRes(R.color.black)
-//                                        .positiveText("Okay")
-//                                        .positiveColorRes(R.color.green)
-//                                        .backgroundColor(getResources().getColor(R.color.white))
-//                                        .icon(getResources().getDrawable(R.drawable.ic_warning))
-//                                        .show();
-//                                // The verification code entered was invalid
-//                            }
                         }
                     }
                 });
     }
+//    after verification, login with firebase with phone auth
 
 
-
-    //   firebase sign in with phone
+//   firebase sign in with phone
     private void signInWithPhoneAuthCredentialPhone(PhoneAuthCredential credential) {
 
                 firebaseAuth.signInWithCredential(credential)
@@ -516,35 +526,16 @@ public class PhoneLogin extends Fragment implements View.OnClickListener{
                             //  statusText.setText("Signed In");
                             resendButton.setEnabled(false);
                             verifyButton.setEnabled(false);
-                            //FirebaseUser user = task.getResult().getUser();
-                            String user_uid = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
-                            String phone_number = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getPhoneNumber();
-
+                            saveUserProfileDataInFirebaseDataBasePHONE(task.getResult().getUser());
                             Toast.makeText(getActivity(), "Congratulations! Login Successful.", Toast.LENGTH_SHORT).show();
-
 
                         } else {
                             showSignInFailedMessage((Objects.requireNonNull(task.getException())).getLocalizedMessage());
-//                            if (task.getException() instanceof
-//                                    FirebaseAuthInvalidCredentialsException) {
-//                                //Toast.makeText(PhoneLogin.this, "Error: "+task.getException().toString(), Toast.LENGTH_SHORT).show();
-//                                new MaterialDialog.Builder(Objects.requireNonNull(getActivity()))
-//                                        .title("Error")
-//                                        .titleColor(getResources().getColor(R.color.black))
-//                                        .content(task.getException().getLocalizedMessage())
-//                                        .contentColorRes(R.color.black)
-//                                        .positiveText("Okay")
-//                                        .positiveColorRes(R.color.green)
-//                                        .backgroundColor(getResources().getColor(R.color.white))
-//                                        .icon(getResources().getDrawable(R.drawable.ic_warning))
-//                                        .show();
-//                                // The verification code entered was invalid
-//                            }
                         }
                     }
                 });
     }
-    //   firebase sign in with phone
+//   firebase sign in with phone
 
 
 //    firebase login failed message
@@ -560,7 +551,7 @@ public class PhoneLogin extends Fragment implements View.OnClickListener{
                     .positiveText("Okay")
                     .positiveColorRes(R.color.black)
                     .backgroundColor(getResources().getColor(R.color.white))
-                    .icon(getResources().getDrawable(R.drawable.ic_cancel))
+                    .icon(getResources().getDrawable(R.drawable.ic_warning))
                     .onPositive(new MaterialDialog.SingleButtonCallback() {
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
@@ -575,28 +566,43 @@ public class PhoneLogin extends Fragment implements View.OnClickListener{
 //    firebase login failed message
 
 
+//    saving data at firebase database
+    private void saveUserProfileDataInFirebaseDataBasePHONE(FirebaseUser user){
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+        databaseReference.child(USER_PROFILES).child(user.getUid())
+                .child(PHONE_NUMBER).setValue(user.getPhoneNumber()).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                // values saved successfully at database
 
-    public void resendCode() {
-        //ic
-                String phoneNumber = phone_number_et.getText().toString();
+            }
+        });
+        Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container_login, new PhoneToGoogle()).addToBackStack("phone_to_google").commit();
 
-                spinKitView.setVisibility(View.VISIBLE);
-
-                phoneNumber = countryCode+phoneNumber;
-                setUpVerificationCallbacksReSendCode();
-
-                PhoneAuthProvider.getInstance().verifyPhoneNumber(
-                        phoneNumber,
-                        60,
-                        TimeUnit.SECONDS,
-                        Objects.requireNonNull(getActivity()),
-                        verificationCallbacks,
-                        resendToken);
-
+        sharedPreferencesLogin = Objects.requireNonNull(getActivity()).getSharedPreferences(LOGIN, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferencesLogin.edit();
+        editor.putString(LOGGED_IN_OR_NOT, "true");
+        editor.apply();
+        Objects.requireNonNull(getActivity()).finish();
     }
+//    saving data at firebase database
 
+    //    saving data at firebase database
+    private void saveUserProfileDataInFirebaseDataBaseGOOGLE_PHONE(FirebaseUser user){
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+        databaseReference.child(USER_PROFILES).child(user.getUid())
+                .child(PHONE_NUMBER).setValue(user.getPhoneNumber());
+        // save in shared pref that user is logged in and then exit this activity
+        sharedPreferencesLogin = Objects.requireNonNull(getActivity()).getSharedPreferences(LOGIN, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferencesLogin.edit();
+        editor.putString(LOGGED_IN_OR_NOT, "true");
+        editor.apply();
+        Objects.requireNonNull(getActivity()).finish();
+    }
+//    saving data at firebase database
 
-//    onclick
+    //    onclick
     @Override
     public void onClick(View view) {
         int id = view.getId();
@@ -649,7 +655,6 @@ public class PhoneLogin extends Fragment implements View.OnClickListener{
 
     }
     //    onclick
-
 
 //    end
 }

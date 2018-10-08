@@ -5,19 +5,21 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="#EDF0F2"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
     android:fitsSystemWindows="true"
     android:theme="@style/MyCustomAppTheme">
 
 
+    <!--when not signed in-->
     <!--sign up layout-->
     <RelativeLayout
+        android:id="@+id/hh_not_sign_in_rl"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#EDF0F2"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
         >
         <!--demo profile pic-->
         <ImageView
@@ -39,6 +41,65 @@
             android:layout_centerVertical="true"
             android:textColor="#75828F"
             />
+
+    </RelativeLayout>
+
+    <!--when signed in-->
+    <RelativeLayout
+        android:id="@+id/hh_signed_in_rl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/activity_vertical_margin"
+        android:visibility="gone"
+        >
+        <!--profile pic-->
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/hh_profile_image_iv"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:background="@drawable/ic_placeholder_profile_pic"
+            />
+
+        <!--name-->
+        <TextView
+            android:id="@+id/hh_name_tv"
+            android:layout_toEndOf="@+id/hh_profile_image_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:hint="@string/name"
+            style="@style/CustomTextStyle12"
+            android:textSize="14sp"
+            />
+
+        <!--email-->
+        <TextView
+            android:id="@+id/hh_email_tv"
+            android:layout_toEndOf="@+id/hh_profile_image_iv"
+            android:layout_below="@+id/hh_name_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="8dp"
+            android:hint="@string/email"
+            style="@style/CustomTextStyle12"
+            android:textSize="14sp"
+            />
+
+        <!--phone-->
+        <TextView
+            android:id="@+id/hh_phone_tv"
+            android:layout_toEndOf="@+id/hh_profile_image_iv"
+            android:layout_below="@+id/hh_email_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="8dp"
+            android:hint="@string/phone_number"
+            style="@style/CustomTextStyle12"
+            android:textSize="14sp"
+            />
+
 
     </RelativeLayout>
 

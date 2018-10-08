@@ -43,7 +43,8 @@ dependencies {
     implementation 'com.afollestad.material-dialogs:commons:0.9.6.0'
     implementation 'com.daimajia.easing:library:2.0@aar'
     implementation 'com.daimajia.androidanimations:library:2.3@aar'
-    implementation 'com.serhatsurguvec.libraries:continuablecirclecountdownview:1.2' // otp countdown
+    implementation 'com.serhatsurguvec.libraries:continuablecirclecountdownview:1.2'
+    // otp countdown
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
@@ -55,6 +56,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-maps:15.0.1' // maps
     implementation 'com.google.android.gms:play-services-places:15.0.1' // places, place picker
     implementation 'com.google.android.gms:play-services-location:15.0.1' // getting location
-    implementation 'com.github.delight-im:Android-SimpleLocation:v1.0.1'
+    implementation 'com.github.delight-im:Android-SimpleLocation:v1.0.1' // getting lat long
+    implementation 'de.hdodenhof:circleimageview:2.2.0' // circular imageview
 }
 apply plugin: 'com.google.gms.google-services'

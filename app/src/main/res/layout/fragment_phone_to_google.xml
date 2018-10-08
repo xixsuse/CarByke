@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:fancy="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/loginBackgroundColor"
+    tools:context=".PhoneToGoogle">
+
+    <!-- TODO: Update blank fragment layout -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/activity_horizontal_margin"
+        >
+
+
+        <!--skip-->
+        <TextView
+            android:id="@+id/tg_skip_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="SKIP"
+            style="@style/CustomTextStyle12"
+            android:layout_alignParentEnd="true"
+            />
+
+        <!--signed in message-->
+        <TextView
+            android:id="@+id/tg_signed_in_message_tv"
+            android:layout_below="@+id/tg_skip_tv"
+            android:layout_marginTop="92dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+
+        <!--with google-->
+        <mehdi.sakout.fancybuttons.FancyButton
+            android:id="@+id/tg_google_fb"
+            android:layout_below="@+id/tg_signed_in_message_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="10dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:paddingTop="10dp"
+            fancy:fb_borderColor="#F34541"
+            fancy:fb_borderWidth="1dp"
+            fancy:fb_defaultColor="#F34541"
+            fancy:fb_focusColor="@color/white"
+            fancy:fb_fontIconResource="&#xf0d4;"
+            fancy:fb_iconPaddingRight="12dp"
+            fancy:fb_iconPosition="left"
+            fancy:fb_radius="4dp"
+            fancy:fb_text="LINK GOOGLE ACCOUNT"
+            fancy:fb_textSize="14sp"
+            style="@style/CustomTextStyle16"
+            app:fb_textColor="@color/white"
+            android:layout_marginTop="8dp"
+            fancy:fb_fontIconSize="18dp"
+            android:elevation="@dimen/fancy_button_elevation"
+            tools:targetApi="lollipop" />
+
+
+    </RelativeLayout>
+
+</RelativeLayout>

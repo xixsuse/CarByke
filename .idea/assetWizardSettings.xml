@@ -19,11 +19,11 @@
                         <option name="values">
                           <map>
                             <entry key="assetSourceType" value="FILE" />
-                            <entry key="height" value="18" />
-                            <entry key="outputName" value="ic_information" />
+                            <entry key="height" value="14" />
+                            <entry key="outputName" value="ic_ep_phone" />
                             <entry key="overrideSize" value="true" />
-                            <entry key="sourceFile" value="C:\Users\Dell\Downloads\info.svg" />
-                            <entry key="width" value="18" />
+                            <entry key="sourceFile" value="C:\Users\Dell\Downloads\phone-call-button.svg" />
+                            <entry key="width" value="14" />
                           </map>
                         </option>
                       </PersistentState>

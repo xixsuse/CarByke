@@ -1,10 +1,10 @@
 package com.carbyke.carbyke;
 
-import android.app.Activity;
-import android.app.ActivityOptions;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -15,27 +15,45 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.daimajia.androidanimations.library.Techniques;
-import com.daimajia.androidanimations.library.YoYo;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
+
+import java.util.Objects;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class Home extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
 
-    SharedPreferences sharedPreferencesAnonymousAuth;
-    private static final String PREF_AU = "pref_au";
-    private static final String STATUS = "status";
+    private SharedPreferences sharedPreferencesLogin;
+    private final static String LOGIN = "login";
+    private final static String LOGGED_IN_OR_NOT = "logged_in";
 
     private ImageView background_iv;
+    CircleImageView profile_image_iv;
     private ImageButton car_ib, bike_ib;
-    private TextView login_sign_tv;
+    private TextView login_sign_tv, name_tv, email_tv, phone_tv;
+    private RelativeLayout not_signed_in_rl, signed_in_rl;
+
+    private final static String USER_PROFILES ="user_profiles";
+    private DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child(USER_PROFILES);
+    private final String PHONE_NUMBER = "phone_number";
+    private final String EMAIL = "email";
+    private final String NAME = "name";
+    private final String PROFILE_IMAGE_URL = "profile_image_url";
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,12 +65,9 @@ public class Home extends AppCompatActivity
         bike_ib = findViewById(R.id.ch_bike_ib);
 
 
-
         Toolbar toolbar =  findViewById(R.id.toolbar);
         toolbar.setTitle(""); // setting title to null
         setSupportActionBar(toolbar);
-
-
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -60,38 +75,82 @@ public class Home extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-//        getting id of nav bar
         login_sign_tv = navigationView.getHeaderView(0).findViewById(R.id.hh_login_sign);
+        not_signed_in_rl = navigationView.getHeaderView(0).findViewById(R.id.hh_not_sign_in_rl);
+        signed_in_rl = navigationView.getHeaderView(0).findViewById(R.id.hh_signed_in_rl);
+        profile_image_iv = navigationView.getHeaderView(0).findViewById(R.id.hh_profile_image_iv);
+        name_tv = navigationView.getHeaderView(0).findViewById(R.id.hh_name_tv);
+        email_tv = navigationView.getHeaderView(0).findViewById(R.id.hh_email_tv);
+        phone_tv = navigationView.getHeaderView(0).findViewById(R.id.hh_phone_tv);
+
+//        getting id of nav bar
+        mAuth = FirebaseAuth.getInstance();
 
         car_ib.setOnClickListener(this);
         bike_ib.setOnClickListener(this);
         login_sign_tv.setOnClickListener(this);
+        signed_in_rl.setOnClickListener(this);
+
     }
-
-//    logging in
-    private void AnonymousAuth() {
-        //        anonymously logging in for security and better user experience
-        FirebaseAnonymousAuth firebaseAnonymousAuth = new FirebaseAnonymousAuth(Home.this);
-        firebaseAnonymousAuth.Auth();
-    }
-    //    logging in
-
-
     //    on start
     public void onStart(){
         super.onStart();
-        sharedPreferencesAnonymousAuth = getSharedPreferences(PREF_AU, MODE_PRIVATE);
-        if (!TextUtils.equals(sharedPreferencesAnonymousAuth.getString(STATUS, ""), "success")){
-            AnonymousAuth();
+        checkIfSignedIn();
+    }
+    //    on Start
+
+
+//    if signed in then display profile data in profile
+    private void checkIfSignedIn() {
+        sharedPreferencesLogin = getSharedPreferences(LOGIN, MODE_PRIVATE);
+        String val = sharedPreferencesLogin.getString(LOGGED_IN_OR_NOT, "");
+        if (TextUtils.equals(val, "true")){
+            not_signed_in_rl.setVisibility(View.GONE);
+            signed_in_rl.setVisibility(View.VISIBLE);
+            setUserData();
         }
 
     }
-//    on Start
+    //    if signed in then display profile data in profile
 
+//    setting user data
+    private void setUserData() {
+        String uid = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
+        databaseReference.child(uid)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        String name;
+                        String email;
+                        String phone;
+                        Uri profile_image_url;
+                        name = dataSnapshot.child(NAME).getValue(String.class);
+                        email = dataSnapshot.child(EMAIL).getValue(String.class);
+                        phone = dataSnapshot.child(PHONE_NUMBER).getValue(String.class);
+                        profile_image_url = mAuth.getCurrentUser().getPhotoUrl();
 
+                        name_tv.setText(name);
+                        email_tv.setText(email);
+                        phone_tv.setText(phone);
+
+                        Picasso.with(Home.this)
+                                .load(profile_image_url)
+                                .placeholder(R.drawable.ic_placeholder_profile_pic)
+                                .centerCrop()
+                                .fit()
+                                .into(profile_image_iv);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+    }
+//    setting user data
 
 
 //    set background image
@@ -182,6 +241,10 @@ public class Home extends AppCompatActivity
                // startActivity(new Intent(Home.this, Login.class), animation);
                 startActivity(new Intent(Home.this, Login.class));
                 //  getSupportFragmentManager().beginTransaction().add(R.id.fragment_layout_home, new Login()).addToBackStack("login").commit();
+                break;
+//                edit profile
+            case R.id.hh_signed_in_rl:
+                startActivity(new Intent(Home.this, EditProfile.class));
                 break;
         }
 

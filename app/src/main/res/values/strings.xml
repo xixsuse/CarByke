@@ -37,4 +37,10 @@
     <string name="enter_phone_number">Enter Phone Number</string>
     <string name="wrong_number">wrong number?</string>
     <string name="no_need_to_sign_up">No need to <b>Sign-up</b>. If you are new user then new account will be automatically created and you will be directly <b>Signed-in</b></string>
+    <string name="name">name</string>
+    <string name="email">Email</string>
+    <string name="phone_number">Phone number</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="save">SAVE</string>
+    <string name="gender">Gender</string>
 </resources>

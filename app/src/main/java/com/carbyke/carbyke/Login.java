@@ -3,6 +3,7 @@ package com.carbyke.carbyke;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputType;
@@ -23,11 +24,18 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.Objects;
 
@@ -45,6 +53,17 @@ public class Login extends AppCompatActivity implements  GoogleApiClient.OnConne
     private SharedPreferences sharedPreferencesLoginMode;
     private final static String MODE = "mode";
     private final static String LOGIN_MODE = "login_mode";
+
+    private final static String USER_PROFILES = "user_profiles";
+    private final static String EMAIL = "email";
+    private final static String PHONE_NUMBER = "phone_number";
+    private final String NAME = "name";
+    private DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child(USER_PROFILES);
+    private DatabaseReference databaseReferenceUID;
+
+    private SharedPreferences sharedPreferencesLogin;
+    private final static String LOGIN = "login";
+    private final static String LOGGED_IN_OR_NOT = "logged_in";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,7 +148,6 @@ public class Login extends AppCompatActivity implements  GoogleApiClient.OnConne
 
     // [START auth_with_google]
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
-        Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
         // [START_EXCLUDE silent]
         // showProgressDialog();
        // rotateLoading.start();
@@ -139,17 +157,12 @@ public class Login extends AppCompatActivity implements  GoogleApiClient.OnConne
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
 
         mAuth.signInWithCredential(credential)
-        //Objects.requireNonNull(mAuth.getCurrentUser()).linkWithCredential(credential)
                 .addOnCompleteListener(Login.this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            //  updateUI(user);
-                            Toast.makeText(Login.this, "Success", Toast.LENGTH_SHORT).show();
-                            SharedPreferences.Editor editor = sharedPreferencesLoginMode.edit();
-                            editor.putString(LOGIN_MODE, "google");
-                            editor.apply();
-                            getSupportFragmentManager().beginTransaction().add(R.id.fragment_container_login, new PhoneLogin()).addToBackStack("phoneLogin").commit();
+
+                            saveUserProfileDataInFirebaseDataBase(task.getResult().getUser());
                         } else {
                             // If sign in fails, display a message to the user.
                             showSignInFailedMessage((Objects.requireNonNull(task.getException())).getLocalizedMessage());
@@ -174,22 +187,59 @@ public class Login extends AppCompatActivity implements  GoogleApiClient.OnConne
                     .contentColorRes(R.color.black)
                     .titleColor(getResources().getColor(R.color.googleRed))
                     .titleColor(getResources().getColor(R.color.black))
-                    .inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_POSTAL_ADDRESS)
                     .positiveText("Okay")
                     .positiveColorRes(R.color.black)
                     .backgroundColor(getResources().getColor(R.color.white))
-                    .icon(getResources().getDrawable(R.drawable.ic_cancel))
-                    .onPositive(new MaterialDialog.SingleButtonCallback() {
-                        @Override
-                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-
-                        }
-                    })
+                    .icon(getResources().getDrawable(R.drawable.ic_warning))
                     .show();
         }
         catch (NullPointerException e) { e.printStackTrace(); }
 
     }
+
+    //    saving data at firebase database
+    private void saveUserProfileDataInFirebaseDataBase(final FirebaseUser user){
+        databaseReferenceUID = databaseReference.child(user.getUid());
+        databaseReferenceUID.child(NAME).setValue(user.getDisplayName());
+        databaseReferenceUID.child(EMAIL).setValue(user.getEmail()).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                // values saved successfully at database
+
+            }
+        });checkIfUserDetailsAreSaved(user);
+    }
+//    saving data at firebase database
+
+    // if phone number is not saved then proceed to link number otherwise close login activity
+    private void checkIfUserDetailsAreSaved(FirebaseUser user) {
+        databaseReferenceUID.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if (!dataSnapshot.hasChild(PHONE_NUMBER)){
+                            SharedPreferences.Editor editor = sharedPreferencesLoginMode.edit();
+                            editor.putString(LOGIN_MODE, "google");
+                            editor.apply();
+                            getSupportFragmentManager().beginTransaction().add(R.id.fragment_container_login, new PhoneLogin()).addToBackStack("phoneLogin").commit();
+                        }
+                        else {
+                            // save in shared pref that user is logged in and then exit this activity if second time log in, other wise prompt for phone auth link
+                            Login.this.finish();
+                        }
+                        sharedPreferencesLogin = getSharedPreferences(LOGIN, MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferencesLogin.edit();
+                        editor.putString(LOGGED_IN_OR_NOT, "true");
+                        editor.apply();
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+    }
+//  checkIfUserDetailsAreSaved
+
 
 
     @Override
@@ -205,6 +255,8 @@ public class Login extends AppCompatActivity implements  GoogleApiClient.OnConne
 
 //        google login
         if (id == R.id.al_google_fb){
+            // sign out if any previous user logged in
+            mAuth.signOut();
 //            if user register earlier but did not complete phone registration
             if (GoogleSignIn.getLastSignedInAccount(Login.this) != null){
                 Auth.GoogleSignInApi.signOut(mGoogleApiClient);
@@ -255,6 +307,19 @@ public class Login extends AppCompatActivity implements  GoogleApiClient.OnConne
                     .show();
         }
         catch (NullPointerException e) { e.printStackTrace(); }
+    }
+
+    public void onBackPressed() {
+
+            FragmentManager fragmentManager = this.getSupportFragmentManager();
+            int s =fragmentManager.getBackStackEntryCount() - 1;
+            if (s >= 1){
+                super.onBackPressed();
+                moveTaskToBack(true);
+                finish();
+                super.onBackPressed();
+
+            }
     }
 
 
