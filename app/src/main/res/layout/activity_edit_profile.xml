@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    xmlns:fancy="http://schemas.android.com/apk/res-auto"
     tools:context=".EditProfile">
 
     <!-- our toolbar -->
@@ -16,24 +17,41 @@
         android:background="@color/chooseLocationBarColor"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         >
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <!--back button-->
+            <ImageButton
+                android:id="@+id/ep_back_ib"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_return_back_white_smoke"
+                android:contentDescription="@string/error_while_loading_image" />
 
-        <ImageButton
-            android:id="@+id/ep_back_b"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/ic_return_back_white_smoke"
-            android:contentDescription="@string/error_while_loading_image" />
+            <!--edit profile-->
+            <TextView
+                android:layout_toEndOf="@+id/ep_back_ib"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/edit_profile"
+                style="@style/CustomTextStyle16"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:paddingStart="@dimen/activity_horizontal_margin"
+                tools:ignore="RtlSymmetry" />
 
-        <!--edit profile-->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/edit_profile"
-            style="@style/CustomTextStyle16"
-            android:textStyle="bold"
-            android:textColor="@color/white"
-            android:paddingStart="@dimen/activity_horizontal_margin"
-            tools:ignore="RtlSymmetry" />
+            <!--logout button-->
+            <ImageButton
+                android:id="@+id/ep_logout_ib"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_logout"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:contentDescription="@string/error_while_loading_image" />
+
+        </RelativeLayout>
+
 
     </android.support.v7.widget.Toolbar>
 
@@ -43,6 +61,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/white"
         >
 
         <android.support.design.widget.AppBarLayout
@@ -50,7 +69,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-            android:background="@color/whiteSmoke"
             android:fitsSystemWindows="true"
             >
 
@@ -67,22 +85,28 @@
                 tools:targetApi="lollipop">
 
                 <RelativeLayout
+                    android:id="@+id/ep_profile_image_rl"
                     android:layout_width="match_parent"
                     android:layout_height="120dp"
-                    android:background="@drawable/edit_profile_background"
-                    android:scaleX="1"
                     >
+
+                    <ImageView
+                        android:id="@+id/ep_background_image"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/edit_profile_background"
+                        android:scaleType="centerCrop"
+                        android:scaleY="1.5"
+                        />
 
                     <!--profile pic-->
                     <de.hdodenhof.circleimageview.CircleImageView
-                        android:id="@+id/hh_profile_image_iv"
+                        android:id="@+id/ep_profile_image_iv"
                         android:layout_width="72dp"
                         android:layout_height="72dp"
                         android:background="@drawable/ic_placeholder_profile_pic"
                         android:layout_centerInParent="true"
                         />
-
-
 
                 </RelativeLayout>
 
@@ -109,78 +133,122 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/name"
                 style="@style/CustomTextStyle16"
-                android:background="@drawable/under_line_textview"
+                android:background="@drawable/under_line_textview_light"
                 android:paddingBottom="@dimen/textViewPaddingBottom"
                 android:drawableStart="@drawable/ic_ep_profile_pic"
                 android:drawablePadding="@dimen/textViewPadding"
+                android:inputType="textPersonName"
+                android:lines="1"
                 />
 
             <!--email-->
-            <EditText
+            <TextView
                 android:id="@+id/ep_email_tv"
                 android:layout_below="@+id/ep_name_tv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/email"
                 style="@style/CustomTextStyle16"
-                android:background="@drawable/under_line_textview"
+                android:background="@drawable/under_line_textview_light"
                 android:paddingBottom="@dimen/textViewPaddingBottom"
                 android:drawableStart="@drawable/ic_ep_email"
                 android:drawablePadding="@dimen/textViewPadding"
-                android:layout_marginTop="@dimen/activity_vertical_margin"
-                android:enabled="false"
+                android:layout_marginTop="24dp"
                 />
 
             <!--phone-->
-            <EditText
+            <TextView
                 android:id="@+id/ep_phone_tv"
                 android:layout_below="@+id/ep_email_tv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/phone_number"
                 style="@style/CustomTextStyle16"
-                android:background="@drawable/under_line_textview"
+                android:background="@drawable/under_line_textview_light"
                 android:paddingBottom="@dimen/textViewPaddingBottom"
                 android:drawableStart="@drawable/ic_ep_phone"
                 android:drawablePadding="@dimen/textViewPadding"
-                android:layout_marginTop="@dimen/activity_vertical_margin"
-                android:enabled="false"
+                android:layout_marginTop="24dp"
                 />
 
             <!--gender-->
-            <EditText
-                android:id="@+id/ep_gender_tv"
+            <co.ceryle.radiorealbutton.RadioRealButtonGroup
+                android:id="@+id/ep_radio_gender"
                 android:layout_below="@+id/ep_phone_tv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/gender"
-                style="@style/CustomTextStyle16"
-                android:background="@drawable/under_line_textview"
-                android:paddingBottom="@dimen/textViewPaddingBottom"
-                android:drawableStart="@drawable/ic_ep_gender"
-                android:drawablePadding="@dimen/textViewPadding"
-                android:layout_marginTop="@dimen/activity_vertical_margin"
-                android:enabled="false"
-                />
+                android:layout_marginTop="24dp"
+                app:rrbg_animateDrawables_enter="overshoot"
+                app:rrbg_animateTexts_enter="overshoot"
+                app:rrbg_dividerColor="@color/black"
+                app:rrbg_dividerSize="1dp"
+                app:rrbg_radius="10dp"
+                app:rrbg_selectorColor="@color/lightGreen"
+                app:rrbg_selectorSize="6dp">
+
+                <co.ceryle.radiorealbutton.RadioRealButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:rrb_drawablePadding="8dp"
+                    app:rrb_ripple="true"
+                    app:rrb_rippleColor="@color/black50"
+                    app:rrb_text="male"
+                    app:rrb_drawableGravity="right"
+                    app:rrb_drawable="@drawable/ic_male"
+                    app:rrb_textColor="@color/black"/>
+
+                <co.ceryle.radiorealbutton.RadioRealButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:rrb_drawableGravity="right"
+                    app:rrb_drawablePadding="8dp"
+                    app:rrb_ripple="true"
+                    app:rrb_rippleColor="@color/black50"
+                    app:rrb_text="female"
+                    app:rrb_drawable="@drawable/ic_female"
+                    app:rrb_textColor="@color/black"/>
+            </co.ceryle.radiorealbutton.RadioRealButtonGroup>
+
+            <!--<TextView-->
+                <!--android:id="@+id/ep_gender_tv"-->
+                <!--android:layout_below="@+id/ep_phone_tv"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:hint="@string/gender"-->
+                <!--style="@style/CustomTextStyle16"-->
+                <!--android:background="@drawable/under_line_textview_light"-->
+                <!--android:paddingBottom="@dimen/textViewPaddingBottom"-->
+                <!--android:drawableStart="@drawable/ic_ep_gender"-->
+                <!--android:drawablePadding="@dimen/textViewPadding"-->
+                <!--android:layout_marginTop="24dp"-->
+                <!--/>-->
 
 
 
         </RelativeLayout>
 
-        <Button
+        <mehdi.sakout.fancybuttons.FancyButton
             android:id="@+id/ep_save_b"
+            android:layout_below="@+id/al_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:text="@string/save"
+            android:paddingBottom="10dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:paddingTop="10dp"
+            fancy:fb_borderColor="@color/lightGreen"
+            fancy:fb_borderWidth="1dp"
+            fancy:fb_defaultColor="@color/lightGreen"
+            fancy:fb_focusColor="@color/white"
+            fancy:fb_radius="0dp"
+            fancy:fb_text="@string/update"
+            fancy:fb_textSize="14sp"
             style="@style/CustomTextStyle16"
-            android:textColor="@color/white"
-            android:textStyle="bold"
-            android:gravity="center"
-            android:enabled="false"
-            android:background="@color/buttonDisabledColor"
+            app:fb_textColor="@color/white"
             android:layout_gravity="bottom"
-            />
+            android:layout_alignParentBottom="true"
+             />
+
 
 
     </android.support.design.widget.CoordinatorLayout>

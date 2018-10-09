@@ -81,6 +81,7 @@ public class PhoneLogin extends Fragment implements View.OnClickListener{
     private final static String USER_PROFILES = "user_profiles";
     private final static String PHONE_NUMBER = "phone_number";
     private final static String PRIMARY_ACCOUNT = "primary_account";
+    private final String GENDER = "gender";
 
     private SharedPreferences sharedPreferencesLogin;
     private final static String LOGIN = "login";
@@ -568,8 +569,9 @@ public class PhoneLogin extends Fragment implements View.OnClickListener{
 
 //    saving data at firebase database
     private void saveUserProfileDataInFirebaseDataBasePHONE(FirebaseUser user){
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-        databaseReference.child(USER_PROFILES).child(user.getUid())
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child(USER_PROFILES);
+        databaseReference.child(GENDER).setValue("male");
+        databaseReference.child(user.getUid())
                 .child(PHONE_NUMBER).setValue(user.getPhoneNumber()).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {

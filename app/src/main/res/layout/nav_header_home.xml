@@ -70,6 +70,7 @@
             android:hint="@string/name"
             style="@style/CustomTextStyle12"
             android:textSize="14sp"
+            android:textStyle="bold"
             />
 
         <!--email-->

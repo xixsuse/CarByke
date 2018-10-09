@@ -55,6 +55,9 @@ public class Home extends AppCompatActivity
     private final String PROFILE_IMAGE_URL = "profile_image_url";
     private FirebaseAuth mAuth;
 
+    private SharedPreferences sharedPreferences;
+    private final static String PROFILE_DATA = "profile_data";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,6 +92,7 @@ public class Home extends AppCompatActivity
 //        getting id of nav bar
         mAuth = FirebaseAuth.getInstance();
 
+
         car_ib.setOnClickListener(this);
         bike_ib.setOnClickListener(this);
         login_sign_tv.setOnClickListener(this);
@@ -110,13 +114,45 @@ public class Home extends AppCompatActivity
         if (TextUtils.equals(val, "true")){
             not_signed_in_rl.setVisibility(View.GONE);
             signed_in_rl.setVisibility(View.VISIBLE);
-            setUserData();
+            getProfileDataFromSharedPref();
+           // setUserData();
         }
 
     }
     //    if signed in then display profile data in profile
 
-//    setting user data
+//    get user profile saved data from shared pref
+    public void getProfileDataFromSharedPref() {
+        sharedPreferences = getSharedPreferences(PROFILE_DATA, MODE_PRIVATE);
+        String name, email, phone;
+        name = sharedPreferences.getString(NAME, "");
+        email = sharedPreferences.getString(EMAIL, "");
+        phone = sharedPreferences.getString(PHONE_NUMBER, "");
+
+        name_tv.setText(name);
+//        email
+        if (!TextUtils.isEmpty(email)){
+            email_tv.setText(email);
+        }
+        else {
+            email_tv.setVisibility(View.GONE);
+        }
+//        phone
+        if (!TextUtils.isEmpty(phone)){
+            phone_tv.setText(phone);
+        }
+        else {
+            phone_tv.setVisibility(View.GONE);
+        }
+
+        // now load data from database
+        setUserData();
+    }
+//    get user profile saved data from shared pref
+
+
+
+    //    setting user data
     private void setUserData() {
         String uid = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
         databaseReference.child(uid)
@@ -128,22 +164,33 @@ public class Home extends AppCompatActivity
                         String phone;
                         Uri profile_image_url;
                         name = dataSnapshot.child(NAME).getValue(String.class);
-                        email = dataSnapshot.child(EMAIL).getValue(String.class);
-                        phone = dataSnapshot.child(PHONE_NUMBER).getValue(String.class);
+                        email = mAuth.getCurrentUser().getEmail();
+                        phone = mAuth.getCurrentUser().getPhoneNumber();
                         profile_image_url = mAuth.getCurrentUser().getPhotoUrl();
 
                         name_tv.setText(name);
-                        email_tv.setText(email);
-                        phone_tv.setText(phone);
+//        email
+                        if (!TextUtils.isEmpty(email)){
+                            email_tv.setText(email);
+                        }
+                        else {
+                            email_tv.setVisibility(View.GONE);
+                        }
+//        phone
+                        if (!TextUtils.isEmpty(phone)){
+                            phone_tv.setText(phone);
+                        }
+                        else {
+                            phone_tv.setVisibility(View.GONE);
+                        }
 
                         Picasso.with(Home.this)
                                 .load(profile_image_url)
                                 .placeholder(R.drawable.ic_placeholder_profile_pic)
-                                .centerCrop()
-                                .fit()
                                 .into(profile_image_iv);
-                    }
 
+                        saveFetchedDataInSharedPrefs(name, email, phone);
+                    }
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
 
@@ -151,6 +198,16 @@ public class Home extends AppCompatActivity
                 });
     }
 //    setting user data
+//    saving data in shared pref
+private void saveFetchedDataInSharedPrefs(String name, String email, String phone) {
+    SharedPreferences.Editor editor = sharedPreferences.edit();
+    editor.putString(NAME, name);
+    editor.putString(EMAIL, email);
+    editor.putString(PHONE_NUMBER, phone);
+    editor.apply();
+}
+    //    saving data in shared pref
+
 
 
 //    set background image

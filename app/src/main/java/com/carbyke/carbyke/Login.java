@@ -58,6 +58,7 @@ public class Login extends AppCompatActivity implements  GoogleApiClient.OnConne
     private final static String EMAIL = "email";
     private final static String PHONE_NUMBER = "phone_number";
     private final String NAME = "name";
+    private final String GENDER = "gender";
     private DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child(USER_PROFILES);
     private DatabaseReference databaseReferenceUID;
 
@@ -197,10 +198,11 @@ public class Login extends AppCompatActivity implements  GoogleApiClient.OnConne
 
     }
 
-    //    saving data at firebase database
+    //    saving data at firebase database                                               //     saving data
     private void saveUserProfileDataInFirebaseDataBase(final FirebaseUser user){
         databaseReferenceUID = databaseReference.child(user.getUid());
         databaseReferenceUID.child(NAME).setValue(user.getDisplayName());
+        databaseReferenceUID.child(GENDER).setValue("male");
         databaseReferenceUID.child(EMAIL).setValue(user.getEmail()).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {

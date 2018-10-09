@@ -16,6 +16,13 @@
         <item name="colorAccent">@color/white</item>
     </style>
 
+    <style name="MyCustomAppThemeEditLogin" parent="Theme.AppCompat.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/appColor</item>
+        <item name="colorAccent">@color/black</item>
+    </style>
+
     <style name="MyCustomAppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
