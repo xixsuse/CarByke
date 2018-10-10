@@ -19,6 +19,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -78,7 +79,7 @@ public class Home extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = findViewById(R.id.nav_view);
+        final NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         login_sign_tv = navigationView.getHeaderView(0).findViewById(R.id.hh_login_sign);
@@ -97,6 +98,18 @@ public class Home extends AppCompatActivity
         bike_ib.setOnClickListener(this);
         login_sign_tv.setOnClickListener(this);
         signed_in_rl.setOnClickListener(this);
+
+        new CheckNetworkConnection(Home.this, new CheckNetworkConnection.OnConnectionCallback() {
+            @Override
+            public void onConnectionSuccess() {
+
+            }
+            @Override
+            public void onConnectionFail(String msg) {
+                NoInternetConnectionAlert noInternetConnectionAlert = new NoInternetConnectionAlert(Home.this);
+                noInternetConnectionAlert.DisplayNoInternetConnection();
+            }
+        }).execute();
 
     }
     //    on start
@@ -131,14 +144,14 @@ public class Home extends AppCompatActivity
 
         name_tv.setText(name);
 //        email
-        if (!TextUtils.isEmpty(email)){
+        if (!TextUtils.isEmpty(email) && !TextUtils.equals(email,"link google account!")){
             email_tv.setText(email);
         }
         else {
             email_tv.setVisibility(View.GONE);
         }
 //        phone
-        if (!TextUtils.isEmpty(phone)){
+        if (!TextUtils.isEmpty(phone)  && !TextUtils.equals(phone,"link phone number!")){
             phone_tv.setText(phone);
         }
         else {
@@ -175,6 +188,7 @@ public class Home extends AppCompatActivity
                         }
                         else {
                             email_tv.setVisibility(View.GONE);
+                            email = "link google account!";
                         }
 //        phone
                         if (!TextUtils.isEmpty(phone)){
@@ -182,6 +196,7 @@ public class Home extends AppCompatActivity
                         }
                         else {
                             phone_tv.setVisibility(View.GONE);
+                            phone = "link phone number!";
                         }
 
                         Picasso.with(Home.this)

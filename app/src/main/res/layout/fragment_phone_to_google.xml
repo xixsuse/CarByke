@@ -15,13 +15,12 @@
         android:padding="@dimen/activity_horizontal_margin"
         >
 
-
         <!--skip-->
         <TextView
             android:id="@+id/tg_skip_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="SKIP"
+            android:text="@string/skip"
             style="@style/CustomTextStyle12"
             android:layout_alignParentEnd="true"
             />
@@ -33,6 +32,7 @@
             android:layout_marginTop="92dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            style="@style/CustomTextStyle12"
             />
 
         <!--with google-->

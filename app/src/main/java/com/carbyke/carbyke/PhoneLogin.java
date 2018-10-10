@@ -103,6 +103,8 @@ public class PhoneLogin extends Fragment implements View.OnClickListener{
         initialiseFirebaseAuth();
         initialiseSharedPrefs();
         showSignInModeMessage();
+//        Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction()
+//                .add(R.id.fragment_container_login, new PhoneToGoogle()).addToBackStack("phone_to_google").commit();
         //Toast.makeText(getActivity(), ""+ Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid(), Toast.LENGTH_SHORT).show();
         return view;
     }
@@ -488,9 +490,9 @@ public class PhoneLogin extends Fragment implements View.OnClickListener{
     // resend code
 
 
-//    after verification, login with firebase with phone auth
+//    after verification, login with firebase with phone auth (link phone number with google account)
     private void signInWithPhoneAuthCredentialMergeGoogle_Phone(PhoneAuthCredential credential) {
-
+//  linking phone auth with google auth
         Objects.requireNonNull(firebaseAuth.getCurrentUser()).linkWithCredential(credential)
                 .addOnCompleteListener(Objects.requireNonNull(getActivity()), new OnCompleteListener<AuthResult>() {
                     @Override
@@ -501,8 +503,7 @@ public class PhoneLogin extends Fragment implements View.OnClickListener{
                             //  statusText.setText("Signed In");
                             resendButton.setEnabled(false);
                             verifyButton.setEnabled(false);
-                            saveUserProfileDataInFirebaseDataBaseGOOGLE_PHONE(task.getResult().getUser());
-
+                            saveUserProfileDataInFirebaseDataBaseGOOGLE_PHONE(Objects.requireNonNull(task.getResult()).getUser());
                             Toast.makeText(getActivity(), "Congratulations! Login Successful.", Toast.LENGTH_SHORT).show();
 
                         } else {
@@ -516,7 +517,7 @@ public class PhoneLogin extends Fragment implements View.OnClickListener{
 
 //   firebase sign in with phone
     private void signInWithPhoneAuthCredentialPhone(PhoneAuthCredential credential) {
-
+//          sign in with phone (no linking here, as google is not signed in)
                 firebaseAuth.signInWithCredential(credential)
                 .addOnCompleteListener(Objects.requireNonNull(getActivity()), new OnCompleteListener<AuthResult>() {
                     @Override
@@ -527,7 +528,7 @@ public class PhoneLogin extends Fragment implements View.OnClickListener{
                             //  statusText.setText("Signed In");
                             resendButton.setEnabled(false);
                             verifyButton.setEnabled(false);
-                            saveUserProfileDataInFirebaseDataBasePHONE(task.getResult().getUser());
+                            saveUserProfileDataInFirebaseDataBasePHONE(Objects.requireNonNull(task.getResult()).getUser());
                             Toast.makeText(getActivity(), "Congratulations! Login Successful.", Toast.LENGTH_SHORT).show();
 
                         } else {
@@ -570,37 +571,30 @@ public class PhoneLogin extends Fragment implements View.OnClickListener{
 //    saving data at firebase database
     private void saveUserProfileDataInFirebaseDataBasePHONE(FirebaseUser user){
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child(USER_PROFILES);
-        databaseReference.child(GENDER).setValue("male");
-        databaseReference.child(user.getUid())
-                .child(PHONE_NUMBER).setValue(user.getPhoneNumber()).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                // values saved successfully at database
-
-            }
-        });
+        databaseReference.child(user.getUid()).child(GENDER).setValue("male");
+        databaseReference.child(user.getUid()).child(PHONE_NUMBER).setValue(user.getPhoneNumber());
+        // open new fragment that will prompt to link google account
         Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container_login, new PhoneToGoogle()).addToBackStack("phone_to_google").commit();
+                .add(R.id.fragment_container_login, new PhoneToGoogle()).addToBackStack("phone_to_google").commit();
 
         sharedPreferencesLogin = Objects.requireNonNull(getActivity()).getSharedPreferences(LOGIN, MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferencesLogin.edit();
         editor.putString(LOGGED_IN_OR_NOT, "true");
         editor.apply();
-        Objects.requireNonNull(getActivity()).finish();
     }
 //    saving data at firebase database
 
-    //    saving data at firebase database
+    //    saving data at firebase database (linked)
     private void saveUserProfileDataInFirebaseDataBaseGOOGLE_PHONE(FirebaseUser user){
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
         databaseReference.child(USER_PROFILES).child(user.getUid())
                 .child(PHONE_NUMBER).setValue(user.getPhoneNumber());
         // save in shared pref that user is logged in and then exit this activity
-        sharedPreferencesLogin = Objects.requireNonNull(getActivity()).getSharedPreferences(LOGIN, MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferencesLogin.edit();
-        editor.putString(LOGGED_IN_OR_NOT, "true");
-        editor.apply();
-        Objects.requireNonNull(getActivity()).finish();
+//        sharedPreferencesLogin = Objects.requireNonNull(getActivity()).getSharedPreferences(LOGIN, MODE_PRIVATE);
+//        SharedPreferences.Editor editor = sharedPreferencesLogin.edit();
+//        editor.putString(LOGGED_IN_OR_NOT, "true");
+//        editor.apply();
+//        Objects.requireNonNull(getActivity()).finish();
     }
 //    saving data at firebase database
 

@@ -60,17 +60,20 @@ public class PhoneToGoogle extends Fragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_phone_to_google, container, false);
-        fetchIDs();
+        signed_in_message_tv = view.findViewById(R.id.tg_signed_in_message_tv);
+        google_sign_in_fb = view.findViewById(R.id.tg_google_fb);
+        skip_tv = view.findViewById(R.id.tg_skip_tv);
         onclick();
         return view;
     }
 
     public void onStart(){
         super.onStart();
+        setMessage();
         initiateGoogleSignInServices();
     }
 
@@ -82,7 +85,6 @@ public class PhoneToGoogle extends Fragment {
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
-        String[] SCOPES = {Scopes.PROFILE};
 
         // Build a GoogleSignInClient with the options specified by gso.
         mGoogleApiClient = new GoogleApiClient.Builder(Objects.requireNonNull(getActivity()))
@@ -120,14 +122,14 @@ public class PhoneToGoogle extends Fragment {
 
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
 
-        mAuth.signInWithCredential(credential)
+        Objects.requireNonNull(mAuth.getCurrentUser()).linkWithCredential(credential)
                 //Objects.requireNonNull(mAuth.getCurrentUser()).linkWithCredential(credential)
                 .addOnCompleteListener(Objects.requireNonNull(getActivity()), new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             //  updateUI(user);
-                            saveUserProfileDataInFirebaseDataBase(task.getResult().getUser());
+                            saveUserProfileDataInFirebaseDataBase(Objects.requireNonNull(task.getResult()).getUser());
                         } else {
                             // If sign in fails, display a message to the user.
                             showSignInFailedMessage((Objects.requireNonNull(task.getException())).getLocalizedMessage());
@@ -175,7 +177,8 @@ public class PhoneToGoogle extends Fragment {
         google_sign_in_fb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+                startActivityForResult(signInIntent, RC_SIGN_IN);
             }
         });
 
@@ -187,17 +190,15 @@ public class PhoneToGoogle extends Fragment {
         });
     }
 
-    private void fetchIDs() {
-        signed_in_message_tv = view.findViewById(R.id.tg_signed_in_message_tv);
-        google_sign_in_fb = view.findViewById(R.id.tg_google_fb);
-        skip_tv = view.findViewById(R.id.tg_skip_tv);
-
-        setMessage();
-    }
 
     private void setMessage() {
         mAuth = FirebaseAuth.getInstance();
-        String phone_number = Objects.requireNonNull(mAuth.getCurrentUser()).getPhoneNumber();
+        String phone_number = null;
+        try {
+            phone_number = mAuth.getCurrentUser().getPhoneNumber();
+        } catch (NullPointerException e) {
+            Toast.makeText(getActivity(), "exception", Toast.LENGTH_SHORT).show();
+        }
         signed_in_message_tv.setText(String.format("You're signed-in as %s. Link your mail account so that next time you can sign in with email or phone number.", phone_number));
     }
 
