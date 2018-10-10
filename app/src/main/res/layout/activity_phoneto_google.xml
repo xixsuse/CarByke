@@ -25,14 +25,25 @@
             android:layout_alignParentEnd="true"
             />
 
+        <!--logo-->
+        <ImageView
+            android:id="@+id/tg_logo"
+            android:layout_width="150dp"
+            android:layout_height="43dp"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/logo_black"
+            android:layout_marginTop="52dp"
+            tools:ignore="ContentDescription" />
+
         <!--signed in message-->
         <TextView
             android:id="@+id/tg_signed_in_message_tv"
-            android:layout_below="@+id/tg_skip_tv"
-            android:layout_marginTop="92dp"
+            android:layout_below="@+id/tg_logo"
+            android:layout_marginTop="52dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/CustomTextStyle12"
+            android:textColor="#9B9B9B"
             />
 
         <!--with google-->
@@ -66,3 +77,4 @@
     </RelativeLayout>
 
 </RelativeLayout>
+

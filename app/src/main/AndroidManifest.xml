@@ -52,9 +52,11 @@
         <activity
             android:name=".Login"
             android:windowSoftInputMode="adjustResize|stateHidden" />
-        <activity android:name=".EditProfile"
-            android:windowSoftInputMode="adjustResize|stateHidden"
-            />
+        <activity
+            android:name=".EditProfile"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
+        <activity android:name=".PhoneLogin" />
+        <activity android:name=".PhoneToGoogle"></activity>
     </application>
 
 </manifest>

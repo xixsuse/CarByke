@@ -1,6 +1,10 @@
 package com.carbyke.carbyke;
 
-
+import android.app.Activity;
+import android.content.Intent;
+import android.os.ResultReceiver;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -46,11 +50,7 @@ import mehdi.sakout.fancybuttons.FancyButton;
 
 import static android.content.Context.MODE_PRIVATE;
 
-
-/**
- * A simple {@link Fragment} subclass.
- */
-public class PhoneLogin extends Fragment implements View.OnClickListener{
+public class PhoneLogin extends AppCompatActivity implements View.OnClickListener {
 
     private View view;
 
@@ -88,28 +88,18 @@ public class PhoneLogin extends Fragment implements View.OnClickListener{
     private final static String LOGGED_IN_OR_NOT = "logged_in";
 
 
-    public PhoneLogin() {
-        // Required empty public constructor
-    }
-
-
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        view = inflater.inflate(R.layout.fragment_phone_login, container, false);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_phone_login);
         fetchIDs();
         TextWatcher();
         initialiseFirebaseAuth();
         initialiseSharedPrefs();
         showSignInModeMessage();
-//        Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction()
-//                .add(R.id.fragment_container_login, new PhoneToGoogle()).addToBackStack("phone_to_google").commit();
-        //Toast.makeText(getActivity(), ""+ Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid(), Toast.LENGTH_SHORT).show();
-        return view;
-    }
 
-//    show <!--signed as google acc info, when first logged in by google-->
+    }
+    //    show <!--signed as google acc info, when first logged in by google-->
     private void showSignInModeMessage() {
         String mode = sharedPreferencesLoginMode.getString(LOGIN_MODE, "");
         if (TextUtils.equals(mode, "google")){
@@ -133,11 +123,11 @@ public class PhoneLogin extends Fragment implements View.OnClickListener{
 
     //    initialising shared preferences
     private void initialiseSharedPrefs(){
-        sharedPreferencesLoginMode = Objects.requireNonNull(getActivity()).getSharedPreferences(MODE, MODE_PRIVATE);
+        sharedPreferencesLoginMode = getSharedPreferences(MODE, MODE_PRIVATE);
     }
     //    initialising shared preferences
 
-//    text watcher
+    //    text watcher
     private void TextWatcher() {
         phone_number_et.addTextChangedListener(new TextWatcher() {
             @Override
@@ -191,19 +181,19 @@ public class PhoneLogin extends Fragment implements View.OnClickListener{
 
     //    getting ids
     private void fetchIDs() {
-        phone_number_et = view.findViewById(R.id.phoneText);
-        codeText = view.findViewById(R.id.codeText);
-        verifyButton = view.findViewById(R.id.verifyButton);
-        sendButton = view.findViewById(R.id.sendButton);
-        resendButton = view.findViewById(R.id.resendButton);
-        wrong_number_tv = view.findViewById(R.id.pl_wrong_number_tv);
-        statusText = view.findViewById(R.id.pl_otp_text);
-        otpRelativeLayout = view.findViewById(R.id.pl_otpRelativeLayout);
-        spinKitView = view.findViewById(R.id.pl_spin_kit);
-        continuableCircleCountDownView = view.findViewById(R.id.pl_circleCountDownView);
-        cancel_ib = view.findViewById(R.id.pl_cancel_ib);
-        signed_in_as = view.findViewById(R.id.pl_signed_in_as);
-        info_ib = view.findViewById(R.id.pl_info_ib);
+        phone_number_et = findViewById(R.id.phoneText);
+        codeText = findViewById(R.id.codeText);
+        verifyButton = findViewById(R.id.verifyButton);
+        sendButton = findViewById(R.id.sendButton);
+        resendButton = findViewById(R.id.resendButton);
+        wrong_number_tv = findViewById(R.id.pl_wrong_number_tv);
+        statusText = findViewById(R.id.pl_otp_text);
+        otpRelativeLayout = findViewById(R.id.pl_otpRelativeLayout);
+        spinKitView = findViewById(R.id.pl_spin_kit);
+        continuableCircleCountDownView = findViewById(R.id.pl_circleCountDownView);
+        cancel_ib = findViewById(R.id.pl_cancel_ib);
+        signed_in_as = findViewById(R.id.pl_signed_in_as);
+        info_ib = findViewById(R.id.pl_info_ib);
 
         sendButton.setEnabled(false);
         verifyButton.setEnabled(false);
@@ -222,24 +212,24 @@ public class PhoneLogin extends Fragment implements View.OnClickListener{
 
     public void sendCode() {
         // ic
-                String phoneNumber = phone_number_et.getText().toString();
+        String phoneNumber = phone_number_et.getText().toString();
 
-                if (TextUtils.isEmpty(phoneNumber) || phoneNumber.length() < 10){
-                    Toast.makeText(getActivity(), "incorrect Phone Number", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+        if (TextUtils.isEmpty(phoneNumber) || phoneNumber.length() < 10){
+            Toast.makeText(PhoneLogin.this, "incorrect Phone Number", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-                spinKitView.setVisibility(View.VISIBLE);
-                phoneNumber = countryCode+phoneNumber;
+        spinKitView.setVisibility(View.VISIBLE);
+        phoneNumber = countryCode+phoneNumber;
 
-                setUpVerificationCallbacksSendCode();
+        setUpVerificationCallbacksSendCode();
 
-                PhoneAuthProvider.getInstance().verifyPhoneNumber(
-                        phoneNumber,        // Phone number to verify
-                        30,                 // Timeout duration
-                        TimeUnit.SECONDS,   // Unit of timeout
-                        Objects.requireNonNull(getActivity()),               // Activity (for callback binding)
-                        verificationCallbacks);
+        PhoneAuthProvider.getInstance().verifyPhoneNumber(
+                phoneNumber,        // Phone number to verify
+                30,                 // Timeout duration
+                TimeUnit.SECONDS,   // Unit of timeout
+                PhoneLogin.this,               // Activity (for callback binding)
+                verificationCallbacks);
         // ic
 
     }
@@ -276,7 +266,7 @@ public class PhoneLogin extends Fragment implements View.OnClickListener{
 
                         if (e instanceof FirebaseAuthInvalidCredentialsException) {
                             // Invalid request
-                            new MaterialDialog.Builder(Objects.requireNonNull(getActivity()))
+                            new MaterialDialog.Builder(PhoneLogin.this)
                                     .title("Invalid credential")
                                     .titleColor(getResources().getColor(R.color.black))
                                     .content(e.getLocalizedMessage())
@@ -291,7 +281,7 @@ public class PhoneLogin extends Fragment implements View.OnClickListener{
                         } else if (e instanceof FirebaseTooManyRequestsException) {
                             // SMS quota exceeded
                             // Log.d(TAG, "SMS Quota exceeded.");
-                            Toast.makeText(getActivity(), "Too many attempts, try after some time", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(PhoneLogin.this, "Too many attempts, try after some time", Toast.LENGTH_SHORT).show();
                             spinKitView.setVisibility(View.GONE);
                         }
                     }
@@ -304,7 +294,7 @@ public class PhoneLogin extends Fragment implements View.OnClickListener{
 //                        disable edit text on code sent
                         phone_number_et.setEnabled(false);
                         wrong_number_tv.setVisibility(View.VISIBLE);
-                        phone_number_et.setTextColor(Objects.requireNonNull(getActivity()).getResources().getColor(R.color.gray));
+                        phone_number_et.setTextColor(getResources().getColor(R.color.gray));
 
                         otpRelativeLayout.setVisibility(View.VISIBLE);
                         YoYo.with(Techniques.SlideInUp)
@@ -352,7 +342,7 @@ public class PhoneLogin extends Fragment implements View.OnClickListener{
     }
 
 
-//when re-send button is used
+    //when re-send button is used
     private void setUpVerificationCallbacksReSendCode() {
 
         verificationCallbacks =
@@ -385,7 +375,7 @@ public class PhoneLogin extends Fragment implements View.OnClickListener{
 
                         if (e instanceof FirebaseAuthInvalidCredentialsException) {
                             // Invalid request
-                            new MaterialDialog.Builder(Objects.requireNonNull(getActivity()))
+                            new MaterialDialog.Builder(PhoneLogin.this)
                                     .title("Invalid credential")
                                     .titleColor(getResources().getColor(R.color.black))
                                     .content(e.getLocalizedMessage())
@@ -400,7 +390,7 @@ public class PhoneLogin extends Fragment implements View.OnClickListener{
                         } else if (e instanceof FirebaseTooManyRequestsException) {
                             // SMS quota exceeded
                             // Log.d(TAG, "SMS Quota exceeded.");
-                            Toast.makeText(getActivity(), "Too many attempts, try after some time", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(PhoneLogin.this, "Too many attempts, try after some time", Toast.LENGTH_SHORT).show();
                             spinKitView.setVisibility(View.GONE);
                         }
                     }
@@ -454,22 +444,22 @@ public class PhoneLogin extends Fragment implements View.OnClickListener{
     //verify code
     public void verifyCode() {
         //ic
-                String code = codeText.getText().toString();
-                PhoneAuthCredential credential = PhoneAuthProvider.getCredential(phoneVerificationId, code);
+        String code = codeText.getText().toString();
+        PhoneAuthCredential credential = PhoneAuthProvider.getCredential(phoneVerificationId, code);
 
-                // firebase login
-                String mode = sharedPreferencesLoginMode.getString(LOGIN_MODE, "");
-                if (TextUtils.equals(mode, "google")){
-                    signInWithPhoneAuthCredentialMergeGoogle_Phone(credential);
-                }
-                else {
-                    signInWithPhoneAuthCredentialPhone(credential);
-                }
+        // firebase login
+        String mode = sharedPreferencesLoginMode.getString(LOGIN_MODE, "");
+        if (TextUtils.equals(mode, "google")){
+            signInWithPhoneAuthCredentialMergeGoogle_Phone(credential);
+        }
+        else {
+            signInWithPhoneAuthCredentialPhone(credential);
+        }
     }
     //verify code
 
 
-// resend code
+    // resend code
     public void resendCode() {
         //ic
         String phoneNumber = phone_number_et.getText().toString();
@@ -483,18 +473,18 @@ public class PhoneLogin extends Fragment implements View.OnClickListener{
                 phoneNumber,
                 30,
                 TimeUnit.SECONDS,
-                Objects.requireNonNull(getActivity()),
+                PhoneLogin.this,
                 verificationCallbacks,
                 resendToken);
     }
     // resend code
 
 
-//    after verification, login with firebase with phone auth (link phone number with google account)
+    //    after verification, login with firebase with phone auth (link phone number with google account)
     private void signInWithPhoneAuthCredentialMergeGoogle_Phone(PhoneAuthCredential credential) {
 //  linking phone auth with google auth
         Objects.requireNonNull(firebaseAuth.getCurrentUser()).linkWithCredential(credential)
-                .addOnCompleteListener(Objects.requireNonNull(getActivity()), new OnCompleteListener<AuthResult>() {
+                .addOnCompleteListener(PhoneLogin.this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
@@ -504,7 +494,7 @@ public class PhoneLogin extends Fragment implements View.OnClickListener{
                             resendButton.setEnabled(false);
                             verifyButton.setEnabled(false);
                             saveUserProfileDataInFirebaseDataBaseGOOGLE_PHONE(Objects.requireNonNull(task.getResult()).getUser());
-                            Toast.makeText(getActivity(), "Congratulations! Login Successful.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(PhoneLogin.this, "Congratulations! Login Successful.", Toast.LENGTH_SHORT).show();
 
                         } else {
                             showSignInFailedMessage((Objects.requireNonNull(task.getException())).getLocalizedMessage());
@@ -515,11 +505,11 @@ public class PhoneLogin extends Fragment implements View.OnClickListener{
 //    after verification, login with firebase with phone auth
 
 
-//   firebase sign in with phone
+    //   firebase sign in with phone
     private void signInWithPhoneAuthCredentialPhone(PhoneAuthCredential credential) {
 //          sign in with phone (no linking here, as google is not signed in)
-                firebaseAuth.signInWithCredential(credential)
-                .addOnCompleteListener(Objects.requireNonNull(getActivity()), new OnCompleteListener<AuthResult>() {
+        firebaseAuth.signInWithCredential(credential)
+                .addOnCompleteListener(PhoneLogin.this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
@@ -529,7 +519,7 @@ public class PhoneLogin extends Fragment implements View.OnClickListener{
                             resendButton.setEnabled(false);
                             verifyButton.setEnabled(false);
                             saveUserProfileDataInFirebaseDataBasePHONE(Objects.requireNonNull(task.getResult()).getUser());
-                            Toast.makeText(getActivity(), "Congratulations! Login Successful.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(PhoneLogin.this, "Congratulations! Login Successful.", Toast.LENGTH_SHORT).show();
 
                         } else {
                             showSignInFailedMessage((Objects.requireNonNull(task.getException())).getLocalizedMessage());
@@ -540,11 +530,11 @@ public class PhoneLogin extends Fragment implements View.OnClickListener{
 //   firebase sign in with phone
 
 
-//    firebase login failed message
+    //    firebase login failed message
     private void showSignInFailedMessage(String errorMessage){
         try{
-            new MaterialDialog.Builder(Objects.requireNonNull(getActivity()))
-                    .title("Sign in failed")
+            new MaterialDialog.Builder(PhoneLogin.this)
+                    .title("Account linking failedd")
                     .content(Objects.requireNonNull(errorMessage))
                     .contentColorRes(R.color.black)
                     .titleColor(getResources().getColor(R.color.googleRed))
@@ -568,19 +558,22 @@ public class PhoneLogin extends Fragment implements View.OnClickListener{
 //    firebase login failed message
 
 
-//    saving data at firebase database
+    //    saving data at firebase database
     private void saveUserProfileDataInFirebaseDataBasePHONE(FirebaseUser user){
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child(USER_PROFILES);
         databaseReference.child(user.getUid()).child(GENDER).setValue("male");
         databaseReference.child(user.getUid()).child(PHONE_NUMBER).setValue(user.getPhoneNumber());
         // open new fragment that will prompt to link google account
-        Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction()
-                .add(R.id.fragment_container_login, new PhoneToGoogle()).addToBackStack("phone_to_google").commit();
+        startActivity(new Intent(PhoneLogin.this, PhoneToGoogle.class));
 
-        sharedPreferencesLogin = Objects.requireNonNull(getActivity()).getSharedPreferences(LOGIN, MODE_PRIVATE);
+        sharedPreferencesLogin = getSharedPreferences(LOGIN, MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferencesLogin.edit();
         editor.putString(LOGGED_IN_OR_NOT, "true");
         editor.apply();
+        //close login activity
+        ((ResultReceiver)getIntent().getParcelableExtra("finisher")).send(1, new Bundle());
+        PhoneLogin.this.finish();
+
     }
 //    saving data at firebase database
 
@@ -632,7 +625,7 @@ public class PhoneLogin extends Fragment implements View.OnClickListener{
                 break;
 //                cancel button
             case R.id.pl_cancel_ib:
-                Objects.requireNonNull(getActivity()).finish();
+                PhoneLogin.this.finish();
 //                Objects.requireNonNull(firebaseAuth.getCurrentUser()).unlink("phone")
 //                        .addOnCompleteListener(Objects.requireNonNull(getActivity()), new OnCompleteListener<AuthResult>() {
 //                            @Override

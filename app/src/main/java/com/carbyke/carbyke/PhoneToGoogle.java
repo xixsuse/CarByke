@@ -1,22 +1,27 @@
 package com.carbyke.carbyke;
 
-
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -34,11 +39,7 @@ import java.util.Objects;
 
 import mehdi.sakout.fancybuttons.FancyButton;
 
-
-/**
- * A simple {@link Fragment} subclass.
- */
-public class PhoneToGoogle extends Fragment {
+public class PhoneToGoogle extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
     private static final String NAME = "name";
     private static final String USER_PROFILES = "user_profiles";
@@ -54,23 +55,18 @@ public class PhoneToGoogle extends Fragment {
 
     private DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child(USER_PROFILES);
 
-    public PhoneToGoogle() {
-        // Required empty public constructor
-    }
-
-
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        view = inflater.inflate(R.layout.fragment_phone_to_google, container, false);
-        signed_in_message_tv = view.findViewById(R.id.tg_signed_in_message_tv);
-        google_sign_in_fb = view.findViewById(R.id.tg_google_fb);
-        skip_tv = view.findViewById(R.id.tg_skip_tv);
-        onclick();
-        return view;
-    }
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_phoneto_google);
+        signed_in_message_tv = findViewById(R.id.tg_signed_in_message_tv);
+        google_sign_in_fb = findViewById(R.id.tg_google_fb);
+        skip_tv = findViewById(R.id.tg_skip_tv);
 
+        mAuth = FirebaseAuth.getInstance();
+
+        onclick();
+    }
     public void onStart(){
         super.onStart();
         setMessage();
@@ -87,8 +83,8 @@ public class PhoneToGoogle extends Fragment {
                 .build();
 
         // Build a GoogleSignInClient with the options specified by gso.
-        mGoogleApiClient = new GoogleApiClient.Builder(Objects.requireNonNull(getActivity()))
-                .enableAutoManage(getActivity()/* FragmentActivity */, (GoogleApiClient.OnConnectionFailedListener) getActivity() /* OnConnectionFailedListener */)
+        mGoogleApiClient = new GoogleApiClient.Builder(PhoneToGoogle.this)
+                .enableAutoManage(PhoneToGoogle.this/* FragmentActivity */, this /* OnConnectionFailedListener */)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
     }
@@ -105,10 +101,11 @@ public class PhoneToGoogle extends Fragment {
                 // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = result.getSignInAccount();
                 firebaseAuthWithGoogle(Objects.requireNonNull(account));
+                Toast.makeText(this, ""+account.getDisplayName()+" "+account.getPhotoUrl(), Toast.LENGTH_SHORT).show();
             } else {
                 // Google Sign In failed, update UI appropriately
                 // [START_EXCLUDE]
-                Toast.makeText(getActivity(), "It seems like you have cancelled Google Authentication!", Toast.LENGTH_LONG).show();
+                Toast.makeText(PhoneToGoogle.this, "It seems like you have cancelled Google Authentication!", Toast.LENGTH_LONG).show();
                 // rotateLoading.stop();
                 // updateUI(null);
                 // [END_EXCLUDE]
@@ -122,24 +119,20 @@ public class PhoneToGoogle extends Fragment {
 
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
 
+
         Objects.requireNonNull(mAuth.getCurrentUser()).linkWithCredential(credential)
                 //Objects.requireNonNull(mAuth.getCurrentUser()).linkWithCredential(credential)
-                .addOnCompleteListener(Objects.requireNonNull(getActivity()), new OnCompleteListener<AuthResult>() {
+                .addOnCompleteListener(PhoneToGoogle.this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             //  updateUI(user);
                             saveUserProfileDataInFirebaseDataBase(Objects.requireNonNull(task.getResult()).getUser());
+                            Toast.makeText(PhoneToGoogle.this, "linked", Toast.LENGTH_SHORT).show();
                         } else {
                             // If sign in fails, display a message to the user.
                             showSignInFailedMessage((Objects.requireNonNull(task.getException())).getLocalizedMessage());
                         }
-
-                        // [START_EXCLUDE]
-                        //   rotateLoading.stop();
-
-                        // hideProgressDialog();
-                        // [END_EXCLUDE]
                     }
                 });
     }
@@ -147,15 +140,19 @@ public class PhoneToGoogle extends Fragment {
 
     //    saving data at firebase database
     private void saveUserProfileDataInFirebaseDataBase(final FirebaseUser user){
-        databaseReference.child(NAME).setValue(user.getDisplayName());
-        Objects.requireNonNull(getActivity()).finish();
+        mAuth = FirebaseAuth.getInstance();
+        String name = Objects.requireNonNull(mAuth.getCurrentUser()).getDisplayName();
+        Toast.makeText(this, "s "+name, Toast.LENGTH_SHORT).show();
+
+        databaseReference.child(user.getUid()).child(NAME).setValue(name);
+        //PhoneToGoogle.this.finish();
     }
 //    saving data at firebase database
 
 
     private void showSignInFailedMessage(String errorMessage){
         try{
-            new MaterialDialog.Builder(Objects.requireNonNull(getActivity()))
+            new MaterialDialog.Builder(PhoneToGoogle.this)
                     .title("Sign in failed")
                     .content(Objects.requireNonNull(errorMessage))
                     .contentColorRes(R.color.black)
@@ -177,6 +174,11 @@ public class PhoneToGoogle extends Fragment {
         google_sign_in_fb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //            if user register earlier but did not complete phone registration
+                if (GoogleSignIn.getLastSignedInAccount(PhoneToGoogle.this) != null){
+                    Auth.GoogleSignInApi.signOut(mGoogleApiClient);
+                    mGoogleApiClient.clearDefaultAccountAndReconnect();
+                }
                 Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
                 startActivityForResult(signInIntent, RC_SIGN_IN);
             }
@@ -185,21 +187,46 @@ public class PhoneToGoogle extends Fragment {
         skip_tv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Objects.requireNonNull(getActivity()).finish();
+                PhoneToGoogle.this.finish();
             }
         });
     }
 
 
     private void setMessage() {
-        mAuth = FirebaseAuth.getInstance();
+
         String phone_number = null;
         try {
             phone_number = mAuth.getCurrentUser().getPhoneNumber();
         } catch (NullPointerException e) {
-            Toast.makeText(getActivity(), "exception", Toast.LENGTH_SHORT).show();
+            Toast.makeText(PhoneToGoogle.this, "exception", Toast.LENGTH_SHORT).show();
         }
-        signed_in_message_tv.setText(String.format("You're signed-in as %s. Link your mail account so that next time you can sign in with email or phone number.", phone_number));
+        signed_in_message_tv.setText(String.format("You're signed-in with phone number %s. Link your google account so that next time you can sign in with email or phone number.", phone_number));
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        try{
+            new MaterialDialog.Builder(PhoneToGoogle.this)
+                    .title("Connection Failed")
+                    .content(""+connectionResult)
+                    .contentColorRes(R.color.black)
+                    .titleColor(getResources().getColor(R.color.googleRed))
+                    .titleColor(getResources().getColor(R.color.black))
+                    .inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_POSTAL_ADDRESS)
+                    .positiveText("Okay")
+                    .positiveColorRes(R.color.black)
+                    .backgroundColor(getResources().getColor(R.color.white))
+                    .icon(getResources().getDrawable(R.drawable.ic_cancel))
+                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                        }
+                    })
+                    .show();
+        }
+        catch (NullPointerException e) { e.printStackTrace(); }
     }
 
 //    end

@@ -99,33 +99,33 @@ class NetWorkInfoUtility {
         return isNetworkAvailable;
     }
 
-//    private boolean isOnline() {
-//        try {
-//            HttpURLConnection httpURLConnection =
-//                    (HttpURLConnection)(new URL("http://www.firebase.com").openConnection());
-//            httpURLConnection.setRequestProperty("User-Agent", "Test");
-//            httpURLConnection.setRequestProperty("Connection", "close");
-//            httpURLConnection.setConnectTimeout(7000);
-//            httpURLConnection.setReadTimeout(7000);
-//            httpURLConnection.connect();
-//            return (httpURLConnection.getResponseCode() == 200); // 200 is for success
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            return false;
-//        }
-//    }
-
     private boolean isOnline() {
-       // Just to check Time delay
-        Runtime runtime = Runtime.getRuntime();
         try {
-            //Pinging to Google server
-            Process ipProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8");
-            int exitValue = ipProcess.waitFor();
-            return (exitValue == 0);
-        } catch (IOException | InterruptedException e) {
+            HttpURLConnection httpURLConnection =
+                    (HttpURLConnection)(new URL("http://www.google.com").openConnection());
+            httpURLConnection.setRequestProperty("User-Agent", "Test");
+            httpURLConnection.setRequestProperty("Connection", "close");
+            httpURLConnection.setConnectTimeout(7000);
+            httpURLConnection.setReadTimeout(7000);
+            httpURLConnection.connect();
+            return (httpURLConnection.getResponseCode() == 200); // 200 is for success
+        } catch (IOException e) {
             e.printStackTrace();
+            return false;
         }
-        return false;
     }
+
+//    private boolean isOnline() {
+//       // Just to check Time delay
+//        Runtime runtime = Runtime.getRuntime();
+//        try {
+//            //Pinging to Google server
+//            Process ipProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8");
+//            int exitValue = ipProcess.waitFor();
+//            return (exitValue == 0);
+//        } catch (IOException | InterruptedException e) {
+//            e.printStackTrace();
+//        }
+//        return false;
+//    }
 }

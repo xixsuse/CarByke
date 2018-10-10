@@ -2,6 +2,7 @@ package com.carbyke.carbyke;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.ResultReceiver;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
@@ -221,7 +222,8 @@ public class Login extends AppCompatActivity implements  GoogleApiClient.OnConne
             SharedPreferences.Editor editor = sharedPreferencesLoginMode.edit();
             editor.putString(LOGIN_MODE, "google");
             editor.apply();
-            getSupportFragmentManager().beginTransaction().add(R.id.fragment_container_login, new PhoneLogin()).addToBackStack("phoneLogin").commit();
+            startActivity(new Intent(Login.this, PhoneLogin.class));
+            Login.this.finish();
         }
         else {
             // save in shared pref that user is logged in and then exit this activity if second time log in, other wise prompt for phone auth link
@@ -289,7 +291,15 @@ public class Login extends AppCompatActivity implements  GoogleApiClient.OnConne
             editor.apply();
             // sign out if any previous user logged in
             mAuth.signOut();
-            getSupportFragmentManager().beginTransaction().add(R.id.fragment_container_login, new PhoneLogin()).addToBackStack("phoneLogin").commit();
+//            listen for response from phone login activity to close login activity
+            Intent intent = new Intent(Login.this,PhoneLogin.class);
+            intent.putExtra("finisher", new ResultReceiver(null) {
+                @Override
+                protected void onReceiveResult(int resultCode, Bundle resultData) {
+                    Login.this.finish();
+                }
+            });
+            startActivityForResult(intent,1);
         }
 
 
@@ -324,18 +334,11 @@ public class Login extends AppCompatActivity implements  GoogleApiClient.OnConne
         catch (NullPointerException e) { e.printStackTrace(); }
     }
 
-    public void onBackPressed() {
 
-            FragmentManager fragmentManager = this.getSupportFragmentManager();
-            int s = fragmentManager.getBackStackEntryCount() - 1;
-            if (s >= 1){
-                super.onBackPressed();
-                moveTaskToBack(true);
-                finish();
+    public void onBackPressed() {
                 super.onBackPressed();
 
             }
-    }
 
 
 //    end
