@@ -1,5 +1,7 @@
 package com.carbyke.carbyke;
 
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.ResultReceiver;
@@ -23,7 +25,6 @@ import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.chaos.view.PinView;
@@ -48,10 +49,8 @@ import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import mehdi.sakout.fancybuttons.FancyButton;
 
-import static android.content.Context.MODE_PRIVATE;
 
-public class PhoneLogin extends AppCompatActivity implements View.OnClickListener {
-
+public class ChangePhoneNumber extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = "PhoneAuth";
 
@@ -67,65 +66,39 @@ public class PhoneLogin extends AppCompatActivity implements View.OnClickListene
     private ContinuableCircleCountDownView continuableCircleCountDownView;
     private static final int OTP_TIME = 30000;
     private FirebaseAuth firebaseAuth;
-    private ImageButton cancel_ib, info_ib;
+    private ImageButton back_ib;
     private String phoneVerificationId;
     private PhoneAuthProvider.OnVerificationStateChangedCallbacks
             verificationCallbacks;
     private PhoneAuthProvider.ForceResendingToken resendToken;
 
-    private SharedPreferences sharedPreferencesLoginMode;
-    private final static String MODE = "mode";
-    private final static String LOGIN_MODE = "login_mode";
 
     private final static String USER_PROFILES = "user_profiles";
     private final static String PROFILE = "profile";
     private final static String PHONE_NUMBER = "phone_number";
-    private final static String PRIMARY_ACCOUNT = "primary_account";
-    private final String GENDER = "gender";
 
-    private SharedPreferences sharedPreferencesLogin;
-    private final static String LOGIN = "login";
-    private final static String LOGGED_IN_OR_NOT = "logged_in";
+    private SharedPreferences sharedPreferences;
+    private final static String PROFILE_DATA = "profile_data";
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_phone_login);
+        setContentView(R.layout.activity_change_phone_number);
+
         fetchIDs();
         TextWatcher();
         initialiseFirebaseAuth();
-        initialiseSharedPrefs();
-        showSignInModeMessage();
 
+        sharedPreferences = getSharedPreferences(PROFILE_DATA, MODE_PRIVATE);
     }
-    //    show <!--signed as google acc info, when first logged in by google-->
-    private void showSignInModeMessage() {
-        String mode = sharedPreferencesLoginMode.getString(LOGIN_MODE, "");
-        if (TextUtils.equals(mode, "google")){
-            String mail_id = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getEmail();
-            signed_in_as.setVisibility(View.VISIBLE);
-            signed_in_as.setText(String.format("You're signed-in as %s. Link your primary phone number.", mail_id));
-        }
-        else {
-            info_ib.setVisibility(View.GONE);
-        }
-    }
-    //    show <!--signed as google acc info, when first logged in by google-->
-
 
     //    initializing firebase auth
     private void initialiseFirebaseAuth(){
         firebaseAuth = FirebaseAuth.getInstance();
     }
     //    initializing firebase auth
-
-
-    //    initialising shared preferences
-    private void initialiseSharedPrefs(){
-        sharedPreferencesLoginMode = getSharedPreferences(MODE, MODE_PRIVATE);
-    }
-    //    initialising shared preferences
 
     //    text watcher
     private void TextWatcher() {
@@ -180,19 +153,17 @@ public class PhoneLogin extends AppCompatActivity implements View.OnClickListene
 
     //    getting ids
     private void fetchIDs() {
-        phone_number_et = findViewById(R.id.phoneText);
-        codeText = findViewById(R.id.codeText);
-        verifyButton = findViewById(R.id.verifyButton);
-        sendButton = findViewById(R.id.sendButton);
-        resendButton = findViewById(R.id.resendButton);
-        wrong_number_tv = findViewById(R.id.pl_wrong_number_tv);
-        statusText = findViewById(R.id.pl_otp_text);
-        otpRelativeLayout = findViewById(R.id.pl_otpRelativeLayout);
-        spinKitView = findViewById(R.id.pl_spin_kit);
-        continuableCircleCountDownView = findViewById(R.id.pl_circleCountDownView);
-        cancel_ib = findViewById(R.id.pl_cancel_ib);
-        signed_in_as = findViewById(R.id.pl_signed_in_as);
-        info_ib = findViewById(R.id.pl_info_ib);
+        phone_number_et = findViewById(R.id.pn_phoneText);
+        codeText = findViewById(R.id.pn_codeText);
+        verifyButton = findViewById(R.id.pn_verifyButton);
+        sendButton = findViewById(R.id.pn_sendButton);
+        resendButton = findViewById(R.id.pn_resendButton);
+        wrong_number_tv = findViewById(R.id.pn_wrong_number_tv);
+        back_ib = findViewById(R.id.ep_back_ib);
+        statusText = findViewById(R.id.pn_otp_text);
+        otpRelativeLayout = findViewById(R.id.pn_otpRelativeLayout);
+        spinKitView = findViewById(R.id.pn_spin_kit);
+        continuableCircleCountDownView = findViewById(R.id.pn_circleCountDownView);
 
         sendButton.setEnabled(false);
         verifyButton.setEnabled(false);
@@ -202,19 +173,30 @@ public class PhoneLogin extends AppCompatActivity implements View.OnClickListene
         resendButton.setOnClickListener(this);
         verifyButton.setOnClickListener(this);
         wrong_number_tv.setOnClickListener(this);
-        cancel_ib.setOnClickListener(this);
+        back_ib.setOnClickListener(this);
     }
+//    fetch ids
 
-    public void onStart(){
-        super.onStart();
-    }
 
+//    send code
     public void sendCode() {
         // ic
         String phoneNumber = phone_number_et.getText().toString();
 
         if (TextUtils.isEmpty(phoneNumber) || phoneNumber.length() < 10){
-            Toast.makeText(PhoneLogin.this, "incorrect Phone Number", Toast.LENGTH_SHORT).show();
+            Toast.makeText(ChangePhoneNumber.this, "incorrect Phone Number", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        String phone_number = sharedPreferences.getString(PHONE_NUMBER, "");
+        try {
+            phone_number = phone_number.substring(3,13);
+        }
+        catch (StringIndexOutOfBoundsException e){
+            Toast.makeText(this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+        if (TextUtils.equals(phoneNumber, phone_number)){
+            Toast.makeText(ChangePhoneNumber.this, "Already signed in with this number", Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -227,11 +209,11 @@ public class PhoneLogin extends AppCompatActivity implements View.OnClickListene
                 phoneNumber,        // Phone number to verify
                 30,                 // Timeout duration
                 TimeUnit.SECONDS,   // Unit of timeout
-                PhoneLogin.this,               // Activity (for callback binding)
+                ChangePhoneNumber.this,               // Activity (for callback binding)
                 verificationCallbacks);
         // ic
-
     }
+//    send code
 
     //    to avoid abuse
     //when send button is used
@@ -242,7 +224,7 @@ public class PhoneLogin extends AppCompatActivity implements View.OnClickListene
 
                     @Override
                     public void onVerificationCompleted(
-                            PhoneAuthCredential credential) {
+                            final PhoneAuthCredential credential) {
 
                         // sign out Button.setEnabled(true);
                         // statusText.setText("Signed In");
@@ -251,13 +233,20 @@ public class PhoneLogin extends AppCompatActivity implements View.OnClickListene
                         codeText.setText("");
 
                         // firebase login
-                        String mode = sharedPreferencesLoginMode.getString(LOGIN_MODE, "");
-                        if (TextUtils.equals(mode, "google")){
-                            signInWithPhoneAuthCredentialMergeGoogle_Phone(credential);
-                        }
-                        else {
-                            signInWithPhoneAuthCredentialPhone(credential);
-                        }
+                        // first unlink the registeren number then link new number
+                        Objects.requireNonNull(firebaseAuth.getCurrentUser()).unlink("phone")
+                                .addOnCompleteListener(ChangePhoneNumber.this, new OnCompleteListener<AuthResult>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<AuthResult> task) {
+                                        if (task.isSuccessful()) {
+                                            // Auth provider unlinked from account
+                                            // ...
+                                            signInWithPhoneAuthCredential(credential);
+                                            Toast.makeText(ChangePhoneNumber.this, "Unlinked", Toast.LENGTH_SHORT).show();
+                                        }
+                                        else showSignInFailedMessage(task.getException().getMessage());
+                                    }
+                                });
                     }
 
                     @Override
@@ -265,8 +254,8 @@ public class PhoneLogin extends AppCompatActivity implements View.OnClickListene
 
                         if (e instanceof FirebaseAuthInvalidCredentialsException) {
                             // Invalid request
-                            new MaterialDialog.Builder(PhoneLogin.this)
-                                    .title("Invalid credential")
+                            new MaterialDialog.Builder(ChangePhoneNumber.this)
+                                    .title("Invalid Credential")
                                     .titleColor(getResources().getColor(R.color.black))
                                     .content(e.getLocalizedMessage())
                                     .contentColorRes(R.color.black)
@@ -280,7 +269,7 @@ public class PhoneLogin extends AppCompatActivity implements View.OnClickListene
                         } else if (e instanceof FirebaseTooManyRequestsException) {
                             // SMS quota exceeded
                             // Log.d(TAG, "SMS Quota exceeded.");
-                            Toast.makeText(PhoneLogin.this, "Too many attempts, try after some time", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ChangePhoneNumber.this, "Too many attempts, try after some time", Toast.LENGTH_SHORT).show();
                             spinKitView.setVisibility(View.GONE);
                         }
                     }
@@ -349,7 +338,7 @@ public class PhoneLogin extends AppCompatActivity implements View.OnClickListene
 
                     @Override
                     public void onVerificationCompleted(
-                            PhoneAuthCredential credential) {
+                            final PhoneAuthCredential credential) {
 
                         // sign out Button.setEnabled(true);
                         // statusText.setText("Signed In");
@@ -360,13 +349,20 @@ public class PhoneLogin extends AppCompatActivity implements View.OnClickListene
                         codeText.setText("");
 
                         // firebase login
-                        String mode = sharedPreferencesLoginMode.getString(LOGIN_MODE, "");
-                        if (TextUtils.equals(mode, "google")){
-                            signInWithPhoneAuthCredentialMergeGoogle_Phone(credential);
-                        }
-                        else {
-                            signInWithPhoneAuthCredentialPhone(credential);
-                        }
+                        // first unlink the registeren number then link new number
+                        Objects.requireNonNull(firebaseAuth.getCurrentUser()).unlink("phone")
+                                .addOnCompleteListener(ChangePhoneNumber.this, new OnCompleteListener<AuthResult>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<AuthResult> task) {
+                                        if (task.isSuccessful()) {
+                                            // Auth provider unlinked from account
+                                            // ...
+                                            signInWithPhoneAuthCredential(credential);
+                                            Toast.makeText(ChangePhoneNumber.this, "Unlinked", Toast.LENGTH_SHORT).show();
+                                        }
+                                        else showSignInFailedMessage(Objects.requireNonNull(task.getException()).getMessage());
+                                    }
+                                });
                     }
 
                     @Override
@@ -374,7 +370,7 @@ public class PhoneLogin extends AppCompatActivity implements View.OnClickListene
 
                         if (e instanceof FirebaseAuthInvalidCredentialsException) {
                             // Invalid request
-                            new MaterialDialog.Builder(PhoneLogin.this)
+                            new MaterialDialog.Builder(ChangePhoneNumber.this)
                                     .title("Invalid credential")
                                     .titleColor(getResources().getColor(R.color.black))
                                     .content(e.getLocalizedMessage())
@@ -389,7 +385,7 @@ public class PhoneLogin extends AppCompatActivity implements View.OnClickListene
                         } else if (e instanceof FirebaseTooManyRequestsException) {
                             // SMS quota exceeded
                             // Log.d(TAG, "SMS Quota exceeded.");
-                            Toast.makeText(PhoneLogin.this, "Too many attempts, try after some time", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ChangePhoneNumber.this, "Too many attempts, try after some time", Toast.LENGTH_SHORT).show();
                             spinKitView.setVisibility(View.GONE);
                         }
                     }
@@ -444,71 +440,32 @@ public class PhoneLogin extends AppCompatActivity implements View.OnClickListene
     public void verifyCode() {
         //ic
         String code = codeText.getText().toString();
-        PhoneAuthCredential credential = PhoneAuthProvider.getCredential(phoneVerificationId, code);
+        final PhoneAuthCredential credential = PhoneAuthProvider.getCredential(phoneVerificationId, code);
 
-        // firebase login
-        String mode = sharedPreferencesLoginMode.getString(LOGIN_MODE, "");
-        if (TextUtils.equals(mode, "google")){
-            signInWithPhoneAuthCredentialMergeGoogle_Phone(credential);
-        }
-        else {
-            signInWithPhoneAuthCredentialPhone(credential);
-        }
+        // first unlink the registeren number then link new number
+        Objects.requireNonNull(firebaseAuth.getCurrentUser()).unlink("phone")
+                .addOnCompleteListener(ChangePhoneNumber.this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Auth provider unlinked from account
+                            // ...
+                            signInWithPhoneAuthCredential(credential);
+                            Toast.makeText(ChangePhoneNumber.this, "Unlinked", Toast.LENGTH_SHORT).show();
+                        }
+                        else showSignInFailedMessage(Objects.requireNonNull(task.getException()).getMessage());
+                    }
+                });
+
     }
     //verify code
 
 
-    // resend code
-    public void resendCode() {
-        //ic
-        String phoneNumber = phone_number_et.getText().toString();
-
-        spinKitView.setVisibility(View.VISIBLE);
-
-        phoneNumber = countryCode+phoneNumber;
-        setUpVerificationCallbacksReSendCode();
-
-        PhoneAuthProvider.getInstance().verifyPhoneNumber(
-                phoneNumber,
-                30,
-                TimeUnit.SECONDS,
-                PhoneLogin.this,
-                verificationCallbacks,
-                resendToken);
-    }
-    // resend code
-
-
-    //    after verification, login with firebase with phone auth (link phone number with google account)
-    private void signInWithPhoneAuthCredentialMergeGoogle_Phone(PhoneAuthCredential credential) {
-//  linking phone auth with google auth
-        Objects.requireNonNull(firebaseAuth.getCurrentUser()).linkWithCredential(credential)
-                .addOnCompleteListener(PhoneLogin.this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // sign out Button.setEnabled(true);
-                            codeText.setText("");
-                            //  statusText.setText("Signed In");
-                            resendButton.setEnabled(false);
-                            verifyButton.setEnabled(false);
-                            saveUserProfileDataInFirebaseDataBaseGOOGLE_PHONE(Objects.requireNonNull(task.getResult()).getUser());
-                            Toast.makeText(PhoneLogin.this, "Congratulations! Login Successful.", Toast.LENGTH_SHORT).show();
-
-                        } else {
-                            showSignInFailedMessage((Objects.requireNonNull(task.getException())).getLocalizedMessage());
-                        }
-                    }
-                });
-    }
-//    after verification, login with firebase with phone auth
-
-
     //   firebase sign in with phone
-    private void signInWithPhoneAuthCredentialPhone(PhoneAuthCredential credential) {
+    private void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
 //          sign in with phone (no linking here, as google is not signed in)
-        firebaseAuth.signInWithCredential(credential)
-                .addOnCompleteListener(PhoneLogin.this, new OnCompleteListener<AuthResult>() {
+        Objects.requireNonNull(firebaseAuth.getCurrentUser()).linkWithCredential(credential)
+                .addOnCompleteListener(ChangePhoneNumber.this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
@@ -517,8 +474,8 @@ public class PhoneLogin extends AppCompatActivity implements View.OnClickListene
                             //  statusText.setText("Signed In");
                             resendButton.setEnabled(false);
                             verifyButton.setEnabled(false);
-                            saveUserProfileDataInFirebaseDataBasePHONE(Objects.requireNonNull(task.getResult()).getUser());
-                            Toast.makeText(PhoneLogin.this, "Login Successful.", Toast.LENGTH_SHORT).show();
+                            saveUserProfileDataInFirebaseDataBase(Objects.requireNonNull(task.getResult()).getUser());
+                            Toast.makeText(ChangePhoneNumber.this, "Successful.", Toast.LENGTH_SHORT).show();
 
                         } else {
                             showSignInFailedMessage((Objects.requireNonNull(task.getException())).getLocalizedMessage());
@@ -528,11 +485,19 @@ public class PhoneLogin extends AppCompatActivity implements View.OnClickListene
     }
 //   firebase sign in with phone
 
+    //    saving data at firebase database
+    private void saveUserProfileDataInFirebaseDataBase(FirebaseUser user){
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance()
+                .getReference().child(USER_PROFILES).child(user.getUid()).child(PROFILE);
+        databaseReference.child(PHONE_NUMBER).setValue(user.getPhoneNumber());
+        ChangePhoneNumber.this.finish();
+    }
+//    saving data at firebase database
 
     //    firebase login failed message
     private void showSignInFailedMessage(String errorMessage){
         try{
-            new MaterialDialog.Builder(PhoneLogin.this)
+            new MaterialDialog.Builder(ChangePhoneNumber.this)
                     .title("Account linking failed")
                     .content(Objects.requireNonNull(errorMessage))
                     .contentColorRes(R.color.black)
@@ -556,42 +521,37 @@ public class PhoneLogin extends AppCompatActivity implements View.OnClickListene
 //    firebase login failed message
 
 
-    //    saving data at firebase database
-    private void saveUserProfileDataInFirebaseDataBasePHONE(FirebaseUser user){
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance()
-                .getReference().child(USER_PROFILES).child(user.getUid()).child(PROFILE);
-        databaseReference.child(GENDER).setValue("male");
-        databaseReference.child(PHONE_NUMBER).setValue(user.getPhoneNumber());
-
-
-        sharedPreferencesLogin = getSharedPreferences(LOGIN, MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferencesLogin.edit();
-        editor.putString(LOGGED_IN_OR_NOT, "true");
-        editor.apply();
-        if (TextUtils.isEmpty(Objects.requireNonNull(firebaseAuth.getCurrentUser()).getEmail())){
-            // open new activity that will prompt to link google account
-            startActivity(new Intent(PhoneLogin.this, PhoneToGoogle.class));
+    // resend code
+    public void resendCode() {
+        //ic
+        String phoneNumber = phone_number_et.getText().toString();
+        String phone_number = sharedPreferences.getString(PHONE_NUMBER, "");
+        try {
+            phone_number = phone_number.substring(3,13);
         }
-        //close login activity
-        ((ResultReceiver)getIntent().getParcelableExtra("finisher")).send(1, new Bundle());
-        PhoneLogin.this.finish();
+        catch (StringIndexOutOfBoundsException e){
+            //
+        }
+        if (TextUtils.equals(phoneNumber, phone_number)){
+            Toast.makeText(ChangePhoneNumber.this, "Already signed in with this number", Toast.LENGTH_LONG).show();
+            return;
+        }
 
-    }
-//    saving data at firebase database
+        spinKitView.setVisibility(View.VISIBLE);
 
-    //    saving data at firebase database (linked)
-    private void saveUserProfileDataInFirebaseDataBaseGOOGLE_PHONE(FirebaseUser user){
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-        databaseReference.child(USER_PROFILES).child(user.getUid()).child(PROFILE)
-                .child(PHONE_NUMBER).setValue(user.getPhoneNumber());
-        // save in shared pref that user is logged in and then exit this activity
-//        sharedPreferencesLogin = Objects.requireNonNull(getActivity()).getSharedPreferences(LOGIN, MODE_PRIVATE);
-//        SharedPreferences.Editor editor = sharedPreferencesLogin.edit();
-//        editor.putString(LOGGED_IN_OR_NOT, "true");
-//        editor.apply();
-//        Objects.requireNonNull(getActivity()).finish();
+        phoneNumber = countryCode+phoneNumber;
+        setUpVerificationCallbacksReSendCode();
+
+        PhoneAuthProvider.getInstance().verifyPhoneNumber(
+                phoneNumber,
+                30,
+                TimeUnit.SECONDS,
+                ChangePhoneNumber.this,
+                verificationCallbacks,
+                resendToken);
     }
-//    saving data at firebase database
+    // resend code
+
 
     //    onclick
     @Override
@@ -600,19 +560,19 @@ public class PhoneLogin extends AppCompatActivity implements View.OnClickListene
 
         switch (id){
 //            send code button
-            case R.id.sendButton:
+            case R.id.pn_sendButton:
                 sendCode();
                 break;
 //            verify code
-            case R.id.verifyButton:
+            case R.id.pn_verifyButton:
                 verifyCode();
                 break;
 //            resend code
-            case R.id.resendButton:
+            case R.id.pn_resendButton:
                 resendCode();
                 break;
 //                wrong number
-            case R.id.pl_wrong_number_tv:
+            case R.id.pn_wrong_number_tv:
                 wrong_number_tv.setVisibility(View.GONE);
                 phone_number_et.setText(null);
                 phone_number_et.setEnabled(true);
@@ -626,8 +586,8 @@ public class PhoneLogin extends AppCompatActivity implements View.OnClickListene
                 continuableCircleCountDownView.setVisibility(View.GONE);
                 break;
 //                cancel button
-            case R.id.pl_cancel_ib:
-                PhoneLogin.this.finish();
+            case R.id.ep_back_ib:
+                ChangePhoneNumber.this.finish();
 //                Objects.requireNonNull(firebaseAuth.getCurrentUser()).unlink("phone")
 //                        .addOnCompleteListener(Objects.requireNonNull(getActivity()), new OnCompleteListener<AuthResult>() {
 //                            @Override
@@ -647,5 +607,5 @@ public class PhoneLogin extends AppCompatActivity implements View.OnClickListene
     }
     //    onclick
 
-//    end
+
 }

@@ -56,7 +56,9 @@
             android:name=".EditProfile"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity android:name=".PhoneLogin" />
-        <activity android:name=".PhoneToGoogle"></activity>
+        <activity android:name=".PhoneToGoogle" />
+        <activity android:name=".ChangePhoneNumber" />
+        <activity android:name=".ProfileVerification"></activity>
     </application>
 
 </manifest>

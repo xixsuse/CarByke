@@ -215,7 +215,7 @@
                 fancy:fb_borderColor="@color/light_steel_blue"
                 fancy:fb_borderWidth="1dp"
                 fancy:fb_defaultColor="@color/light_steel_blue"
-                fancy:fb_focusColor="#9bd823"
+                fancy:fb_focusColor="@color/white"
                 fancy:fb_iconPosition="left"
                 fancy:fb_radius="4dp"
                 fancy:fb_text="FIND CARS"

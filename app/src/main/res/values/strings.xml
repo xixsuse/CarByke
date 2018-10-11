@@ -45,4 +45,6 @@
     <string name="gender">Gender</string>
     <string name="update"><b>UPDATE</b></string>
     <string name="skip">SKIP</string>
+    <string name="change_phone_number">Change Phone Number</string>
+    <string name="profile_verification">Profile Verification</string>
 </resources>

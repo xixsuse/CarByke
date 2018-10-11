@@ -122,7 +122,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/white"
-            android:padding="@dimen/activity_horizontal_margin"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             >
 
@@ -139,6 +138,9 @@
                 android:drawablePadding="@dimen/textViewPadding"
                 android:inputType="textPersonName"
                 android:lines="1"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
                 />
 
             <!--email-->
@@ -154,6 +156,8 @@
                 android:drawableStart="@drawable/ic_ep_email"
                 android:drawablePadding="@dimen/textViewPadding"
                 android:layout_marginTop="24dp"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
                 />
 
             <!--phone-->
@@ -169,6 +173,8 @@
                 android:drawableStart="@drawable/ic_ep_phone"
                 android:drawablePadding="@dimen/textViewPadding"
                 android:layout_marginTop="24dp"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
                 />
 
             <!--gender-->
@@ -184,7 +190,10 @@
                 app:rrbg_dividerSize="1dp"
                 app:rrbg_radius="10dp"
                 app:rrbg_selectorColor="@color/lightGreen"
-                app:rrbg_selectorSize="6dp">
+                app:rrbg_selectorSize="6dp"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                >
 
                 <co.ceryle.radiorealbutton.RadioRealButton
                     android:layout_width="wrap_content"
@@ -209,19 +218,43 @@
                     app:rrb_textColor="@color/black"/>
             </co.ceryle.radiorealbutton.RadioRealButtonGroup>
 
-            <!--<TextView-->
-                <!--android:id="@+id/ep_gender_tv"-->
-                <!--android:layout_below="@+id/ep_phone_tv"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:hint="@string/gender"-->
-                <!--style="@style/CustomTextStyle16"-->
-                <!--android:background="@drawable/under_line_textview_light"-->
-                <!--android:paddingBottom="@dimen/textViewPaddingBottom"-->
-                <!--android:drawableStart="@drawable/ic_ep_gender"-->
-                <!--android:drawablePadding="@dimen/textViewPadding"-->
-                <!--android:layout_marginTop="24dp"-->
-                <!--/>-->
+            <!--profile verification-->
+            <RelativeLayout
+                android:id="@+id/ep_profile_verification_rl"
+                android:layout_below="@+id/ep_radio_gender"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:background="#EDF0F2"
+                android:padding="@dimen/activity_horizontal_margin"
+                >
+                <!--verify licence-->
+                <ImageView
+                    android:id="@+id/ep_verify_licence"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ic_verify_licence"
+                    tools:ignore="ContentDescription" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/profile_verification"
+                    style="@style/CustomTextStyle16"
+                    android:layout_toEndOf="@+id/ep_verify_licence"
+                    android:layout_marginStart="12dp"
+                    android:layout_centerVertical="true"
+                    />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ic_right_arrow_next"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentEnd="true"
+                    />
+
+
+            </RelativeLayout>
 
 
 

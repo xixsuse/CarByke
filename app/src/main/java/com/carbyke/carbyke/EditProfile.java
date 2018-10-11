@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,6 +39,7 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
     RadioRealButtonGroup gender_radio;
 
     private final static String USER_PROFILES = "user_profiles";
+    private final static String PROFILE = "profile";
     private final static String EMAIL = "email";
     private final static String NAME = "name";
     private final static String PHONE_NUMBER = "phone_number";
@@ -46,6 +48,8 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
     private ImageButton back_ib, logout_ib;
 
     private FancyButton update_fb;
+
+    private RelativeLayout profile_verification_rl;
 
     private SharedPreferences sharedPreferences;
     private final static String PROFILE_DATA = "profile_data";
@@ -66,6 +70,7 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
         logout_ib = findViewById(R.id.ep_logout_ib);
         gender_radio = findViewById(R.id.ep_radio_gender);
         update_fb = findViewById(R.id.ep_save_b);
+        profile_verification_rl = findViewById(R.id.ep_profile_verification_rl);
 
         sharedPreferences = getSharedPreferences(PROFILE_DATA, MODE_PRIVATE);
         mAuth = FirebaseAuth.getInstance();
@@ -73,8 +78,8 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
         back_ib.setOnClickListener(this);
         logout_ib.setOnClickListener(this);
         update_fb.setOnClickListener(this);
-
-
+        phone_tv.setOnClickListener(this);
+        profile_verification_rl.setOnClickListener(this);
     }
 
 
@@ -126,7 +131,7 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
 //    setting user data
     private void setData() {
         String uid = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
-        databaseReference.child(uid)
+        databaseReference.child(uid).child(PROFILE)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -227,10 +232,20 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
                 else if (position == 1) gender = "female";
 
                 final String uid = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
-                databaseReference.child(uid).child(GENDER).setValue(gender);
-                databaseReference.child(uid).child(NAME).setValue(name);
+                databaseReference.child(uid).child(PROFILE).child(GENDER).setValue(gender);
+                databaseReference.child(uid).child(PROFILE).child(NAME).setValue(name);
                 saveFetchedDataInSharedPrefsAfterUpdate(name, gender);
                 Toast.makeText(this, "profile updated", Toast.LENGTH_SHORT).show();
+                break;
+
+//                change phone number
+            case R.id.ep_phone_tv:
+                startActivity(new Intent(EditProfile.this, ChangePhoneNumber.class));
+                break;
+
+//                profile verification
+            case R.id.ep_profile_verification_rl:
+                startActivity(new Intent(EditProfile.this, ProfileVerification.class));
                 break;
 
 //                logout
@@ -257,10 +272,9 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
                                 mAuth = FirebaseAuth.getInstance();
                                 mAuth.signOut();
 
-
-                               // EditProfile.this.finish();
-                               // finishAffinity();
-                               // startActivity(new Intent(EditProfile.this, Home.class));
+                                EditProfile.this.finish();
+                                finishAffinity();
+                                startActivity(new Intent(EditProfile.this, Home.class));
 
                                 // TODO
                             }

@@ -58,6 +58,7 @@ public class Login extends AppCompatActivity implements  GoogleApiClient.OnConne
     private final static String LOGIN_MODE = "login_mode";
 
     private final static String USER_PROFILES = "user_profiles";
+    private final static String PROFILE = "profile";
     private final static String EMAIL = "email";
     private final static String PHONE_NUMBER = "phone_number";
     private final String NAME = "name";
@@ -179,7 +180,7 @@ public class Login extends AppCompatActivity implements  GoogleApiClient.OnConne
                     .contentColorRes(R.color.black)
                     .titleColor(getResources().getColor(R.color.googleRed))
                     .titleColor(getResources().getColor(R.color.black))
-                    .positiveText("Okay")
+                    .positiveText("Try Again")
                     .positiveColorRes(R.color.black)
                     .backgroundColor(getResources().getColor(R.color.white))
                     .icon(getResources().getDrawable(R.drawable.ic_warning))
@@ -192,25 +193,46 @@ public class Login extends AppCompatActivity implements  GoogleApiClient.OnConne
 
     //    saving data at firebase database                                               //     saving data
     private void saveUserProfileDataInFirebaseDataBase(final FirebaseUser user){
-        databaseReferenceUID = databaseReference.child(user.getUid());
-        databaseReferenceUID.child(NAME).setValue(user.getDisplayName());
-        databaseReferenceUID.child(GENDER).setValue("male");
-        databaseReferenceUID.child(EMAIL).setValue(user.getEmail()).addOnSuccessListener(new OnSuccessListener<Void>() {
+        databaseReferenceUID = databaseReference.child(user.getUid()).child(PROFILE);
+
+        databaseReferenceUID.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onSuccess(Void aVoid) {
-                checkIfUserDetailsAreSaved(user);
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                // if name already saved then
+                if (!dataSnapshot.hasChild(NAME)){
+                    databaseReferenceUID.child(NAME).setValue(user.getDisplayName());
+                }
+                if (!dataSnapshot.hasChild(GENDER)){
+                    databaseReferenceUID.child(GENDER).setValue("male");
+                }
+                databaseReferenceUID.child(EMAIL).setValue(user.getEmail()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        checkIfUserDetailsAreSaved(user);
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        showSignInFailedMessage(e.getLocalizedMessage());
+                    }
+                });
+//        user is signed in so, need to save in prefs when phone linked
+                sharedPreferencesLogin = getSharedPreferences(LOGIN, MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferencesLogin.edit();
+                editor.putString(LOGGED_IN_OR_NOT, "true");
+                editor.apply();
+
             }
-        }).addOnFailureListener(new OnFailureListener() {
+
             @Override
-            public void onFailure(@NonNull Exception e) {
-                showSignInFailedMessage(e.getLocalizedMessage());
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                   showSignInFailedMessage(databaseError.getMessage());
             }
         });
-//        user is signed in so, need to save in prefs when phone linked
-        sharedPreferencesLogin = getSharedPreferences(LOGIN, MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferencesLogin.edit();
-        editor.putString(LOGGED_IN_OR_NOT, "true");
-        editor.apply();
+
+
+
+
     }
 //    saving data at firebase database
 

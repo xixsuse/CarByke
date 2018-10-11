@@ -49,6 +49,7 @@ public class Home extends AppCompatActivity
     private RelativeLayout not_signed_in_rl, signed_in_rl;
 
     private final static String USER_PROFILES ="user_profiles";
+    private final static String PROFILE = "profile";
     private DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child(USER_PROFILES);
     private final String PHONE_NUMBER = "phone_number";
     private final String EMAIL = "email";
@@ -159,16 +160,16 @@ public class Home extends AppCompatActivity
         }
 
         // now load data from database
-        setUserData();
+        setUserDataFromFirebase();
     }
 //    get user profile saved data from shared pref
 
 
 
     //    setting user data
-    private void setUserData() {
+    private void setUserDataFromFirebase() {
         String uid = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
-        databaseReference.child(uid)
+        databaseReference.child(uid).child(PROFILE)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -238,7 +239,7 @@ private void saveFetchedDataInSharedPrefs(String name, String email, String phon
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {

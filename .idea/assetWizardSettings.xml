@@ -19,9 +19,11 @@
                         <option name="values">
                           <map>
                             <entry key="assetSourceType" value="FILE" />
-                            <entry key="outputName" value="ic_logout" />
+                            <entry key="height" value="18" />
+                            <entry key="outputName" value="ic_right_arrow_next" />
                             <entry key="overrideSize" value="true" />
-                            <entry key="sourceFile" value="C:\Users\Dell\Downloads\logout.svg" />
+                            <entry key="sourceFile" value="C:\Users\Dell\Downloads\right-arrow.svg" />
+                            <entry key="width" value="18" />
                           </map>
                         </option>
                       </PersistentState>

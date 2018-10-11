@@ -6,74 +6,48 @@
     android:layout_height="match_parent"
     xmlns:fancy="http://schemas.android.com/apk/res-auto"
     android:background="@color/white"
-    tools:context=".PhoneLogin">
+    tools:context=".ChangePhoneNumber">
 
-    <!--upper Layout-->
-    <RelativeLayout
-        android:id="@+id/pl_rel1"
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/pn_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#F3F3F3"
-        android:padding="@dimen/activity_vertical_margin"
+        android:background="@color/chooseLocationBarColor"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         >
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <!--back button-->
+            <ImageButton
+                android:id="@+id/ep_back_ib"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_return_back_white_smoke"
+                android:contentDescription="@string/error_while_loading_image" />
 
-        <!--cancel-->
-        <ImageButton
-            android:id="@+id/pl_cancel_ib"
-            android:layout_width="14dp"
-            android:layout_height="14dp"
-            android:background="@drawable/ic_cancel"
-            android:layout_marginEnd="@dimen/activity_vertical_margin"
-            android:layout_alignParentEnd="true"
-            tools:ignore="ContentDescription" />
+            <!--edit profile-->
+            <TextView
+                android:layout_toEndOf="@+id/ep_back_ib"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/change_phone_number"
+                style="@style/CustomTextStyle16"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:paddingStart="@dimen/activity_horizontal_margin"
+                tools:ignore="RtlSymmetry" />
 
-        <!--logo-->
-        <ImageView
-            android:id="@+id/pl_logo"
-            android:layout_width="150dp"
-            android:layout_height="43dp"
-            android:layout_centerHorizontal="true"
-            android:background="@drawable/logo_black"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            tools:ignore="ContentDescription" />
 
-        <!--image-->
-        <ImageView
-            android:id="@+id/pl_phone_hand"
-            android:layout_width="52dp"
-            android:layout_height="52dp"
-            android:layout_marginTop="32dp"
-            android:layout_centerHorizontal="true"
-            android:layout_below="@+id/pl_logo"
-            android:background="@drawable/otp"
-            tools:ignore="ContentDescription" />
+        </RelativeLayout>
 
-        <!--signed as google acc info, when first logged in by google-->
-        <TextView
-            android:id="@+id/pl_signed_in_as"
-            android:layout_below="@+id/pl_phone_hand"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/CustomTextStyle12"
-            android:textStyle="bold"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:visibility="gone"
-            />
 
-        <ImageButton
-            android:id="@+id/pl_info_ib"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:background="@drawable/ic_information"
-            android:layout_marginStart="7dp"
-            tools:ignore="ContentDescription" />
-
-    </RelativeLayout>
+    </android.support.v7.widget.Toolbar>
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/pl_rel1"
+        android:layout_below="@id/pn_toolbar"
         >
 
 
@@ -84,7 +58,7 @@
 
             <!--wrong number-->
             <TextView
-                android:id="@+id/pl_wrong_number_tv"
+                android:id="@+id/pn_wrong_number_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
@@ -98,7 +72,7 @@
 
 
             <LinearLayout
-                android:id="@+id/pl_linear3"
+                android:id="@+id/pn_linear3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -121,7 +95,7 @@
                     />
 
                 <EditText
-                    android:id="@+id/phoneText"
+                    android:id="@+id/pn_phoneText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     style="@style/CustomTextStyle16"
@@ -139,8 +113,8 @@
 
 
             <LinearLayout
-                android:id="@+id/pl_linear1"
-                android:layout_below="@+id/pl_linear3"
+                android:id="@+id/pn_linear1"
+                android:layout_below="@+id/pn_linear3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -151,7 +125,7 @@
                 >
                 <!--giving padding to show elevation of buttons-->
                 <mehdi.sakout.fancybuttons.FancyButton
-                    android:id="@+id/sendButton"
+                    android:id="@+id/pn_sendButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingBottom="10dp"
@@ -174,7 +148,7 @@
                     />
 
                 <mehdi.sakout.fancybuttons.FancyButton
-                    android:id="@+id/resendButton"
+                    android:id="@+id/pn_resendButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingBottom="10dp"
@@ -200,8 +174,8 @@
 
             <!--countdown-->
             <com.serhatsurguvec.continuablecirclecountdownview.ContinuableCircleCountDownView
-                android:id="@+id/pl_circleCountDownView"
-                android:layout_below="@+id/pl_linear1"
+                android:id="@+id/pn_circleCountDownView"
+                android:layout_below="@+id/pn_linear1"
                 android:layout_width="52dp"
                 android:layout_height="52dp"
                 android:layout_alignParentEnd="true"
@@ -220,9 +194,9 @@
             <!--loading view-->
             <com.github.ybq.android.spinkit.SpinKitView
                 android:visibility="gone"
-                android:layout_below="@+id/pl_linear1"
+                android:layout_below="@+id/pn_linear1"
                 xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/pl_spin_kit"
+                android:id="@+id/pn_spin_kit"
                 style="@style/SpinKitView.Small.Circle"
                 android:layout_centerInParent="true"
                 android:layout_width="wrap_content"
@@ -234,8 +208,8 @@
 
             <!--otp sent message-->
             <TextView
-                android:id="@+id/pl_otp_text"
-                android:layout_below="@+id/pl_circleCountDownView"
+                android:id="@+id/pn_otp_text"
+                android:layout_below="@+id/pn_circleCountDownView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/activity_horizontal_margin"
@@ -247,15 +221,15 @@
 
 
             <RelativeLayout
-                android:layout_below="@+id/pl_otp_text"
-                android:id="@+id/pl_otpRelativeLayout"
+                android:layout_below="@+id/pn_otp_text"
+                android:id="@+id/pn_otpRelativeLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
                 >
 
                 <com.chaos.view.PinView
-                    android:id="@+id/codeText"
+                    android:id="@+id/pn_codeText"
                     style="@style/PinWidget.PinView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -281,7 +255,7 @@
 
 
                 <mehdi.sakout.fancybuttons.FancyButton
-                    android:id="@+id/verifyButton"
+                    android:id="@+id/pn_verifyButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/activity_horizontal_margin"
@@ -305,18 +279,6 @@
                     />
 
             </RelativeLayout>
-
-
-
-            <!--<Button-->
-            <!--android:id="@+id/signoutButton"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:onClick="signOut"-->
-            <!--android:visibility="gone"-->
-            <!--/>-->
-
-
 
 
         </RelativeLayout>
