@@ -13,7 +13,7 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/chooseLocationBarColor"
+        android:background="@color/topBarColor"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         >
 
@@ -42,7 +42,7 @@
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/chooseLocationBarColor"
+        android:background="@color/topBarColor"
         android:minHeight="32dp"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
 

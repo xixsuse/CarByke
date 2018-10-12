@@ -47,4 +47,11 @@
     <string name="skip">SKIP</string>
     <string name="change_phone_number">Change Phone Number</string>
     <string name="profile_verification">Profile Verification</string>
+    <string name="incomplete">Incomplete</string>
+    <string name="status">status</string>
+    <string name="driving_license">Driving License</string>
+    <string name="aadhaar_card">Aadhaar Card</string>
+    <string name="live_photo">Live Photo</string>
+    <string name="upload_driving_license_image">Upload Driving License Image</string>
+    <string name="upload">UPLOAD</string>
 </resources>

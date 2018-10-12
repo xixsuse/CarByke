@@ -1,9 +1,279 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
+    xmlns:fancy="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/fragment_container_profile_verification"
     tools:context=".ProfileVerification">
 
-</android.support.constraint.ConstraintLayout>
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/pv_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/topBarColor"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        >
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <!--back button-->
+            <ImageButton
+                android:id="@+id/pv_back_ib"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_return_back_white_smoke"
+                android:contentDescription="@string/error_while_loading_image" />
+
+            <TextView
+                android:layout_toEndOf="@+id/pv_back_ib"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/profile_verification"
+                style="@style/CustomTextStyle16"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:paddingStart="@dimen/activity_horizontal_margin"
+                tools:ignore="RtlSymmetry" />
+
+
+        </RelativeLayout>
+    </android.support.v7.widget.Toolbar>
+
+
+    <RelativeLayout
+        android:id="@+id/pv_percentage_view_rl"
+        android:layout_below="@+id/pv_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        >
+        <!--profile completion percentage teller-->
+        <com.eralp.circleprogressview.CircleProgressView
+            android:id="@+id/pv_profile_verification_cpv"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            app:cpv_circle_color="#27375c"
+            app:cpv_circle_width="6dp"
+            app:cpv_background_circle_width="1dp"
+            app:cpv_background_circle_color="#5b253048"
+            app:cpv_text_prefix=""
+            app:cpv_text_size="18"
+            app:cpv_text_color="#27375c"/>
+
+        <!--incomplete text-->
+        <TextView
+            android:id="@+id/pv_incomplete_tv"
+            android:layout_toEndOf="@+id/pv_profile_verification_cpv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="@string/status"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="32dp"
+            style="@style/CustomTextStyle16"
+            />
+
+
+    </RelativeLayout>
+
+    <!--horizontal line-->
+    <View
+        android:id="@+id/pv_horizontal_line"
+        android:layout_below="@+id/pv_percentage_view_rl"
+        android:layout_width="match_parent"
+        android:layout_height= "1dp"
+        android:background="@color/gray"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        />
+
+    <!--driving licence relative layout-->
+    <RelativeLayout
+        android:id="@+id/pv_upload_driving_license_rl"
+        android:layout_below="@+id/pv_horizontal_line"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/white_background"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:paddingStart="@dimen/activity_horizontal_margin"
+        android:paddingEnd="@dimen/activity_horizontal_margin"
+        android:elevation="@dimen/fancy_button_elevation"
+        tools:targetApi="lollipop">
+
+        <ImageView
+            android:id="@+id/pv_driving_license_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_license"
+            android:layout_centerVertical="true"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:layout_toEndOf="@+id/pv_driving_license_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/driving_license"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            style="@style/CustomTextStyle16"
+            android:textStyle="bold"
+            />
+        <!--license button-->
+        <mehdi.sakout.fancybuttons.FancyButton
+            android:id="@+id/pv_upload_driving_license_fb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="5dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:paddingTop="5dp"
+            fancy:fb_borderWidth="1dp"
+            fancy:fb_defaultColor="@color/lightGreen"
+            fancy:fb_fontIconResource="&#xf093;"
+            fancy:fb_focusColor="@color/white"
+            fancy:fb_radius="4dp"
+            fancy:fb_text="upload"
+            style="@style/CustomTextStyle16"
+            app:fb_textColor="@color/black"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:elevation="@dimen/fancy_button_elevation"
+            tools:targetApi="lollipop"
+            tools:ignore="RelativeOverlap" />
+        
+    </RelativeLayout>
+
+    <!--adhar card relative layout-->
+    <RelativeLayout
+        android:id="@+id/pv_upload_adhar_rl"
+        android:layout_below="@+id/pv_upload_driving_license_rl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/white_background"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:paddingStart="@dimen/activity_horizontal_margin"
+        android:paddingEnd="@dimen/activity_horizontal_margin"
+        android:elevation="@dimen/fancy_button_elevation"
+        tools:targetApi="lollipop">
+
+        <ImageView
+            android:id="@+id/pv_adhar_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_adhar_card"
+            android:layout_centerVertical="true"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:layout_toEndOf="@+id/pv_adhar_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/aadhaar_card"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            style="@style/CustomTextStyle16"
+            android:textStyle="bold"
+            />
+        <!--license button-->
+        <mehdi.sakout.fancybuttons.FancyButton
+            android:id="@+id/pv_upload_adhar_fb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="5dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:paddingTop="5dp"
+            fancy:fb_borderWidth="1dp"
+            fancy:fb_defaultColor="@color/lightGreen"
+            fancy:fb_fontIconResource="&#xf093;"
+            fancy:fb_focusColor="@color/white"
+            fancy:fb_radius="4dp"
+            fancy:fb_text="upload"
+            style="@style/CustomTextStyle16"
+            app:fb_textColor="@color/black"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:elevation="@dimen/fancy_button_elevation"
+            tools:targetApi="lollipop"
+            tools:ignore="RelativeOverlap" />
+
+    </RelativeLayout>
+
+    <!--live photo relative layout-->
+    <RelativeLayout
+        android:id="@+id/pv_live_photo_rl"
+        android:layout_below="@+id/pv_upload_adhar_rl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/white_background"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:paddingStart="@dimen/activity_horizontal_margin"
+        android:paddingEnd="@dimen/activity_horizontal_margin"
+        android:elevation="@dimen/fancy_button_elevation"
+        tools:targetApi="lollipop">
+
+        <ImageView
+            android:id="@+id/pv_live_photo_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_live_photo"
+            android:layout_centerVertical="true"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:layout_toEndOf="@+id/pv_live_photo_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/live_photo"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            style="@style/CustomTextStyle16"
+            android:textStyle="bold"
+            />
+        <!--license button-->
+        <mehdi.sakout.fancybuttons.FancyButton
+            android:id="@+id/pv_upload_live_photo_fb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="5dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:paddingTop="5dp"
+            fancy:fb_borderWidth="1dp"
+            fancy:fb_defaultColor="@color/lightGreen"
+            fancy:fb_fontIconResource="&#xf093;"
+            fancy:fb_focusColor="@color/white"
+            fancy:fb_radius="4dp"
+            fancy:fb_text="upload"
+            style="@style/CustomTextStyle16"
+            app:fb_textColor="@color/black"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:elevation="@dimen/fancy_button_elevation"
+            tools:targetApi="lollipop"
+            tools:ignore="RelativeOverlap" />
+
+    </RelativeLayout>
+    
+
+
+
+</RelativeLayout>

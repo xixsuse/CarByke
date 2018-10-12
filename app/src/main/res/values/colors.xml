@@ -8,7 +8,7 @@
     <!--My colors-->
 <!--app color blue gray 900-->
     <color name="appColor">#252B32</color>
-    <color name="chooseLocationBarColor">#323A44</color>
+    <color name="topBarColor">#323A44</color>
     <color name="transparent">#00000000</color>
     <color name="linen">#FAF0E6</color>
     <color name="whiteSmoke">#F5F5F5</color>

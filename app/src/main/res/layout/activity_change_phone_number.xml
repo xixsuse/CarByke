@@ -12,7 +12,7 @@
         android:id="@+id/pn_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/chooseLocationBarColor"
+        android:background="@color/topBarColor"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         >
         <RelativeLayout
@@ -256,6 +256,7 @@
 
                 <mehdi.sakout.fancybuttons.FancyButton
                     android:id="@+id/pn_verifyButton"
+                    android:layout_below="@id/pn_codeText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/activity_horizontal_margin"
@@ -270,10 +271,8 @@
                     fancy:fb_radius="4dp"
                     fancy:fb_text="Verify OTP"
                     fancy:fb_textColor="@color/white"
-                    android:layout_below="@id/codeText"
                     android:layout_marginTop="24dp"
                     android:layout_marginEnd="@dimen/activity_horizontal_margin"
-                    android:layout_marginBottom="24dp"
                     android:elevation="@dimen/fancy_button_elevation"
                     tools:targetApi="lollipop"
                     />

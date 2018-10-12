@@ -188,17 +188,17 @@ public class ChangePhoneNumber extends AppCompatActivity implements View.OnClick
             return;
         }
 
-        String phone_number = sharedPreferences.getString(PHONE_NUMBER, "");
-        try {
-            phone_number = phone_number.substring(3,13);
-        }
-        catch (StringIndexOutOfBoundsException e){
-            Toast.makeText(this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
-        }
-        if (TextUtils.equals(phoneNumber, phone_number)){
-            Toast.makeText(ChangePhoneNumber.this, "Already signed in with this number", Toast.LENGTH_LONG).show();
-            return;
-        }
+//        String phone_number = sharedPreferences.getString(PHONE_NUMBER, "");
+//        try {
+//            phone_number = phone_number.substring(3,13);
+//        }
+//        catch (StringIndexOutOfBoundsException e){
+//            Toast.makeText(this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
+//        }
+//        if (TextUtils.equals(phoneNumber, phone_number)){
+//            Toast.makeText(ChangePhoneNumber.this, "Already signed in with this number", Toast.LENGTH_LONG).show();
+//            return;
+//        }
 
         spinKitView.setVisibility(View.VISIBLE);
         phoneNumber = countryCode+phoneNumber;

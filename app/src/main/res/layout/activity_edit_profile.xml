@@ -14,7 +14,7 @@
         android:id="@+id/ep_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/chooseLocationBarColor"
+        android:background="@color/topBarColor"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         >
         <RelativeLayout
@@ -227,7 +227,9 @@
                 android:layout_marginTop="24dp"
                 android:background="#EDF0F2"
                 android:padding="@dimen/activity_horizontal_margin"
-                >
+                android:elevation="@dimen/fancy_button_elevation"
+                tools:targetApi="lollipop">
+
                 <!--verify licence-->
                 <ImageView
                     android:id="@+id/ep_verify_licence"
