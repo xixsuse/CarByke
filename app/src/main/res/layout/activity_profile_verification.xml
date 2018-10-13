@@ -56,14 +56,15 @@
         <!--profile completion percentage teller-->
         <com.eralp.circleprogressview.CircleProgressView
             android:id="@+id/pv_profile_verification_cpv"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            app:cpv_circle_color="#27375c"
-            app:cpv_circle_width="6dp"
-            app:cpv_background_circle_width="1dp"
+            android:layout_width="130dp"
+            android:layout_height="130dp"
+            app:cpv_circle_color="@color/lightGreen"
+            app:cpv_circle_width="12dp"
+            app:cpv_background_circle_width="12dp"
             app:cpv_background_circle_color="#5b253048"
-            app:cpv_text_prefix=""
-            app:cpv_text_size="18"
+            app:cpv_text_prefix="%"
+            style="@style/CustomTextStyle16"
+            app:cpv_text_size="20"
             app:cpv_text_color="#27375c"/>
 
         <!--incomplete text-->
@@ -73,6 +74,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:hint="@string/status"
+            android:text="@string/incomplete"
+            android:textColor="@color/red"
+            android:textStyle="bold"
             android:layout_centerVertical="true"
             android:layout_marginStart="32dp"
             style="@style/CustomTextStyle16"
@@ -97,8 +101,8 @@
         android:id="@+id/pv_horizontal_line"
         android:layout_below="@+id/pv_percentage_view_rl"
         android:layout_width="match_parent"
-        android:layout_height= "1dp"
-        android:background="@color/gray"
+        android:layout_height="1dp"
+        android:background="@color/black10"
         android:layout_marginTop="@dimen/activity_vertical_margin"
         android:layout_marginStart="@dimen/activity_horizontal_margin"
         android:layout_marginEnd="@dimen/activity_horizontal_margin"
@@ -110,7 +114,7 @@
         android:layout_below="@+id/pv_horizontal_line"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_marginTop="24dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:background="@drawable/white_background"
@@ -283,8 +287,22 @@
             tools:ignore="RelativeOverlap" />
 
     </RelativeLayout>
-    
 
+
+    <!--finish button-->
+    <Button
+        android:id="@+id/ac_upload_b"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:text="@string/submit_to_verify"
+        style="@style/CustomTextStyle16"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:enabled="false"
+        android:background="@color/buttonDisabledColor"
+        />
 
 
 </RelativeLayout>

@@ -1,9 +1,15 @@
 package com.carbyke.carbyke;
 
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
@@ -16,6 +22,8 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.daimajia.numberprogressbar.NumberProgressBar;
 import com.github.ybq.android.spinkit.SpinKitView;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -34,10 +42,19 @@ import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
 import java.util.Objects;
 
+import pl.aprilapps.easyphotopicker.DefaultCallback;
+import pl.aprilapps.easyphotopicker.EasyImage;
+
 import static android.app.Activity.RESULT_OK;
+import static android.content.Context.CAMERA_SERVICE;
 
 
 /**
@@ -53,13 +70,14 @@ public class UploadLivePhoto extends Fragment {
 
     private final static String USER_PROFILES = "user_profiles";
     private final static String IMAGES = "images";
-    private final static String IMAGE_NAME = "driving_license.jpg";
+    private final static String IMAGE_NAME = "face_image.jpg";
 
 
     private FirebaseAuth mAuth;
 
     private SpinKitView loading, loading1;
     private NumberProgressBar numberProgressBar;
+
 
     private DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
 
@@ -69,7 +87,7 @@ public class UploadLivePhoto extends Fragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_upload_live_photo, container, false);
@@ -87,7 +105,7 @@ public class UploadLivePhoto extends Fragment {
             public void onClick(View view) {
                 final String uid = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
                 databaseReference.child(USER_PROFILES).child(uid).child(IMAGES)
-                        .child("driving_license").setValue(null).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        .child("face-image").setValue(null).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         upload_license_ib.setBackgroundResource(R.drawable.ic_upload_image);
@@ -125,18 +143,17 @@ public class UploadLivePhoto extends Fragment {
         show1();
         final String uid = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
         databaseReference.child(USER_PROFILES).child(uid).child(IMAGES)
-                .child("driving_license").addListenerForSingleValueEvent(new ValueEventListener() {
+                .child("aadhar_image").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 String url = dataSnapshot.getValue(String.class);
-                if (!TextUtils.isEmpty(url)){
+                if (!TextUtils.isEmpty(url)) {
                     Picasso.with(getActivity())
                             .load(url)
                             .into(upload_license_ib);
                     delete_ib.setVisibility(View.VISIBLE);
                     dismiss1();
-                }
-                else {
+                } else {
                     upload_license_ib.setBackgroundResource(R.drawable.ic_upload_image);
                     dismiss1();
                 }
@@ -151,14 +168,12 @@ public class UploadLivePhoto extends Fragment {
     }
 
 
-
-
     private boolean getExtension(File file) {
         String fileName = file.getName();
         String extension;
         try {
             extension = fileName.substring(fileName.lastIndexOf("."));
-            if (extension.equals(".gif")){
+            if (extension.equals(".gif")) {
                 Toast.makeText(getActivity(), "gif not supported", Toast.LENGTH_SHORT).show();
                 return false;
             }
@@ -223,7 +238,7 @@ public class UploadLivePhoto extends Fragment {
     //    upload image
     public void UploadImageFileToFirebaseStorage() {
 
-        try{
+        try {
             if (ImageFilePath != null) {
 
                 show();
@@ -232,7 +247,7 @@ public class UploadLivePhoto extends Fragment {
                 final String uid = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
                 StorageReference storageReference = FirebaseStorage.getInstance().getReference();
                 final StorageReference imageStorageReference = storageReference.child(USER_PROFILES).child(uid)
-                        .child(IMAGES).child("driving_license").child(IMAGE_NAME);
+                        .child(IMAGES).child("face_image").child(IMAGE_NAME);
 
                 imageStorageReference.putFile(ImageFilePath)
                         .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -245,7 +260,7 @@ public class UploadLivePhoto extends Fragment {
                                         String url = uri.toString();
 
                                         databaseReference.child(USER_PROFILES).child(uid).child(IMAGES)
-                                                .child("driving_license")
+                                                .child("face_image")
                                                 .setValue(url).addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void aVoid) {
@@ -254,6 +269,8 @@ public class UploadLivePhoto extends Fragment {
                                                 dismiss();
                                                 numberProgressBar.setVisibility(View.GONE);
                                                 delete_ib.setVisibility(View.VISIBLE);
+                                                upload_b.setEnabled(false);
+                                                upload_b.setBackgroundColor(Objects.requireNonNull(getActivity()).getResources().getColor(R.color.buttonDisabledColor));
                                             }
                                         });
                                     }
@@ -277,39 +294,36 @@ public class UploadLivePhoto extends Fragment {
                                 int total_size = (int) taskSnapshot.getTotalByteCount();
                                 int uploaded = (int) taskSnapshot.getBytesTransferred();
                                 int percentage_completed;
-                                percentage_completed = Math.abs(uploaded*100 / total_size);
+                                percentage_completed = Math.abs(uploaded * 100 / total_size);
                                 numberProgressBar.setProgress(percentage_completed);
                                 if (TextUtils.equals(String.valueOf(taskSnapshot.getTotalByteCount()),
-                                        String.valueOf(taskSnapshot.getBytesTransferred()))){
+                                        String.valueOf(taskSnapshot.getBytesTransferred()))) {
                                     numberProgressBar.setProgress(100);
                                 }
                             }
                         });
             }
 
-        }
-        catch (IllegalArgumentException | NullPointerException e){
+        } catch (IllegalArgumentException | NullPointerException e) {
             e.printStackTrace();
         }
 
     }//upload image
 
 
-
-
-    private void show(){
+    private void show() {
         loading.setVisibility(View.VISIBLE);
     }
 
-    private void dismiss(){
+    private void dismiss() {
         loading.setVisibility(View.GONE);
     }
 
-    private void show1(){
+    private void show1() {
         loading1.setVisibility(View.VISIBLE);
     }
 
-    private void dismiss1(){
+    private void dismiss1() {
         loading1.setVisibility(View.GONE);
     }
 

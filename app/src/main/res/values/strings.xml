@@ -60,4 +60,14 @@
                                       - Complete house address should be visible.\n
                                       - Blurry image wil not be accepted.\n
                                       - License already registered with CarByke will not be accepted.</string>
+    <string name="aadhar_guidelines">- Name, dob, license number, expiry date should be visible.\n
+                                     - Complete house address should be visible.\n
+                                     - Blurry image wil not be accepted.\n
+                                     - Aadhar Number already registered with CarByke will not be accepted.</string>
+    <string name="live_image_guidelines">- Choose camera and take live photo.\n
+                                     - Face should be clearly visible.\n
+                                     - Blurry image wil not be accepted.\n
+                                     - Recently clicked image is also accepted but should not be too old one.</string>
+    <string name="upload_live_face_image">Upload Live face Image</string>
+    <string name="submit_to_verify">SUBMIT TO VERIFY</string>
 </resources>

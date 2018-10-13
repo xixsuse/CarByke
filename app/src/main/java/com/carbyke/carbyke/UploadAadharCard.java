@@ -83,7 +83,7 @@ public class UploadAadharCard extends Fragment {
             public void onClick(View view) {
                 final String uid = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
                 databaseReference.child(USER_PROFILES).child(uid).child(IMAGES)
-                        .child("driving_license").setValue(null).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        .child("aadhar_image").setValue(null).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         upload_license_ib.setBackgroundResource(R.drawable.ic_upload_image);
@@ -248,6 +248,8 @@ public class UploadAadharCard extends Fragment {
                                                 dismiss();
                                                 numberProgressBar.setVisibility(View.GONE);
                                                 delete_ib.setVisibility(View.VISIBLE);
+                                                upload_b.setEnabled(false);
+                                                upload_b.setBackgroundColor(Objects.requireNonNull(getActivity()).getResources().getColor(R.color.buttonDisabledColor));
                                             }
                                         });
                                     }

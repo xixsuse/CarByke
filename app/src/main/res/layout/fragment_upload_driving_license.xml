@@ -92,21 +92,17 @@
         tools:ignore="ContentDescription" />
 
 
-    <!--if image really large in length-->
-    <android.support.v4.widget.NestedScrollView
-        android:id="@+id/dl_selected_image_nsv"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_below="@+id/dl_toolbar"
-        android:layout_marginTop="52dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_centerHorizontal="true"
-        >
-
+    <!--selected image-->
         <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:id="@+id/dl_selected_image_rl"
+            android:layout_width="wrap_content"
+            android:layout_height="200dp"
+            android:layout_below="@+id/dl_toolbar"
+            android:layout_marginTop="52dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_centerHorizontal="true"
+            >
             <ImageView
                 android:id="@+id/dl_upload_license_ib"
                 android:layout_width="wrap_content"
@@ -129,12 +125,11 @@
 
         </RelativeLayout>
 
-    </android.support.v4.widget.NestedScrollView>
 
     <!--image must contain-->
     <TextView
         android:id="@+id/dl_guide_tv"
-        android:layout_below="@+id/dl_selected_image_nsv"
+        android:layout_below="@+id/dl_selected_image_rl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/image_must_contain"

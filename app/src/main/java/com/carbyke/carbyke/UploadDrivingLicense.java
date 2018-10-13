@@ -261,6 +261,8 @@ public class UploadDrivingLicense extends Fragment {
                                                 dismiss();
                                                 numberProgressBar.setVisibility(View.GONE);
                                                 delete_ib.setVisibility(View.VISIBLE);
+                                                upload_b.setEnabled(false);
+                                                upload_b.setBackgroundColor(Objects.requireNonNull(getActivity()).getResources().getColor(R.color.buttonDisabledColor));
                                             }
                                         });
                                     }
