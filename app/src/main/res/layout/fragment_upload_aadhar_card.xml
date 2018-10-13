@@ -6,11 +6,11 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:elevation="@dimen/fancy_button_elevation"
-    tools:context=".UploadDrivingLicense"
+    tools:context=".UploadAadharCard"
     tools:targetApi="lollipop">
 
     <android.support.v7.widget.Toolbar
-        android:id="@+id/dl_toolbar"
+        android:id="@+id/ac_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/topBarColor"
@@ -21,17 +21,17 @@
             android:layout_height="wrap_content">
             <!--back button-->
             <ImageButton
-                android:id="@+id/dl_back_ib"
+                android:id="@+id/ac_back_ib"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/ic_return_back_white_smoke"
                 android:contentDescription="@string/error_while_loading_image" />
 
             <TextView
-                android:layout_toEndOf="@+id/dl_back_ib"
+                android:layout_toEndOf="@+id/ac_back_ib"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/upload_driving_license_image"
+                android:text="@string/upload_aadhar_card_image"
                 style="@style/CustomTextStyle16"
                 android:textStyle="bold"
                 android:textColor="@color/white"
@@ -45,8 +45,8 @@
 
     <!--loading view-->
     <com.github.ybq.android.spinkit.SpinKitView
-        android:id="@+id/dl_spin_kit"
-        android:layout_below="@+id/dl_toolbar"
+        android:id="@+id/ac_spin_kit"
+        android:layout_below="@+id/ac_toolbar"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         style="@style/SpinKitView.Small.Circle"
         android:layout_width="wrap_content"
@@ -61,10 +61,10 @@
 
     <!--number progress bar-->
     <com.daimajia.numberprogressbar.NumberProgressBar
-        android:id="@+id/dl_number_progress"
-        android:layout_toStartOf="@+id/dl_spin_kit"
-        android:layout_toEndOf="@+id/dl_delete_ib"
-        android:layout_below="@+id/dl_toolbar"
+        android:id="@+id/ac_number_progress"
+        android:layout_toStartOf="@+id/ac_spin_kit"
+        android:layout_toEndOf="@+id/ac_delete_ib"
+        android:layout_below="@+id/ac_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/activity_horizontal_margin"
@@ -80,13 +80,13 @@
 
     <!--delete-->
     <ImageButton
-        android:id="@+id/dl_delete_ib"
+        android:id="@+id/ac_delete_ib"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/ic_delete"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_below="@+id/dl_toolbar"
+        android:layout_below="@+id/ac_toolbar"
         android:layout_marginTop="@dimen/activity_vertical_margin"
         android:visibility="gone"
         tools:ignore="ContentDescription" />
@@ -94,10 +94,10 @@
 
     <!--if image really large in length-->
     <android.support.v4.widget.NestedScrollView
-        android:id="@+id/dl_selected_image_nsv"
+        android:id="@+id/ac_selected_image_nsv"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:layout_below="@+id/dl_toolbar"
+        android:layout_below="@+id/ac_toolbar"
         android:layout_marginTop="52dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
@@ -108,7 +108,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <ImageView
-                android:id="@+id/dl_upload_license_ib"
+                android:id="@+id/ac_upload_license_ib"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
@@ -116,7 +116,7 @@
 
             <!--loading view-->
             <com.github.ybq.android.spinkit.SpinKitView
-                android:id="@+id/dl_spin_kit_1"
+                android:id="@+id/ac_spin_kit_1"
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 style="@style/SpinKitView.Large.Circle"
                 android:layout_width="wrap_content"
@@ -133,8 +133,8 @@
 
     <!--image must contain-->
     <TextView
-        android:id="@+id/dl_guide_tv"
-        android:layout_below="@+id/dl_selected_image_nsv"
+        android:id="@+id/ac_guide_tv"
+        android:layout_below="@+id/ac_selected_image_nsv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/image_must_contain"
@@ -146,8 +146,8 @@
 
     <!--guidelines-->
     <TextView
-        android:id="@+id/dl_guide_desc_tv"
-        android:layout_below="@+id/dl_guide_tv"
+        android:id="@+id/ac_guide_desc_tv"
+        android:layout_below="@+id/ac_guide_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/license_guidelines"
@@ -160,7 +160,7 @@
 
     <!--upload button-->
     <Button
-        android:id="@+id/dl_upload_b"
+        android:id="@+id/ac_upload_b"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"

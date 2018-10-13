@@ -1,20 +1,11 @@
 package com.carbyke.carbyke;
 
-
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +14,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.daimajia.numberprogressbar.NumberProgressBar;
 import com.github.ybq.android.spinkit.SpinKitView;
@@ -42,15 +32,17 @@ import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
+
 import java.io.File;
 import java.util.Objects;
+
 import static android.app.Activity.RESULT_OK;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class UploadDrivingLicense extends Fragment {
+public class UploadAadharCard extends Fragment {
 
     private View view;
     private ImageView upload_license_ib;
@@ -60,32 +52,29 @@ public class UploadDrivingLicense extends Fragment {
 
     private final static String USER_PROFILES = "user_profiles";
     private final static String IMAGES = "images";
-    private final static String IMAGE_NAME = "driving_license.jpg";
-
-
+    private final static String IMAGE_NAME = "aadhar_card.jpg";
     private FirebaseAuth mAuth;
-
     private SpinKitView loading, loading1;
     private NumberProgressBar numberProgressBar;
-
     private DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
 
-    public UploadDrivingLicense() {
+    public UploadAadharCard() {
         // Required empty public constructor
     }
 
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        view = inflater.inflate(R.layout.fragment_upload_driving_license, container, false);
-        upload_license_ib = view.findViewById(R.id.dl_upload_license_ib);
-        upload_b = view.findViewById(R.id.dl_upload_b);
-        loading = view.findViewById(R.id.dl_spin_kit);
-        loading1 = view.findViewById(R.id.dl_spin_kit_1);
-        delete_ib = view.findViewById(R.id.dl_delete_ib);
-        numberProgressBar = view.findViewById(R.id.dl_number_progress);
+        view = inflater.inflate(R.layout.fragment_upload_aadhar_card, container, false);
+
+        upload_license_ib = view.findViewById(R.id.ac_upload_license_ib);
+        upload_b = view.findViewById(R.id.ac_upload_b);
+        loading = view.findViewById(R.id.ac_spin_kit);
+        loading1 = view.findViewById(R.id.ac_spin_kit_1);
+        delete_ib = view.findViewById(R.id.ac_delete_ib);
+        numberProgressBar = view.findViewById(R.id.ac_number_progress);
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -126,24 +115,24 @@ public class UploadDrivingLicense extends Fragment {
         checkIfImageUploaded();
 
         return view;
+
     }
 
     private void checkIfImageUploaded() {
         show1();
         final String uid = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
         databaseReference.child(USER_PROFILES).child(uid).child(IMAGES)
-                .child("driving_license").addListenerForSingleValueEvent(new ValueEventListener() {
+                .child("aadhar_image").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 String url = dataSnapshot.getValue(String.class);
-                if (!TextUtils.isEmpty(url)){
+                if (!TextUtils.isEmpty(url)) {
                     Picasso.with(getActivity())
                             .load(url)
                             .into(upload_license_ib);
                     delete_ib.setVisibility(View.VISIBLE);
                     dismiss1();
-                }
-                else {
+                } else {
                     upload_license_ib.setBackgroundResource(R.drawable.ic_upload_image);
                     dismiss1();
                 }
@@ -158,26 +147,24 @@ public class UploadDrivingLicense extends Fragment {
     }
 
 
-
-
     private boolean getExtension(File file) {
         String fileName = file.getName();
         String extension;
         try {
             extension = fileName.substring(fileName.lastIndexOf("."));
-            if (extension.equals(".gif")){
+            if (extension.equals(".gif")) {
                 Toast.makeText(getActivity(), "gif not supported", Toast.LENGTH_SHORT).show();
                 return false;
             }
         } catch (Exception e) {
             Toast.makeText(getActivity(), "something went gone, try again", Toast.LENGTH_SHORT).show();
-           return false;
+            return false;
         }
         return true;
     }
 
 
-//    select image to upload to firebase storage
+    //    select image to upload to firebase storage
     private void selectImageToUpload() {
         CropImage.activity()
                 .setGuidelines(CropImageView.Guidelines.ON_TOUCH)
@@ -196,14 +183,14 @@ public class UploadDrivingLicense extends Fragment {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             if (resultCode == RESULT_OK) {
                 ImageFilePath = result.getUri();
-              //  File actualImage = FileUtils.getFile(getActivity(), ImageFilePath);
+                //  File actualImage = FileUtils.getFile(getActivity(), ImageFilePath);
                 //if (getExtension(actualImage)){
-                    upload_license_ib.setBackground(null);
-                    Picasso.with(getActivity())
-                            .load(ImageFilePath)
-                            .into(upload_license_ib);
-                    upload_b.setEnabled(true);
-                    upload_b.setBackgroundColor(Objects.requireNonNull(getActivity()).getResources().getColor(R.color.lightGreen));
+                upload_license_ib.setBackground(null);
+                Picasso.with(getActivity())
+                        .load(ImageFilePath)
+                        .into(upload_license_ib);
+                upload_b.setEnabled(true);
+                upload_b.setBackgroundColor(Objects.requireNonNull(getActivity()).getResources().getColor(R.color.lightGreen));
 //                }
 //                else {
 //                    ImageFilePath = null;
@@ -227,10 +214,10 @@ public class UploadDrivingLicense extends Fragment {
     }
     //wait for result after selecting image
 
-//    upload image
+    //    upload image
     public void UploadImageFileToFirebaseStorage() {
 
-        try{
+        try {
             if (ImageFilePath != null) {
 
                 show();
@@ -239,7 +226,7 @@ public class UploadDrivingLicense extends Fragment {
                 final String uid = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
                 StorageReference storageReference = FirebaseStorage.getInstance().getReference();
                 final StorageReference imageStorageReference = storageReference.child(USER_PROFILES).child(uid)
-                       .child(IMAGES).child("driving_license").child(IMAGE_NAME);
+                        .child(IMAGES).child("aadhar_image").child(IMAGE_NAME);
 
                 imageStorageReference.putFile(ImageFilePath)
                         .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -252,7 +239,7 @@ public class UploadDrivingLicense extends Fragment {
                                         String url = uri.toString();
 
                                         databaseReference.child(USER_PROFILES).child(uid).child(IMAGES)
-                                                .child("driving_license")
+                                                .child("aadhar_image")
                                                 .setValue(url).addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void aVoid) {
@@ -284,39 +271,36 @@ public class UploadDrivingLicense extends Fragment {
                                 int total_size = (int) taskSnapshot.getTotalByteCount();
                                 int uploaded = (int) taskSnapshot.getBytesTransferred();
                                 int percentage_completed;
-                                percentage_completed = Math.abs(uploaded*100 / total_size);
+                                percentage_completed = Math.abs(uploaded * 100 / total_size);
                                 numberProgressBar.setProgress(percentage_completed);
                                 if (TextUtils.equals(String.valueOf(taskSnapshot.getTotalByteCount()),
-                                        String.valueOf(taskSnapshot.getBytesTransferred()))){
+                                        String.valueOf(taskSnapshot.getBytesTransferred()))) {
                                     numberProgressBar.setProgress(100);
                                 }
                             }
                         });
             }
 
-        }
-        catch (IllegalArgumentException | NullPointerException e){
+        } catch (IllegalArgumentException | NullPointerException e) {
             e.printStackTrace();
         }
 
     }//upload image
 
 
-
-
-    private void show(){
+    private void show() {
         loading.setVisibility(View.VISIBLE);
     }
 
-    private void dismiss(){
+    private void dismiss() {
         loading.setVisibility(View.GONE);
     }
 
-    private void show1(){
+    private void show1() {
         loading1.setVisibility(View.VISIBLE);
     }
 
-    private void dismiss1(){
+    private void dismiss1() {
         loading1.setVisibility(View.GONE);
     }
 
@@ -324,3 +308,4 @@ public class UploadDrivingLicense extends Fragment {
 
 //    end
 }
+

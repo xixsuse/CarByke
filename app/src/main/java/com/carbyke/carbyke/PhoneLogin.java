@@ -628,18 +628,6 @@ public class PhoneLogin extends AppCompatActivity implements View.OnClickListene
 //                cancel button
             case R.id.pl_cancel_ib:
                 PhoneLogin.this.finish();
-//                Objects.requireNonNull(firebaseAuth.getCurrentUser()).unlink("phone")
-//                        .addOnCompleteListener(Objects.requireNonNull(getActivity()), new OnCompleteListener<AuthResult>() {
-//                            @Override
-//                            public void onComplete(@NonNull Task<AuthResult> task) {
-//                                if (task.isSuccessful()) {
-//                                    // Auth provider unlinked from account
-//                                    // ...
-//                                    Toast.makeText(getActivity(), "Unlinked", Toast.LENGTH_SHORT).show();
-//                                }
-//                                else Toast.makeText(getActivity(), ""+ Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
-//                            }
-//                        });
                 break;
 
         }

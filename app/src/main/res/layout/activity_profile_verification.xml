@@ -78,6 +78,17 @@
             style="@style/CustomTextStyle16"
             />
 
+        <!--loading view-->
+        <com.github.ybq.android.spinkit.SpinKitView
+            android:id="@+id/pv_spin_kit"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            style="@style/SpinKitView.Small.Circle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            app:SpinKit_Color="@color/black"
+            android:visibility="gone"
+            />
 
     </RelativeLayout>
 
