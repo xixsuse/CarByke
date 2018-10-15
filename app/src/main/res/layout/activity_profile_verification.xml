@@ -291,7 +291,7 @@
 
     <!--finish button-->
     <Button
-        android:id="@+id/ac_upload_b"
+        android:id="@+id/pv_submit_b"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"

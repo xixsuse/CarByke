@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -214,6 +215,8 @@ public class Home extends AppCompatActivity
                 });
     }
 //    setting user data
+
+
 //    saving data in shared pref
 private void saveFetchedDataInSharedPrefs(String name, String email, String phone) {
     SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -222,7 +225,7 @@ private void saveFetchedDataInSharedPrefs(String name, String email, String phon
     editor.putString(PHONE_NUMBER, phone);
     editor.apply();
 }
-    //    saving data in shared pref
+//    saving data in shared pref
 
 
 
@@ -302,7 +305,8 @@ private void saveFetchedDataInSharedPrefs(String name, String email, String phon
         switch (id){
 //            open search car activity
             case R.id.ch_car_ib:
-                startActivity(new Intent(Home.this, SearchCar.class));
+               startActivity(new Intent(Home.this, SearchCar.class));
+                //Log.w("r23", databaseReference.push().getKey());
                 break;
 //            open search bike activity
             case R.id.ch_bike_ib:

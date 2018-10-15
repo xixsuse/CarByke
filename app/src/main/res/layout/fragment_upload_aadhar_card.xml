@@ -104,7 +104,7 @@
         android:layout_centerHorizontal="true"
         >
         <ImageView
-            android:id="@+id/ac_upload_license_ib"
+            android:id="@+id/ac_select_license_ib"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
@@ -154,7 +154,7 @@
 
     <!--upload button-->
     <Button
-        android:id="@+id/ac_upload_b"
+        android:id="@+id/ac_submit_b"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"

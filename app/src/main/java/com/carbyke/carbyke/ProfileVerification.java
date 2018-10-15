@@ -3,9 +3,10 @@ package com.carbyke.carbyke;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.widget.Button;
+import android.widget.ImageButton;
 
 import com.eralp.circleprogressview.CircleProgressView;
 import com.github.ybq.android.spinkit.SpinKitView;
@@ -23,8 +24,10 @@ import mehdi.sakout.fancybuttons.FancyButton;
 public class ProfileVerification extends AppCompatActivity implements View.OnClickListener {
 
     private FancyButton upload_license_fb, upload_adhar_fb, upload_live_photo_fb;
+    private Button submit_b;
     private SpinKitView loading;
     private CircleProgressView profile_verification_cpv;
+    private ImageButton back_ib;
 
     private final static String USER_PROFILES = "user_profiles";
     private final static String IMAGES = "images";
@@ -42,6 +45,8 @@ public class ProfileVerification extends AppCompatActivity implements View.OnCli
         upload_adhar_fb = findViewById(R.id.pv_upload_adhar_fb);
         upload_license_fb = findViewById(R.id.pv_upload_driving_license_fb);
         upload_live_photo_fb = findViewById(R.id.pv_upload_live_photo_fb);
+        submit_b = findViewById(R.id.pv_submit_b);
+        back_ib = findViewById(R.id.pv_back_ib);
         loading = findViewById(R.id.pv_spin_kit);
         profile_verification_cpv = findViewById(R.id.pv_profile_verification_cpv);
         profile_verification_cpv.setInterpolator(new AccelerateDecelerateInterpolator());
@@ -49,6 +54,8 @@ public class ProfileVerification extends AppCompatActivity implements View.OnCli
         upload_adhar_fb.setOnClickListener(this);
         upload_license_fb.setOnClickListener(this);
         upload_live_photo_fb.setOnClickListener(this);
+        submit_b.setOnClickListener(this);
+        back_ib.setOnClickListener(this);
     }
 
     public void onStart(){
@@ -64,10 +71,30 @@ public class ProfileVerification extends AppCompatActivity implements View.OnCli
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 int count = 0;
-                if (dataSnapshot.hasChild(DRIVING_LICENSE)) count++;
-                if (dataSnapshot.hasChild(AADHAR_IMAGE)) count++;
-                if (dataSnapshot.hasChild(FACE_IMAGE)) count++;
+                if (dataSnapshot.hasChild(DRIVING_LICENSE)) {
+                    count++;
+                    upload_license_fb.setText("uploaded");
+                } else{
+                    upload_license_fb.setText("upload");
+                }
 
+                if (dataSnapshot.hasChild(AADHAR_IMAGE)){
+                    count++;
+                    upload_adhar_fb.setText("uploaded");
+                } else{
+                    upload_adhar_fb.setText("upload");
+                }
+
+                if (dataSnapshot.hasChild(FACE_IMAGE)){
+                    count++;
+                    upload_live_photo_fb.setText("uploaded");
+                } else{
+                    upload_live_photo_fb.setText("upload");
+                }
+
+
+                submit_b.setEnabled(false);
+                submit_b.setBackgroundColor(getResources().getColor(R.color.buttonDisabledColor));
                 if (count == 0){
                     profile_verification_cpv.setProgress(0);
                 }
@@ -79,6 +106,8 @@ public class ProfileVerification extends AppCompatActivity implements View.OnCli
                 }
                 else if (count == 3){
                     profile_verification_cpv.setProgressWithAnimation(80, 2000);
+                    submit_b.setEnabled(false); // enable
+                    submit_b.setBackgroundColor(getResources().getColor(R.color.lightGreen));
                 }
             }
 
@@ -141,6 +170,10 @@ public class ProfileVerification extends AppCompatActivity implements View.OnCli
                         dismiss();
                     }
                 }).execute();
+                break;
+//                back button
+            case R.id.pv_back_ib:
+                ProfileVerification.this.finish();
                 break;
 
         }

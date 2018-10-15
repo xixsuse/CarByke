@@ -111,9 +111,7 @@ public class SearchCar extends AppCompatActivity implements View.OnClickListener
         switch (id){
 //            search button
             case R.id.sc_search_b:
-                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-                String key = databaseReference.push().getKey();
-                Log.w("mypushkey", "key: "+key);
+                startActivity(new Intent(SearchCar.this, AvailableCarList.class));
                 break;
 
 //            set location

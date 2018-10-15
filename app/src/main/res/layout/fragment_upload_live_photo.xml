@@ -104,7 +104,7 @@
             android:layout_centerHorizontal="true"
             >
             <ImageView
-                android:id="@+id/lp_upload_license_ib"
+                android:id="@+id/lp_select_license_ib"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"

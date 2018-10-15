@@ -1,15 +1,9 @@
 package com.carbyke.carbyke;
 
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
@@ -20,10 +14,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
-
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.daimajia.numberprogressbar.NumberProgressBar;
 import com.github.ybq.android.spinkit.SpinKitView;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -41,20 +32,9 @@ import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
-
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.List;
 import java.util.Objects;
-
-import pl.aprilapps.easyphotopicker.DefaultCallback;
-import pl.aprilapps.easyphotopicker.EasyImage;
-
 import static android.app.Activity.RESULT_OK;
-import static android.content.Context.CAMERA_SERVICE;
 
 
 /**
@@ -63,7 +43,7 @@ import static android.content.Context.CAMERA_SERVICE;
 public class UploadLivePhoto extends Fragment {
 
     private View view;
-    private ImageView upload_license_ib;
+    private ImageView select_license_ib;
     private ImageButton delete_ib;
     private Uri ImageFilePath;
     private Button upload_b;
@@ -91,7 +71,7 @@ public class UploadLivePhoto extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_upload_live_photo, container, false);
-        upload_license_ib = view.findViewById(R.id.lp_upload_license_ib);
+        select_license_ib = view.findViewById(R.id.lp_select_license_ib);
         upload_b = view.findViewById(R.id.lp_upload_b);
         loading = view.findViewById(R.id.lp_spin_kit);
         loading1 = view.findViewById(R.id.lp_spin_kit_1);
@@ -103,34 +83,45 @@ public class UploadLivePhoto extends Fragment {
         delete_ib.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final String uid = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
-                databaseReference.child(USER_PROFILES).child(uid).child(IMAGES)
-                        .child("face-image").setValue(null).addOnSuccessListener(new OnSuccessListener<Void>() {
+                show();
+                new CheckNetworkConnection(getActivity(), new CheckNetworkConnection.OnConnectionCallback() {
                     @Override
-                    public void onSuccess(Void aVoid) {
-                        upload_license_ib.setBackgroundResource(R.drawable.ic_upload_image);
-                        delete_ib.setVisibility(View.GONE);
-                        upload_b.setEnabled(false);
-                        upload_b.setBackgroundColor(Objects.requireNonNull(getActivity()).getResources().getColor(R.color.buttonDisabledColor));
-                        Picasso.with(getActivity())
-                                .load(R.drawable.ic_upload_image)
-                                .into(upload_license_ib);
+                    public void onConnectionSuccess() {
+                        deleteImage();
                     }
-                });
+                    @Override
+                    public void onConnectionFail(String msg) {
+                        NoInternetConnectionAlert noInternetConnectionAlert = new NoInternetConnectionAlert(getActivity());
+                        noInternetConnectionAlert.DisplayNoInternetConnection();
+                        dismiss();
+                    }
+                }).execute();
             }
         });
 
-        upload_license_ib.setOnClickListener(new View.OnClickListener() {
+        select_license_ib.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                selectImageToUpload();
+               selectImageToUpload();
             }
         });
 
         upload_b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                UploadImageFileToFirebaseStorage();
+                show();
+                new CheckNetworkConnection(getActivity(), new CheckNetworkConnection.OnConnectionCallback() {
+                    @Override
+                    public void onConnectionSuccess() {
+                        UploadImageFileToFirebaseStorage();
+                    }
+                    @Override
+                    public void onConnectionFail(String msg) {
+                        NoInternetConnectionAlert noInternetConnectionAlert = new NoInternetConnectionAlert(getActivity());
+                        noInternetConnectionAlert.DisplayNoInternetConnection();
+                        dismiss();
+                    }
+                }).execute();
             }
         });
 
@@ -138,6 +129,28 @@ public class UploadLivePhoto extends Fragment {
 
         return view;
     }
+
+
+
+    //    deleting image
+    private void deleteImage() {
+        final String uid = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
+        databaseReference.child(USER_PROFILES).child(uid).child(IMAGES)
+                .child("face-image").setValue(null).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                select_license_ib.setBackgroundResource(R.drawable.ic_upload_image);
+                delete_ib.setVisibility(View.GONE);
+                upload_b.setEnabled(false);
+                upload_b.setBackgroundColor(Objects.requireNonNull(getActivity()).getResources().getColor(R.color.buttonDisabledColor));
+                Picasso.with(getActivity())
+                        .load(R.drawable.ic_upload_image)
+                        .into(select_license_ib);
+                dismiss();
+            }
+        });
+    }
+//    deleting image
 
     private void checkIfImageUploaded() {
         show1();
@@ -150,11 +163,11 @@ public class UploadLivePhoto extends Fragment {
                 if (!TextUtils.isEmpty(url)) {
                     Picasso.with(getActivity())
                             .load(url)
-                            .into(upload_license_ib);
+                            .into(select_license_ib);
                     delete_ib.setVisibility(View.VISIBLE);
                     dismiss1();
                 } else {
-                    upload_license_ib.setBackgroundResource(R.drawable.ic_upload_image);
+                    select_license_ib.setBackgroundResource(R.drawable.ic_upload_image);
                     dismiss1();
                 }
 
@@ -206,10 +219,10 @@ public class UploadLivePhoto extends Fragment {
                 ImageFilePath = result.getUri();
                 //  File actualImage = FileUtils.getFile(getActivity(), ImageFilePath);
                 //if (getExtension(actualImage)){
-                upload_license_ib.setBackground(null);
+                select_license_ib.setBackground(null);
                 Picasso.with(getActivity())
                         .load(ImageFilePath)
-                        .into(upload_license_ib);
+                        .into(select_license_ib);
                 upload_b.setEnabled(true);
                 upload_b.setBackgroundColor(Objects.requireNonNull(getActivity()).getResources().getColor(R.color.lightGreen));
 //                }
@@ -240,8 +253,6 @@ public class UploadLivePhoto extends Fragment {
 
         try {
             if (ImageFilePath != null) {
-
-                show();
                 numberProgressBar.setVisibility(View.VISIBLE);
                 delete_ib.setVisibility(View.GONE);
                 final String uid = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();

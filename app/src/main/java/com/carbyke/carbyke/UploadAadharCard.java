@@ -45,7 +45,7 @@ import static android.app.Activity.RESULT_OK;
 public class UploadAadharCard extends Fragment {
 
     private View view;
-    private ImageView upload_license_ib;
+    private ImageView select_license_ib;
     private ImageButton delete_ib;
     private Uri ImageFilePath;
     private Button upload_b;
@@ -69,8 +69,8 @@ public class UploadAadharCard extends Fragment {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_upload_aadhar_card, container, false);
 
-        upload_license_ib = view.findViewById(R.id.ac_upload_license_ib);
-        upload_b = view.findViewById(R.id.ac_upload_b);
+        select_license_ib = view.findViewById(R.id.ac_select_license_ib);
+        upload_b = view.findViewById(R.id.ac_submit_b);
         loading = view.findViewById(R.id.ac_spin_kit);
         loading1 = view.findViewById(R.id.ac_spin_kit_1);
         delete_ib = view.findViewById(R.id.ac_delete_ib);
@@ -81,24 +81,24 @@ public class UploadAadharCard extends Fragment {
         delete_ib.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final String uid = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
-                databaseReference.child(USER_PROFILES).child(uid).child(IMAGES)
-                        .child("aadhar_image").setValue(null).addOnSuccessListener(new OnSuccessListener<Void>() {
+                show();
+                new CheckNetworkConnection(getActivity(), new CheckNetworkConnection.OnConnectionCallback() {
                     @Override
-                    public void onSuccess(Void aVoid) {
-                        upload_license_ib.setBackgroundResource(R.drawable.ic_upload_image);
-                        delete_ib.setVisibility(View.GONE);
-                        upload_b.setEnabled(false);
-                        upload_b.setBackgroundColor(Objects.requireNonNull(getActivity()).getResources().getColor(R.color.buttonDisabledColor));
-                        Picasso.with(getActivity())
-                                .load(R.drawable.ic_upload_image)
-                                .into(upload_license_ib);
+                    public void onConnectionSuccess() {
+                        deleteImage();
                     }
-                });
+                    @Override
+                    public void onConnectionFail(String msg) {
+                        NoInternetConnectionAlert noInternetConnectionAlert = new NoInternetConnectionAlert(getActivity());
+                        noInternetConnectionAlert.DisplayNoInternetConnection();
+                        dismiss();
+                    }
+                }).execute();
+
             }
         });
 
-        upload_license_ib.setOnClickListener(new View.OnClickListener() {
+        select_license_ib.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 selectImageToUpload();
@@ -108,7 +108,19 @@ public class UploadAadharCard extends Fragment {
         upload_b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                UploadImageFileToFirebaseStorage();
+                show();
+                new CheckNetworkConnection(getActivity(), new CheckNetworkConnection.OnConnectionCallback() {
+                    @Override
+                    public void onConnectionSuccess() {
+                        UploadImageFileToFirebaseStorage();
+                    }
+                    @Override
+                    public void onConnectionFail(String msg) {
+                        NoInternetConnectionAlert noInternetConnectionAlert = new NoInternetConnectionAlert(getActivity());
+                        noInternetConnectionAlert.DisplayNoInternetConnection();
+                        dismiss();
+                    }
+                }).execute();
             }
         });
 
@@ -117,6 +129,26 @@ public class UploadAadharCard extends Fragment {
         return view;
 
     }
+
+//    deleting image
+    private void deleteImage() {
+        final String uid = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
+        databaseReference.child(USER_PROFILES).child(uid).child(IMAGES)
+                .child("aadhar_image").setValue(null).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                select_license_ib.setBackgroundResource(R.drawable.ic_upload_image);
+                delete_ib.setVisibility(View.GONE);
+                upload_b.setEnabled(false);
+                upload_b.setBackgroundColor(Objects.requireNonNull(getActivity()).getResources().getColor(R.color.buttonDisabledColor));
+                Picasso.with(getActivity())
+                        .load(R.drawable.ic_upload_image)
+                        .into(select_license_ib);
+                dismiss();
+            }
+        });
+    }
+//    deleting image
 
     private void checkIfImageUploaded() {
         show1();
@@ -129,11 +161,11 @@ public class UploadAadharCard extends Fragment {
                 if (!TextUtils.isEmpty(url)) {
                     Picasso.with(getActivity())
                             .load(url)
-                            .into(upload_license_ib);
+                            .into(select_license_ib);
                     delete_ib.setVisibility(View.VISIBLE);
                     dismiss1();
                 } else {
-                    upload_license_ib.setBackgroundResource(R.drawable.ic_upload_image);
+                    select_license_ib.setBackgroundResource(R.drawable.ic_upload_image);
                     dismiss1();
                 }
 
@@ -185,10 +217,10 @@ public class UploadAadharCard extends Fragment {
                 ImageFilePath = result.getUri();
                 //  File actualImage = FileUtils.getFile(getActivity(), ImageFilePath);
                 //if (getExtension(actualImage)){
-                upload_license_ib.setBackground(null);
+                select_license_ib.setBackground(null);
                 Picasso.with(getActivity())
                         .load(ImageFilePath)
-                        .into(upload_license_ib);
+                        .into(select_license_ib);
                 upload_b.setEnabled(true);
                 upload_b.setBackgroundColor(Objects.requireNonNull(getActivity()).getResources().getColor(R.color.lightGreen));
 //                }
@@ -219,8 +251,6 @@ public class UploadAadharCard extends Fragment {
 
         try {
             if (ImageFilePath != null) {
-
-                show();
                 numberProgressBar.setVisibility(View.VISIBLE);
                 delete_ib.setVisibility(View.GONE);
                 final String uid = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();

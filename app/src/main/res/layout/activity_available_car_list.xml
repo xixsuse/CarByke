@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/fragment_container_list_of_users_for_aangadia"
+    tools:context=".AvailableCarList">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/cc_main.appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        android:background="#f2f2f2"
+        android:fitsSystemWindows="true"
+        >
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/cc_main.collapsing"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_scrollFlags="scroll|enterAlways"
+            android:fitsSystemWindows="true"
+            app:contentScrim="@color/white"
+            app:expandedTitleMarginStart="48dp"
+            app:expandedTitleMarginEnd="64dp"
+            android:background="#f2f2f2"
+            tools:targetApi="lollipop">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#f2f2f2"
+                android:padding="7dp"
+                >
+
+            <RelativeLayout
+                android:id="@+id/cc_rl_1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+                <!--back-->
+                <ImageButton
+                    android:id="@+id/cc_back_b"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ic_return_back"
+                    android:layout_centerVertical="true"
+                    tools:ignore="ContentDescription" />
+
+                <!--place name-->
+                <TextView
+                    android:id="@+id/cc_place_name_tv"
+                    android:layout_width="339dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="7dp"
+                    android:layout_marginStart="7dp"
+                    android:layout_toEndOf="@+id/cc_back_b"
+                    android:layout_toStartOf="@+id/cc_filter_ib"
+                    android:layout_centerVertical="true"
+                    android:background="@color/white" />
+                <!--filter-->
+                <ImageButton
+                    android:id="@+id/cc_filter_ib"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ic_filter"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    tools:ignore="ContentDescription" />
+            </RelativeLayout>
+
+                <!--date time-->
+                <RelativeLayout
+                    android:layout_below="@+id/cc_rl_1"
+                    android:layout_marginTop="3dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <!--start date time-->
+                    <TextView
+                        android:id="@+id/cc_start_date_time_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/CustomTextStyle12"
+                        android:hint="@string/start_date"
+                        android:layout_centerVertical="true"
+                        />
+
+                    <!--separator-->
+                    <ImageButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/ic_right_arrow"
+                        android:layout_centerHorizontal="true"
+                        android:contentDescription="@string/error_while_loading_image" />
+
+
+
+                    <!--end date time-->
+                    <TextView
+                        android:id="@+id/cc_end_date_time_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/CustomTextStyle12"
+                        android:hint="@string/start_date"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        />
+
+                </RelativeLayout>
+
+            </RelativeLayout>
+
+        </android.support.design.widget.CollapsingToolbarLayout>
+    </android.support.design.widget.AppBarLayout>
+
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#f2f2f2"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        >
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/cc_recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/appColor"
+            />
+
+    </RelativeLayout>
+
+</android.support.design.widget.CoordinatorLayout>
