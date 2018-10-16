@@ -1,31 +1,23 @@
 package com.carbyke.carbyke;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.provider.Settings;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.kunzisoft.switchdatetime.SwitchDateTimeDialogFragment;
 import com.squareup.picasso.Picasso;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import mehdi.sakout.fancybuttons.FancyButton;
@@ -39,10 +31,14 @@ public class SearchCar extends AppCompatActivity implements View.OnClickListener
     Date date_to_be_set_for_drop_off, date_to_be_set_for_pick_up;
     private TextView set_location_tv, where_tv;
 
-    SharedPreferences sharedPreferencesLocation;
+    SharedPreferences sharedPreferencesLocation, sharedPreferencesDateTime;
     private static final String LOCATION = "location";
     private static final String STATION = "station";
     private static final String TYPE = "type";
+
+    private static final String DATE_TIME = "date_time";
+    private static final String START_DATE_TIME = "start_date_time";
+    private static final String END_DATE_TIME = "end_date_time";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,6 +99,21 @@ public class SearchCar extends AppCompatActivity implements View.OnClickListener
     //    setting images
 
 
+//    saving date and time in shared prefs
+    private void saveDateTimeInSharedPrefs(String start_date_time, String end_date_time){
+        sharedPreferencesDateTime = getSharedPreferences(DATE_TIME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferencesDateTime.edit();
+
+        start_date_time = start_date_time.substring(start_date_time.length()-20, start_date_time.length()).replaceAll("\n"," ");
+        end_date_time = end_date_time.substring(end_date_time.length()-20, end_date_time.length()).replaceAll("\n"," ");
+
+        editor.putString(START_DATE_TIME, start_date_time);
+        editor.putString(END_DATE_TIME, end_date_time);
+        editor.apply();
+    }
+//    saving date and time in shared prefs
+
+
 //    onclick
     @Override
     public void onClick(View view) {
@@ -111,7 +122,24 @@ public class SearchCar extends AppCompatActivity implements View.OnClickListener
         switch (id){
 //            search button
             case R.id.sc_search_b:
-                startActivity(new Intent(SearchCar.this, AvailableCarList.class));
+
+//                check if location is selected
+                if (TextUtils.isEmpty(set_location_tv.getText().toString().trim())){
+                    Toast.makeText(this, "Select Location", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                String start_date_time = pick_up_time_tv.getText().toString().trim();
+                String end_date_time = drop_off_time_tv.getText().toString().trim();
+
+                // check if both dates are selected
+                if (!TextUtils.isEmpty(start_date_time) && !TextUtils.isEmpty(end_date_time)){
+                    saveDateTimeInSharedPrefs(start_date_time, end_date_time);
+                    startActivity(new Intent(SearchCar.this, SearchedCarList.class));
+                }
+                else {
+                    Toast.makeText(this, "Select date time", Toast.LENGTH_SHORT).show();
+                }
                 break;
 
 //            set location

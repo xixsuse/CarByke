@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:fancy="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rlo_relativeLayout"
+    android:background="@color/white"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+
+        >
+
+        <!--car photo relative layout-->
+        <RelativeLayout
+            android:id="@+id/rc_car_image_rl"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:background="@drawable/simple_rectangle"
+            android:layout_marginStart="@dimen/car_list_layout_margin"
+            android:layout_marginTop="@dimen/car_list_layout_margin"
+            >
+            <!--car image-->
+            <ImageView
+                android:id="@+id/rc_car_image_iv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </RelativeLayout>
+
+        <!--car name-->
+        <TextView
+            android:id="@+id/rc_car_name_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/rc_car_image_rl"
+            android:layout_alignTop="@+id/rc_car_image_rl"
+            android:layout_marginStart="@dimen/car_list_layout_margin"
+            android:layout_marginEnd="@dimen/car_list_layout_margin"
+            android:hint="car name"
+            style="@style/CustomTextStyle16"
+            />
+
+        <!--seats-->
+        <TextView
+            android:id="@+id/rc_seat_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/rc_car_image_rl"
+            android:layout_below="@+id/rc_car_name_tv"
+            android:layout_marginStart="@dimen/car_list_layout_margin"
+            android:layout_marginEnd="@dimen/car_list_layout_margin"
+            android:hint="car name"
+            style="@style/CustomTextStyle12"
+            />
+
+
+        <!--distance between client and pick up place-->
+        <TextView
+            android:id="@+id/rc_distance_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/rc_car_image_rl"
+            android:layout_above="@+id/rc_self_pick_up_place_tv"
+            android:layout_marginStart="@dimen/car_list_layout_margin"
+            android:layout_marginEnd="@dimen/car_list_layout_margin"
+            android:hint="Pick up place name"
+            style="@style/CustomTextStyle16"
+            android:drawableStart="@drawable/ic_location"
+            android:drawablePadding="4dp"
+            />
+
+        <!--pick up place-->
+        <TextView
+            android:id="@+id/rc_self_pick_up_place_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/rc_car_image_rl"
+            android:layout_alignBottom="@+id/rc_car_image_rl"
+            android:layout_marginStart="@dimen/car_list_layout_margin"
+            android:layout_marginEnd="@dimen/car_list_layout_margin"
+            android:hint="Pick up place name"
+            style="@style/CustomTextStyle12"
+            />
+
+        <!--horizontal line-->
+        <View
+            android:id="@+id/rc_divider"
+            android:layout_below="@+id/rc_car_image_rl"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/black50"
+            android:layout_marginTop="8dp"
+            />
+
+        <!--prices represented in linear layout-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="4"
+            android:orientation="horizontal"
+            android:layout_below="@+id/rc_divider"
+            >
+
+            <!--100kms-->
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="8dp"
+                >
+                <!--price-->
+                <TextView
+                    android:id="@+id/rc_km100_price_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/CustomTextStyle16"
+                    android:text="2000"
+                    android:drawableStart="@drawable/ic_rupee"
+                    android:textColor="@color/lightGreen"
+                    android:drawablePadding="8dp"
+                    />
+                <!--kms free-->
+                <TextView
+                    android:id="@+id/rc_km100_dist_tv"
+                    android:layout_below="@+id/rc_km100_price_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="100 kms free"
+                    style="@style/CustomTextStyle12"
+                    android:textColor="#86877C"
+                    />
+            </RelativeLayout>
+
+
+            <!--200kms-->
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="8dp"
+                >
+                <!--price-->
+                <TextView
+                    android:id="@+id/rc_km200_price_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/CustomTextStyle16"
+                    android:text="2000"
+                    android:drawableStart="@drawable/ic_rupee"
+                    android:textColor="@color/lightGreen"
+                    android:drawablePadding="8dp"
+                    />
+                <!--kms free-->
+                <TextView
+                    android:id="@+id/rc_km200_dist_tv"
+                    android:layout_below="@+id/rc_km200_price_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="200 kms free"
+                    style="@style/CustomTextStyle12"
+                    android:textColor="#86877C"
+                    />
+            </RelativeLayout>
+
+            <!--350kms-->
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="8dp"
+                >
+                <!--price-->
+                <TextView
+                    android:id="@+id/rc_km350_price_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/CustomTextStyle16"
+                    android:text="2000"
+                    android:drawableStart="@drawable/ic_rupee"
+                    android:textColor="@color/lightGreen"
+                    android:drawablePadding="8dp"
+                    />
+                <!--kms free-->
+                <TextView
+                    android:id="@+id/rc_km350_dist_tv"
+                    android:layout_below="@+id/rc_km350_price_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="350 kms free"
+                    style="@style/CustomTextStyle12"
+                    android:textColor="#86877C"
+                    />
+            </RelativeLayout>
+
+            <!--book button-->
+            <!--with google-->
+            <mehdi.sakout.fancybuttons.FancyButton
+                xmlns:app="http://schemas.android.com/tools"
+                android:id="@+id/rc_book_fb"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:paddingBottom="10dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:paddingTop="10dp"
+                fancy:fb_borderWidth="1dp"
+                fancy:fb_defaultColor="@color/lightGreen"
+                fancy:fb_focusColor="@color/white"
+                fancy:fb_iconPaddingRight="12dp"
+                fancy:fb_iconPosition="left"
+                fancy:fb_radius="4dp"
+                fancy:fb_text="BOOK"
+                fancy:fb_textSize="12sp"
+                style="@style/CustomTextStyle12"
+                app:fb_textColor="@color/white"
+                android:layout_marginTop="8dp"
+                fancy:fb_fontIconSize="18dp"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:elevation="@dimen/fancy_button_elevation"
+                app:targetApi="lollipop" />
+
+        </LinearLayout>
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>
+

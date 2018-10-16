@@ -24,7 +24,7 @@ public class ChooseLocation extends AppCompatActivity implements View.OnClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_location);
 
-        //Initializing the tablayout
+        //Initializing the tab layout
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);
 
         //Adding the tabs using addTab() method

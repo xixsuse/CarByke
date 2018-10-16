@@ -16,7 +16,7 @@
         <item name="colorAccent">@color/white</item>
     </style>
 
-    <style name="MyCustomAppThemeEditLogin" parent="Theme.AppCompat.NoActionBar">
+    <style name="MyCustomAppThemeCarList" parent="Theme.AppCompat.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/appColor</item>

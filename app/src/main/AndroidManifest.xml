@@ -72,7 +72,9 @@
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" />
-        <activity android:name=".AvailableCarList"></activity>
+        <activity android:name=".SearchedCarList"
+            android:theme="@style/MyCustomAppThemeCarList"
+            />
     </application>
 
 </manifest>
