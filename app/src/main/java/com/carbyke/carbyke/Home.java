@@ -146,14 +146,14 @@ public class Home extends AppCompatActivity
 
         name_tv.setText(name);
 //        email
-        if (!TextUtils.isEmpty(email) && !TextUtils.equals(email,"link google account!")){
+        if (!TextUtils.isEmpty(email) && !TextUtils.equals(email,"Link google account!")){
             email_tv.setText(email);
         }
         else {
             email_tv.setVisibility(View.GONE);
         }
 //        phone
-        if (!TextUtils.isEmpty(phone)  && !TextUtils.equals(phone,"link phone number!")){
+        if (!TextUtils.isEmpty(phone)  && !TextUtils.equals(phone,"Link phone number!")){
             phone_tv.setText(phone);
         }
         else {
@@ -169,6 +169,7 @@ public class Home extends AppCompatActivity
 
     //    setting user data
     private void setUserDataFromFirebase() {
+        mAuth = FirebaseAuth.getInstance();
         String uid = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
         databaseReference.child(uid).child(PROFILE)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -190,7 +191,7 @@ public class Home extends AppCompatActivity
                         }
                         else {
                             email_tv.setVisibility(View.GONE);
-                            email = "link google account!";
+                            email = "Link google account!";
                         }
 //        phone
                         if (!TextUtils.isEmpty(phone)){
@@ -198,7 +199,7 @@ public class Home extends AppCompatActivity
                         }
                         else {
                             phone_tv.setVisibility(View.GONE);
-                            phone = "link phone number!";
+                            phone = "Link phone number!";
                         }
 
                         Picasso.with(Home.this)

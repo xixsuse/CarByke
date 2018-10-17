@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
@@ -75,6 +76,7 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
         sharedPreferences = getSharedPreferences(PROFILE_DATA, MODE_PRIVATE);
         mAuth = FirebaseAuth.getInstance();
 
+
         back_ib.setOnClickListener(this);
         logout_ib.setOnClickListener(this);
         update_fb.setOnClickListener(this);
@@ -87,7 +89,22 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
     public void onStart(){
         super.onStart();
         getProfileDataFromSharedPref();
+        checkIfMailLinked();
     }
+
+//    checking if email linked
+    private void checkIfMailLinked() {
+        mAuth = FirebaseAuth.getInstance();
+        if (!Objects.requireNonNull(Objects.requireNonNull(mAuth.getCurrentUser()).getProviders()).contains("google.com")){
+            email_tv.setEnabled(true);
+            email_tv.setOnClickListener(this);
+        }
+        else {
+            email_tv.setEnabled(false);
+        }
+
+    }
+    //    checking if email linked
 
 
     public void getProfileDataFromSharedPref() {
@@ -98,20 +115,20 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
         gender = sharedPreferences.getString(GENDER, "");
 
         name_tv.setText(name);
-        if (!TextUtils.equals(email, "link google account!")){
+        if (!TextUtils.equals(email, "Link google account!")){
             email_tv.setText(email);
             email_tv.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.ic_ep_email),null,getResources().getDrawable(R.drawable.ic_locked),null);
         }
         else{
-            email_tv.setHint("link google account!");
+            email_tv.setHint("Link google account!");
         }
 
-        if (!TextUtils.equals(phone, "link phone number!")){
+        if (!TextUtils.equals(phone, "Link phone number!")){
             phone_tv.setText(phone);
             phone_tv.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.ic_ep_phone),null,getResources().getDrawable(R.drawable.ic_verified),null);
         }
         else{
-            phone_tv.setHint("link phone number!");
+            phone_tv.setHint("Link phone number!");
         }
 
         if (TextUtils.equals(gender,"male")){
@@ -149,8 +166,8 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
                             email_tv.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.ic_ep_email),null,getResources().getDrawable(R.drawable.ic_locked),null);
                             }
                         else{
-                            email_tv.setHint("link google account!");
-                            email = "link google account!";
+                            email_tv.setHint("Link google account!");
+                            email = "Link google account!";
                             email_tv.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.ic_ep_email),null,null,null);
 
                         }
@@ -160,9 +177,9 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
                             phone_tv.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.ic_ep_phone),null,getResources().getDrawable(R.drawable.ic_verified),null);
                         }
                         else{
-                            phone_tv.setHint("link phone number!");
+                            phone_tv.setHint("Link phone number!");
                             phone_tv.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.ic_ep_phone),null,null,null);
-                            phone = "link phone number!";
+                            phone = "Link phone number!";
                         }
 
                         if (TextUtils.equals(gender,"male")){
@@ -240,12 +257,23 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
 
 //                change phone number
             case R.id.ep_phone_tv:
-                startActivity(new Intent(EditProfile.this, ChangePhoneNumber.class));
+                mAuth = FirebaseAuth.getInstance();
+                if (Objects.requireNonNull(Objects.requireNonNull(mAuth.getCurrentUser()).getProviders()).contains("google.com")){
+                    startActivity(new Intent(EditProfile.this, ChangePhoneNumber.class));
+                }
+                else {
+                    Toast.makeText(this, "Link google account to change phone number", Toast.LENGTH_SHORT).show();
+                }
                 break;
 
 //                profile verification
             case R.id.ep_profile_verification_rl:
                 startActivity(new Intent(EditProfile.this, ProfileVerification.class));
+                break;
+
+//               link phone number
+            case R.id.ep_email_tv:
+                startActivity(new Intent(EditProfile.this, PhoneToGoogle.class));
                 break;
 
 //                logout
