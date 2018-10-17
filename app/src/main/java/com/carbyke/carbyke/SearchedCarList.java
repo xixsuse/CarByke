@@ -56,7 +56,7 @@ public class SearchedCarList extends AppCompatActivity implements View.OnClickLi
         tabLayout.addTab(tabLayout.newTab().setText("With Fuel"));
         tabLayout.addTab(tabLayout.newTab().setText("Without Fuel"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
-        tabLayout.setTabTextColors(ColorStateList.valueOf(getResources().getColor(R.color.black)));
+        tabLayout.setTabTextColors(ColorStateList.valueOf(getResources().getColor(R.color.appColor)));
 
         //Initializing viewPager
         viewPager =  findViewById(R.id.cc_pager);

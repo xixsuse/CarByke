@@ -71,4 +71,5 @@
     <string name="upload_live_face_image">Upload Live face Image</string>
     <string name="submit_to_verify">SUBMIT TO VERIFY</string>
     <string name="start_date">start date</string>
+    <string name="filter">filter</string>
 </resources>

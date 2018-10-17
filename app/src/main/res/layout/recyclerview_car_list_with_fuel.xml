@@ -4,23 +4,24 @@
     xmlns:fancy="http://schemas.android.com/apk/res-auto"
     android:id="@+id/rlo_relativeLayout"
     android:background="@color/white"
+    android:layout_marginTop="8dp"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"
-
         >
 
         <!--car photo relative layout-->
         <RelativeLayout
             android:id="@+id/rc_car_image_rl"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="135dp"
+            android:layout_height="110dp"
             android:background="@drawable/simple_rectangle"
             android:layout_marginStart="@dimen/car_list_layout_margin"
             android:layout_marginTop="@dimen/car_list_layout_margin"
+            android:padding="12dp"
             >
             <!--car image-->
             <ImageView
@@ -52,7 +53,7 @@
             android:layout_below="@+id/rc_car_name_tv"
             android:layout_marginStart="@dimen/car_list_layout_margin"
             android:layout_marginEnd="@dimen/car_list_layout_margin"
-            android:hint="car name"
+            android:hint="seater"
             style="@style/CustomTextStyle12"
             />
 
@@ -97,6 +98,7 @@
 
         <!--prices represented in linear layout-->
         <LinearLayout
+            android:id="@+id/rc_price_ll"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:weightSum="4"
@@ -109,18 +111,22 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:padding="8dp"
+                android:paddingStart="2dp"
+                android:paddingEnd="2dp"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
                 >
                 <!--price-->
                 <TextView
                     android:id="@+id/rc_km100_price_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    style="@style/CustomTextStyle16"
+                    style="@style/CustomTextStyle14"
                     android:text="2000"
                     android:drawableStart="@drawable/ic_rupee"
                     android:textColor="@color/lightGreen"
-                    android:drawablePadding="8dp"
+                    android:layout_centerHorizontal="true"
+                    android:drawablePadding="@dimen/car_list_layout_drawable_padding"
                     />
                 <!--kms free-->
                 <TextView
@@ -129,8 +135,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="100 kms free"
-                    style="@style/CustomTextStyle12"
+                    style="@style/CustomTextStyle10"
                     android:textColor="#86877C"
+                    android:layout_centerHorizontal="true"
                     />
             </RelativeLayout>
 
@@ -140,18 +147,22 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:padding="8dp"
+                android:paddingStart="2dp"
+                android:paddingEnd="2dp"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
                 >
                 <!--price-->
                 <TextView
                     android:id="@+id/rc_km200_price_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    style="@style/CustomTextStyle16"
+                    style="@style/CustomTextStyle14"
                     android:text="2000"
                     android:drawableStart="@drawable/ic_rupee"
                     android:textColor="@color/lightGreen"
-                    android:drawablePadding="8dp"
+                    android:layout_centerHorizontal="true"
+                    android:drawablePadding="@dimen/car_list_layout_drawable_padding"
                     />
                 <!--kms free-->
                 <TextView
@@ -160,7 +171,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="200 kms free"
-                    style="@style/CustomTextStyle12"
+                    style="@style/CustomTextStyle10"
+                    android:layout_centerHorizontal="true"
                     android:textColor="#86877C"
                     />
             </RelativeLayout>
@@ -170,18 +182,22 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:padding="8dp"
+                android:paddingStart="2dp"
+                android:paddingEnd="2dp"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
                 >
                 <!--price-->
                 <TextView
                     android:id="@+id/rc_km350_price_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    style="@style/CustomTextStyle16"
+                    style="@style/CustomTextStyle14"
                     android:text="2000"
                     android:drawableStart="@drawable/ic_rupee"
                     android:textColor="@color/lightGreen"
-                    android:drawablePadding="8dp"
+                    android:layout_centerHorizontal="true"
+                    android:drawablePadding="@dimen/car_list_layout_drawable_padding"
                     />
                 <!--kms free-->
                 <TextView
@@ -190,8 +206,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="350 kms free"
-                    style="@style/CustomTextStyle12"
+                    style="@style/CustomTextStyle10"
                     android:textColor="#86877C"
+                    android:layout_centerHorizontal="true"
                     />
             </RelativeLayout>
 
@@ -225,6 +242,7 @@
                 app:targetApi="lollipop" />
 
         </LinearLayout>
+
     </RelativeLayout>
 
 </android.support.v7.widget.CardView>

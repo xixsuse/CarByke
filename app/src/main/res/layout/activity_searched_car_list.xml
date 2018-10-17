@@ -32,7 +32,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#f2f2f2"
-                android:padding="7dp"
+                android:padding="10dp"
                 >
 
             <RelativeLayout
@@ -43,7 +43,7 @@
                 <!--back-->
                 <ImageButton
                     android:id="@+id/cc_back_b"
-                    android:layout_width="14dp"
+                    android:layout_width="18dp"
                     android:layout_height="14dp"
                     android:background="@drawable/ic_return_back_black"
                     android:layout_centerVertical="true"
@@ -60,17 +60,23 @@
                     android:layout_toStartOf="@+id/cc_filter_ib"
                     android:layout_centerVertical="true"
                     style="@style/CustomTextStyle12"
-                    android:padding="3dp"
+                    android:padding="5dp"
                     android:drawablePadding="3dp"
                     android:singleLine="true"
+                    android:gravity="center_vertical"
                     android:drawableStart="@drawable/ic_location"
-                    android:background="@color/white" />
+                    android:background="@drawable/corner_rectangle_rent_home" />
                 <!--filter-->
-                <ImageButton
+                <TextView
                     android:id="@+id/cc_filter_ib"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/ic_filter"
+                    style="@style/CustomTextStyle12"
+                    android:text="@string/filter"
+                    android:drawableEnd="@drawable/ic_filter"
+                    android:drawablePadding="5dp"
+                    android:textAllCaps="true"
+                    android:textColor="@color/lightGreen"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     tools:ignore="ContentDescription" />
@@ -79,7 +85,7 @@
                 <!--date time-->
                 <RelativeLayout
                     android:layout_below="@+id/cc_rl_1"
-                    android:layout_marginTop="3dp"
+                    android:layout_marginTop="7dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 

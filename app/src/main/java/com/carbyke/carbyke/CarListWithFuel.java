@@ -99,7 +99,6 @@ public class CarListWithFuel extends Fragment {
                 for (DataSnapshot postSnapshot : snapshot.getChildren()) {
                     DataForRecyclerView data = postSnapshot.getValue(DataForRecyclerView.class);
                     list.add(data);
-                    Toast.makeText(getActivity(), "data: "+ Objects.requireNonNull(data).getCar_name(), Toast.LENGTH_SHORT).show();
                     }
 
                 adapter = new CarListWithFuelRecyclerViewAdapter(getContext(), list);

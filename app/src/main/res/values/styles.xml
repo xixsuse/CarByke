@@ -20,7 +20,7 @@
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/appColor</item>
-        <item name="colorAccent">@color/black</item>
+        <item name="colorAccent">@color/lightGreen</item>
     </style>
 
     <style name="MyCustomAppTheme.NoActionBar">
@@ -37,6 +37,14 @@
     <style name="CustomTextStyle12" parent="@android:style/Theme.Light">
         <item name="android:textColor">@color/black</item>
         <item name="android:textSize">@dimen/sp12</item>
+        <item name="android:fontFamily">OpenSans-Regular.ttf</item>
+    </style>
+
+
+    <!--text style small-->
+    <style name="CustomTextStyle10" parent="@android:style/Theme.Light">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">@dimen/sp10</item>
         <item name="android:fontFamily">OpenSans-Regular.ttf</item>
     </style>
 
