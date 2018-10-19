@@ -125,7 +125,7 @@ public class PhoneToGoogle extends AppCompatActivity implements GoogleApiClient.
                             saveUserProfileDataInFirebaseDataBase();
                             Toast.makeText(PhoneToGoogle.this, "linked", Toast.LENGTH_SHORT).show();
                         } else {
-                            // If sign in fails, display a message to the user.
+
                             showSignInFailedMessage((Objects.requireNonNull(task.getException())).getLocalizedMessage());
                         }
                     }

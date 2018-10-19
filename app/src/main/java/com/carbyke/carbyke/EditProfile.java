@@ -259,7 +259,16 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
             case R.id.ep_phone_tv:
                 mAuth = FirebaseAuth.getInstance();
                 if (Objects.requireNonNull(Objects.requireNonNull(mAuth.getCurrentUser()).getProviders()).contains("google.com")){
-                    startActivity(new Intent(EditProfile.this, ChangePhoneNumber.class));
+
+                    mAuth = FirebaseAuth.getInstance();
+                    String number = mAuth.getCurrentUser().getPhoneNumber();
+                    if (TextUtils.isEmpty(number)){
+                        startActivity(new Intent(EditProfile.this, PhoneLogin.class));
+                    }
+                    else {
+                        startActivity(new Intent(EditProfile.this, ChangePhoneNumber.class));
+                    }
+
                 }
                 else {
                     Toast.makeText(this, "Link google account to change phone number", Toast.LENGTH_SHORT).show();

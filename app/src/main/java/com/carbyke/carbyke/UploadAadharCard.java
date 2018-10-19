@@ -46,7 +46,7 @@ public class UploadAadharCard extends Fragment {
 
     private View view;
     private ImageView select_license_ib;
-    private ImageButton delete_ib;
+    private ImageButton delete_ib, back_ib;
     private Uri ImageFilePath;
     private Button upload_b;
 
@@ -64,7 +64,7 @@ public class UploadAadharCard extends Fragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_upload_aadhar_card, container, false);
@@ -74,9 +74,19 @@ public class UploadAadharCard extends Fragment {
         loading = view.findViewById(R.id.ac_spin_kit);
         loading1 = view.findViewById(R.id.ac_spin_kit_1);
         delete_ib = view.findViewById(R.id.ac_delete_ib);
+        back_ib = view.findViewById(R.id.ac_back_ib);
         numberProgressBar = view.findViewById(R.id.ac_number_progress);
 
         mAuth = FirebaseAuth.getInstance();
+
+        back_ib.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Fragment fragment = Objects.requireNonNull(getActivity()).getSupportFragmentManager().findFragmentByTag("aadhar_card");
+                if(fragment != null)
+                    getActivity().getSupportFragmentManager().beginTransaction().remove(fragment).commit();
+            }
+        });
 
         delete_ib.setOnClickListener(new View.OnClickListener() {
             @Override

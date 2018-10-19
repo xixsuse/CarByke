@@ -144,7 +144,12 @@ public class Home extends AppCompatActivity
         email = sharedPreferences.getString(EMAIL, "");
         phone = sharedPreferences.getString(PHONE_NUMBER, "");
 
-        name_tv.setText(name);
+        if (TextUtils.isEmpty(name)){
+            name_tv.setVisibility(View.GONE);
+        }else {
+            name_tv.setText(name);
+        }
+
 //        email
         if (!TextUtils.isEmpty(email) && !TextUtils.equals(email,"Link google account!")){
             email_tv.setText(email);
@@ -184,7 +189,13 @@ public class Home extends AppCompatActivity
                         phone = mAuth.getCurrentUser().getPhoneNumber();
                         profile_image_url = mAuth.getCurrentUser().getPhotoUrl();
 
-                        name_tv.setText(name);
+
+
+                        if (TextUtils.isEmpty(name)){
+                            name_tv.setVisibility(View.GONE);
+                        }else {
+                            name_tv.setText(name);
+                        }
 //        email
                         if (!TextUtils.isEmpty(email)){
                             email_tv.setText(email);

@@ -1,6 +1,7 @@
 package com.carbyke.carbyke;
 
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -130,7 +131,7 @@ public class ProfileVerification extends AppCompatActivity implements View.OnCli
                 new CheckNetworkConnection(ProfileVerification.this, new CheckNetworkConnection.OnConnectionCallback() {
                     @Override
                     public void onConnectionSuccess() {
-                        getSupportFragmentManager().beginTransaction().add(R.id.fragment_container_profile_verification, new UploadAadharCard()).addToBackStack("aadhar_card").commit();
+                        getSupportFragmentManager().beginTransaction().add(R.id.fragment_container_profile_verification, new UploadAadharCard(), "aadhar_card").addToBackStack("aadhar_card").commit();
                         dismiss();
                     }
                     @Override
@@ -145,7 +146,7 @@ public class ProfileVerification extends AppCompatActivity implements View.OnCli
                 new CheckNetworkConnection(ProfileVerification.this, new CheckNetworkConnection.OnConnectionCallback() {
                     @Override
                     public void onConnectionSuccess() {
-                        getSupportFragmentManager().beginTransaction().add(R.id.fragment_container_profile_verification, new UploadDrivingLicense()).addToBackStack("upload_license").commit();
+                        getSupportFragmentManager().beginTransaction().add(R.id.fragment_container_profile_verification, new UploadDrivingLicense(), "upload_license").addToBackStack("upload_license").commit();
                         dismiss();
                     }
                     @Override
@@ -160,7 +161,7 @@ public class ProfileVerification extends AppCompatActivity implements View.OnCli
                 new CheckNetworkConnection(ProfileVerification.this, new CheckNetworkConnection.OnConnectionCallback() {
                     @Override
                     public void onConnectionSuccess() {
-                        getSupportFragmentManager().beginTransaction().add(R.id.fragment_container_profile_verification, new UploadLivePhoto()).addToBackStack("live_photo").commit();
+                        getSupportFragmentManager().beginTransaction().add(R.id.fragment_container_profile_verification, new UploadLivePhoto(), "live_photo").addToBackStack("live_photo").commit();
                         dismiss();
                     }
                     @Override

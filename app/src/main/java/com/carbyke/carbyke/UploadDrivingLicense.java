@@ -45,7 +45,7 @@ public class UploadDrivingLicense extends Fragment {
 
     private View view;
     private ImageView select_license_ib;
-    private ImageButton delete_ib;
+    private ImageButton delete_ib, back_ib;
     private Uri ImageFilePath;
     private Button upload_b;
 
@@ -76,9 +76,19 @@ public class UploadDrivingLicense extends Fragment {
         loading = view.findViewById(R.id.dl_spin_kit);
         loading1 = view.findViewById(R.id.dl_spin_kit_1);
         delete_ib = view.findViewById(R.id.dl_delete_ib);
+        back_ib = view.findViewById(R.id.dl_back_ib);
         numberProgressBar = view.findViewById(R.id.dl_number_progress);
 
         mAuth = FirebaseAuth.getInstance();
+
+        back_ib.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Fragment fragment = Objects.requireNonNull(getActivity()).getSupportFragmentManager().findFragmentByTag("upload_license");
+                if(fragment != null)
+                    getActivity().getSupportFragmentManager().beginTransaction().remove(fragment).commit();
+            }
+        });
 
         delete_ib.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -44,7 +44,7 @@ public class UploadLivePhoto extends Fragment {
 
     private View view;
     private ImageView select_license_ib;
-    private ImageButton delete_ib;
+    private ImageButton delete_ib, back_ib;
     private Uri ImageFilePath;
     private Button upload_b;
 
@@ -76,9 +76,20 @@ public class UploadLivePhoto extends Fragment {
         loading = view.findViewById(R.id.lp_spin_kit);
         loading1 = view.findViewById(R.id.lp_spin_kit_1);
         delete_ib = view.findViewById(R.id.lp_delete_ib);
+        back_ib = view.findViewById(R.id.lp_back_ib);
         numberProgressBar = view.findViewById(R.id.lp_number_progress);
 
         mAuth = FirebaseAuth.getInstance();
+
+        back_ib.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Fragment fragment = Objects.requireNonNull(getActivity()).getSupportFragmentManager().findFragmentByTag("live_photo");
+                if(fragment != null)
+                    getActivity().getSupportFragmentManager().beginTransaction().remove(fragment).commit();
+            }
+        });
+
 
         delete_ib.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -136,7 +147,7 @@ public class UploadLivePhoto extends Fragment {
     private void deleteImage() {
         final String uid = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
         databaseReference.child(USER_PROFILES).child(uid).child(IMAGES)
-                .child("face-image").setValue(null).addOnSuccessListener(new OnSuccessListener<Void>() {
+                .child("face_image").setValue(null).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 select_license_ib.setBackgroundResource(R.drawable.ic_upload_image);
@@ -156,7 +167,7 @@ public class UploadLivePhoto extends Fragment {
         show1();
         final String uid = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
         databaseReference.child(USER_PROFILES).child(uid).child(IMAGES)
-                .child("aadhar_image").addListenerForSingleValueEvent(new ValueEventListener() {
+                .child("face_image").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 String url = dataSnapshot.getValue(String.class);

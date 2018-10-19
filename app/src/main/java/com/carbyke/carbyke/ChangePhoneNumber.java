@@ -188,20 +188,20 @@ public class ChangePhoneNumber extends AppCompatActivity implements View.OnClick
             return;
         }
 
-//        String phone_number = sharedPreferences.getString(PHONE_NUMBER, "");
-//        try {
-//            phone_number = phone_number.substring(3,13);
-//        }
-//        catch (StringIndexOutOfBoundsException e){
-//            Toast.makeText(this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
-//        }
-//        if (TextUtils.equals(phoneNumber, phone_number)){
-//            Toast.makeText(ChangePhoneNumber.this, "Already signed in with this number", Toast.LENGTH_LONG).show();
-//            return;
-//        }
 
         spinKitView.setVisibility(View.VISIBLE);
         phoneNumber = countryCode+phoneNumber;
+        firebaseAuth = FirebaseAuth.getInstance();
+
+//        check if using same number
+        String number = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getPhoneNumber();
+        if (!TextUtils.isEmpty(phoneNumber)){
+            if (TextUtils.equals(phoneNumber, number)){
+                Toast.makeText(this, "Already signed-in with this number.", Toast.LENGTH_SHORT).show();
+                spinKitView.setVisibility(View.GONE);
+                return;
+            }
+        }
 
         setUpVerificationCallbacksSendCode();
 
@@ -233,20 +233,7 @@ public class ChangePhoneNumber extends AppCompatActivity implements View.OnClick
                         codeText.setText("");
 
                         // firebase login
-                        // first unlink the registeren number then link new number
-                        Objects.requireNonNull(firebaseAuth.getCurrentUser()).unlink("phone")
-                                .addOnCompleteListener(ChangePhoneNumber.this, new OnCompleteListener<AuthResult>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<AuthResult> task) {
-                                        if (task.isSuccessful()) {
-                                            // Auth provider unlinked from account
-                                            // ...
-                                            signInWithPhoneAuthCredential(credential);
-                                            Toast.makeText(ChangePhoneNumber.this, "Unlinked", Toast.LENGTH_SHORT).show();
-                                        }
-                                        else showSignInFailedMessage(task.getException().getMessage());
-                                    }
-                                });
+                        signInWithPhoneAuthCredential(credential);
                     }
 
                     @Override
@@ -349,20 +336,21 @@ public class ChangePhoneNumber extends AppCompatActivity implements View.OnClick
                         codeText.setText("");
 
                         // firebase login
-                        // first unlink the registeren number then link new number
-                        Objects.requireNonNull(firebaseAuth.getCurrentUser()).unlink("phone")
-                                .addOnCompleteListener(ChangePhoneNumber.this, new OnCompleteListener<AuthResult>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<AuthResult> task) {
-                                        if (task.isSuccessful()) {
-                                            // Auth provider unlinked from account
-                                            // ...
-                                            signInWithPhoneAuthCredential(credential);
-                                            Toast.makeText(ChangePhoneNumber.this, "Unlinked", Toast.LENGTH_SHORT).show();
-                                        }
-                                        else showSignInFailedMessage(Objects.requireNonNull(task.getException()).getMessage());
-                                    }
-                                });
+                        signInWithPhoneAuthCredential(credential);
+//                        Objects.requireNonNull(firebaseAuth.getCurrentUser()).unlink("phone")
+//                                .addOnCompleteListener(ChangePhoneNumber.this, new OnCompleteListener<AuthResult>() {
+//                                    @Override
+//                                    public void onComplete(@NonNull Task<AuthResult> task) {
+//                                        if (task.isSuccessful()) {
+//
+//                                            Toast.makeText(ChangePhoneNumber.this, "new account attached", Toast.LENGTH_SHORT).show();
+//                                        }
+//                                        else {
+//                                            ShowMessage showMessage = new ShowMessage(ChangePhoneNumber.this);
+//                                            showMessage.failMessageWithTitle("failed", Objects.requireNonNull(task.getException()).getMessage());
+//                                        }
+//                                    }
+//                                });
                     }
 
                     @Override
@@ -442,104 +430,72 @@ public class ChangePhoneNumber extends AppCompatActivity implements View.OnClick
         String code = codeText.getText().toString();
         final PhoneAuthCredential credential = PhoneAuthProvider.getCredential(phoneVerificationId, code);
 
-        // first unlink the registeren number then link new number
-        Objects.requireNonNull(firebaseAuth.getCurrentUser()).unlink("phone")
-                .addOnCompleteListener(ChangePhoneNumber.this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Auth provider unlinked from account
-                            // ...
-                            signInWithPhoneAuthCredential(credential);
-                            Toast.makeText(ChangePhoneNumber.this, "Unlinked", Toast.LENGTH_SHORT).show();
-                        }
-                        else showSignInFailedMessage(Objects.requireNonNull(task.getException()).getMessage());
-                    }
-                });
+        signInWithPhoneAuthCredential(credential);
 
     }
     //verify code
 
 
     //   firebase sign in with phone
-    private void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
+    private void signInWithPhoneAuthCredential(final PhoneAuthCredential credential) {
 //          sign in with phone (no linking here, as google is not signed in)
-        Objects.requireNonNull(firebaseAuth.getCurrentUser()).linkWithCredential(credential)
-                .addOnCompleteListener(ChangePhoneNumber.this, new OnCompleteListener<AuthResult>() {
+
+
+        Objects.requireNonNull(firebaseAuth.getCurrentUser()).updatePhoneNumber(credential)
+                .addOnCompleteListener(ChangePhoneNumber.this, new OnCompleteListener<Void>() {
                     @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
+                    public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
                             // sign out Button.setEnabled(true);
                             codeText.setText("");
                             //  statusText.setText("Signed In");
                             resendButton.setEnabled(false);
                             verifyButton.setEnabled(false);
-                            saveUserProfileDataInFirebaseDataBase(Objects.requireNonNull(task.getResult()).getUser());
+                            signInWithPhoneAuthCredential(credential);
+                            saveUserProfileDataInFirebaseDataBase();
                             Toast.makeText(ChangePhoneNumber.this, "Successful.", Toast.LENGTH_SHORT).show();
 
                         } else {
-                            showSignInFailedMessage((Objects.requireNonNull(task.getException())).getLocalizedMessage());
+                            ShowMessage showMessage = new ShowMessage(ChangePhoneNumber.this);
+                            showMessage.failMessageWithTitle("failed", Objects.requireNonNull(task.getException()).getMessage());
                         }
                     }
                 });
+
     }
 //   firebase sign in with phone
 
     //    saving data at firebase database
-    private void saveUserProfileDataInFirebaseDataBase(FirebaseUser user){
+    private void saveUserProfileDataInFirebaseDataBase(){
+        String uid = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
+        String number = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getPhoneNumber();
+
         DatabaseReference databaseReference = FirebaseDatabase.getInstance()
-                .getReference().child(USER_PROFILES).child(user.getUid()).child(PROFILE);
-        databaseReference.child(PHONE_NUMBER).setValue(user.getPhoneNumber());
+                .getReference().child(USER_PROFILES).child(uid).child(PROFILE);
+        databaseReference.child(PHONE_NUMBER).setValue(number);
         ChangePhoneNumber.this.finish();
     }
 //    saving data at firebase database
-
-    //    firebase login failed message
-    private void showSignInFailedMessage(String errorMessage){
-        try{
-            new MaterialDialog.Builder(ChangePhoneNumber.this)
-                    .title("Account linking failed")
-                    .content(Objects.requireNonNull(errorMessage))
-                    .contentColorRes(R.color.black)
-                    .titleColor(getResources().getColor(R.color.googleRed))
-                    .titleColor(getResources().getColor(R.color.black))
-                    .positiveText("Okay")
-                    .positiveColorRes(R.color.black)
-                    .backgroundColor(getResources().getColor(R.color.white))
-                    .icon(getResources().getDrawable(R.drawable.ic_warning))
-                    .onPositive(new MaterialDialog.SingleButtonCallback() {
-                        @Override
-                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-
-                        }
-                    })
-                    .show();
-        }
-        catch (NullPointerException e) { e.printStackTrace(); }
-
-    }
-//    firebase login failed message
 
 
     // resend code
     public void resendCode() {
         //ic
         String phoneNumber = phone_number_et.getText().toString();
-        String phone_number = sharedPreferences.getString(PHONE_NUMBER, "");
-        try {
-            phone_number = phone_number.substring(3,13);
-        }
-        catch (StringIndexOutOfBoundsException e){
-            //
-        }
-        if (TextUtils.equals(phoneNumber, phone_number)){
-            Toast.makeText(ChangePhoneNumber.this, "Already signed in with this number", Toast.LENGTH_LONG).show();
-            return;
-        }
 
         spinKitView.setVisibility(View.VISIBLE);
 
         phoneNumber = countryCode+phoneNumber;
+        //        check if using same number
+        String number = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getPhoneNumber();
+        if (!TextUtils.isEmpty(phoneNumber)){
+            if (TextUtils.equals(phoneNumber, number)){
+                Toast.makeText(this, "Already signed-in with this number.", Toast.LENGTH_SHORT).show();
+                spinKitView.setVisibility(View.GONE);
+                return;
+            }
+        }
+
         setUpVerificationCallbacksReSendCode();
 
         PhoneAuthProvider.getInstance().verifyPhoneNumber(
@@ -588,18 +544,6 @@ public class ChangePhoneNumber extends AppCompatActivity implements View.OnClick
 //                cancel button
             case R.id.ep_back_ib:
                 ChangePhoneNumber.this.finish();
-//                Objects.requireNonNull(firebaseAuth.getCurrentUser()).unlink("phone")
-//                        .addOnCompleteListener(Objects.requireNonNull(getActivity()), new OnCompleteListener<AuthResult>() {
-//                            @Override
-//                            public void onComplete(@NonNull Task<AuthResult> task) {
-//                                if (task.isSuccessful()) {
-//                                    // Auth provider unlinked from account
-//                                    // ...
-//                                    Toast.makeText(getActivity(), "Unlinked", Toast.LENGTH_SHORT).show();
-//                                }
-//                                else Toast.makeText(getActivity(), ""+ Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
-//                            }
-//                        });
                 break;
 
         }

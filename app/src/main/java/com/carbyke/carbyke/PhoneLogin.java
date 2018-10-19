@@ -494,7 +494,7 @@ public class PhoneLogin extends AppCompatActivity implements View.OnClickListene
                             verifyButton.setEnabled(false);
                             saveUserProfileDataInFirebaseDataBaseGOOGLE_PHONE(Objects.requireNonNull(task.getResult()).getUser());
                             Toast.makeText(PhoneLogin.this, "Congratulations! Login Successful.", Toast.LENGTH_SHORT).show();
-
+                            PhoneLogin.this.finish();
                         } else {
                             showSignInFailedMessage((Objects.requireNonNull(task.getException())).getLocalizedMessage());
                         }
@@ -519,7 +519,7 @@ public class PhoneLogin extends AppCompatActivity implements View.OnClickListene
                             verifyButton.setEnabled(false);
                             saveUserProfileDataInFirebaseDataBasePHONE(Objects.requireNonNull(task.getResult()).getUser());
                             Toast.makeText(PhoneLogin.this, "Login Successful.", Toast.LENGTH_SHORT).show();
-
+                            PhoneLogin.this.finish();
                         } else {
                             showSignInFailedMessage((Objects.requireNonNull(task.getException())).getLocalizedMessage());
                         }

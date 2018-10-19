@@ -4,7 +4,6 @@
         android:layout_height="wrap_content"
         android:id="@+id/rlo_relativeLayout"
         android:background="@color/white"
-
         xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!--station name-->
