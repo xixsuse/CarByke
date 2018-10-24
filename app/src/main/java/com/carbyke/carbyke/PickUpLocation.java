@@ -1,6 +1,7 @@
 package com.carbyke.carbyke;
 
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -52,6 +53,7 @@ public class PickUpLocation extends Fragment{
     private DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
 
     private static final String PICK_UP_BASE = "pick_up_base";
+    @SuppressLint("StaticFieldLeak")
     public static Button continue_b;
 
     SpinKitView sv;
@@ -155,9 +157,6 @@ public class PickUpLocation extends Fragment{
                 adapter = new PickUpLocationRecyclerViewAdapter(getContext(), list);
                 recyclerView.setAdapter(adapter);
 
-                if (list.isEmpty()){
-                    Toast.makeText(getContext(), "No Station Available", Toast.LENGTH_SHORT).show();
-                }
 
             }
 

@@ -176,7 +176,6 @@ public class ProfileVerification extends AppCompatActivity implements View.OnCli
             case R.id.pv_back_ib:
                 ProfileVerification.this.finish();
                 break;
-
         }
 
     }

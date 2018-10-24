@@ -261,7 +261,7 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
                 if (Objects.requireNonNull(Objects.requireNonNull(mAuth.getCurrentUser()).getProviders()).contains("google.com")){
 
                     mAuth = FirebaseAuth.getInstance();
-                    String number = mAuth.getCurrentUser().getPhoneNumber();
+                    String number = Objects.requireNonNull(mAuth.getCurrentUser()).getPhoneNumber();
                     if (TextUtils.isEmpty(number)){
                         startActivity(new Intent(EditProfile.this, PhoneLogin.class));
                     }

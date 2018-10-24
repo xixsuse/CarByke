@@ -4,10 +4,12 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
@@ -27,6 +29,7 @@ public class CarListWithFuelRecyclerViewAdapter extends RecyclerView.Adapter<Car
     private static final String STATION = "station";
     private static final String TYPE = "type";
     private int selectedPos = RecyclerView.NO_POSITION;
+    private int selected_pos_for_background;
 
     CarListWithFuelRecyclerViewAdapter(Context context, List<DataForRecyclerView> TempList) {
 
@@ -51,9 +54,22 @@ public class CarListWithFuelRecyclerViewAdapter extends RecyclerView.Adapter<Car
 
         setData(holder, info);
         setCarImage(holder, info);
+
+        setBackGround(holder, position);
+
     }
 
-//    setting car image
+    private void setBackGround(final ViewHolder holder, final int position) {
+        holder.price_1_rl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                holder.price_1_rl.setBackground(context.getResources().getDrawable(R.drawable.simple_rectangle));
+                selected_pos_for_background = position;
+            }
+        });
+    }
+
+    //    setting car image
     private void setCarImage(ViewHolder holder, DataForRecyclerView info) {
         Picasso.with(context)
                 .load(info.getImage_url())
@@ -64,22 +80,24 @@ public class CarListWithFuelRecyclerViewAdapter extends RecyclerView.Adapter<Car
     //    setting data
     private void setData(ViewHolder holder, DataForRecyclerView info) {
         holder.car_name_tv.setText(info.getCar_name());
-        holder.seat_tv.setText(String.format("%s Seater", String.valueOf(info.getSeater())));
-        //holder.distance_tv.setText(info.());
-        //holder.self_pick_up_place_tv.setText(info.());
-        holder.km100_price_tv.setText(addComma(info.getW_100kms()));
-        //holder.km100_dist_tv.setText(info.());
-        holder.km200_price_tv.setText(addComma(info.getW_200kms()));
-        //holder.km200_dist_tv.setText(info.());
-        holder.km350_price_tv.setText(addComma(info.getW_350kms()));
-        //holder.km350_dist_tv.setText(info.());
+        if (!TextUtils.isEmpty(info.getSeater())){
+            holder.seat_tv.setText(String.format("%s Seater", String.valueOf(info.getSeater())));
+        }
+        holder.price_1_tv.setText(addComma(info.getWith_fuel_1()));
+        holder.price_2_tv.setText(addComma(info.getWith_fuel_2()));
+        holder.price_3_tv.setText(addComma(info.getWith_fuel_3()));
     }
 //    setting data
 
 
-    private String addComma(int number){
-        NumberFormat formatter = new DecimalFormat("#,###");
-        return formatter.format(number);
+    private String addComma(String number){
+        try {
+            NumberFormat formatter = new DecimalFormat("#,###");
+            return formatter.format(Integer.parseInt(number));
+        }
+        catch (Exception e){
+            return "N.A";
+        }
     }
 
 
@@ -100,10 +118,11 @@ public class CarListWithFuelRecyclerViewAdapter extends RecyclerView.Adapter<Car
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView car_name_tv, seat_tv, distance_tv, self_pick_up_place_tv, km100_price_tv, km100_dist_tv,
-                km200_price_tv, km200_dist_tv, km350_price_tv, km350_dist_tv;
+        private TextView car_name_tv, seat_tv, distance_tv, self_pick_up_place_tv, price_1_tv, km100_dist_tv,
+                price_2_tv, km200_dist_tv, price_3_tv, km350_dist_tv;
         private FancyButton book_fb;
         private ImageView car_image_iv;
+        private RelativeLayout price_1_rl;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -112,14 +131,15 @@ public class CarListWithFuelRecyclerViewAdapter extends RecyclerView.Adapter<Car
             seat_tv = itemView.findViewById(R.id.rc_seat_tv);
             distance_tv = itemView.findViewById(R.id.rc_distance_tv);
             self_pick_up_place_tv = itemView.findViewById(R.id.rc_self_pick_up_place_tv);
-            km100_price_tv = itemView.findViewById(R.id.rc_km100_price_tv);
-            km100_dist_tv = itemView.findViewById(R.id.rc_km100_dist_tv);
-            km200_price_tv = itemView.findViewById(R.id.rc_km200_price_tv);
-            km200_dist_tv = itemView.findViewById(R.id.rc_km200_dist_tv);
-            km350_price_tv = itemView.findViewById(R.id.rc_km350_price_tv);
-            km350_dist_tv = itemView.findViewById(R.id.rc_km350_dist_tv);
+            price_1_tv = itemView.findViewById(R.id.rc_fuel_1_price_tv);
+            km100_dist_tv = itemView.findViewById(R.id.rc_fuel_1_dist_tv);
+            price_2_tv = itemView.findViewById(R.id.rc_fuel_2_price_tv);
+            km200_dist_tv = itemView.findViewById(R.id.rc_fuel_2_dist_tv);
+            price_3_tv = itemView.findViewById(R.id.rc_fuel_3_price_tv);
+            km350_dist_tv = itemView.findViewById(R.id.rc_fuel_3_dist_tv);
             book_fb = itemView.findViewById(R.id.rc_book_fb);
             car_image_iv = itemView.findViewById(R.id.rc_car_image_iv);
+            price_1_rl = itemView.findViewById(R.id.rc_price_1_rl);
         }
     }
 //end

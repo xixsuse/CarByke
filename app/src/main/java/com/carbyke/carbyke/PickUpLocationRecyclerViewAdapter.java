@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -63,7 +64,7 @@ public class PickUpLocationRecyclerViewAdapter extends RecyclerView.Adapter<Pick
             editor.apply();
         }
 
-        holder.base_name_tv.setOnClickListener(new View.OnClickListener() {
+        holder.relativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (position == RecyclerView.NO_POSITION) return;   // just a precaution in case if previous value is a null
@@ -76,31 +77,6 @@ public class PickUpLocationRecyclerViewAdapter extends RecyclerView.Adapter<Pick
 
     }
 
-
-    private void selection(String station){
-        new MaterialDialog.Builder(context)
-                //.title("")
-                //.titleColor(context.getResources().getColor(R.color.black))
-                .backgroundColor(Color.WHITE)
-                .content(station)
-                .contentColor(context.getResources().getColor(R.color.black))
-                .positiveText("Continue")
-                .positiveColor(context.getResources().getColor(R.color.black))
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-
-                    }
-                })
-                .negativeText("Cancel")
-                .negativeColor(context.getResources().getColor(R.color.black))
-                .onNegative(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                    }
-                })
-                .show();
-    }
 
     @Override
     public long getItemId(int position) {
@@ -121,12 +97,14 @@ public class PickUpLocationRecyclerViewAdapter extends RecyclerView.Adapter<Pick
 
         TextView base_name_tv;
         ImageButton tick_ib;
+        RelativeLayout relativeLayout;
 
         ViewHolder(View itemView) {
             super(itemView);
 
             base_name_tv = itemView.findViewById(R.id.rul_base_name_tv);
             tick_ib = itemView.findViewById(R.id.rul_tick_ib);
+            relativeLayout = itemView.findViewById(R.id.rul_relativeLayout);
 
         }
     }

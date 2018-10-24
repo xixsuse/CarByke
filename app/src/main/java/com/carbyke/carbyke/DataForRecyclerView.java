@@ -2,8 +2,7 @@ package com.carbyke.carbyke;
 
 public class DataForRecyclerView {
 
-    String station, car_name, image_url;
-    int w_100kms, w_200kms, w_350kms, f_100kms, f_200kms, f_350kms, seater;
+    private String station, car_name, image_url, with_fuel_1, with_fuel_2, with_fuel_3, without_fuel_1, without_fuel_2, without_fuel_3, seater;
 
     DataForRecyclerView(){
         }
@@ -20,31 +19,31 @@ public class DataForRecyclerView {
         return car_name;
     }
 
-    public int getW_100kms() {
-        return w_100kms;
+    public String getWith_fuel_1() {
+        return with_fuel_1;
     }
 
-    public int getW_200kms() {
-        return w_200kms;
+    public String getWith_fuel_2() {
+        return with_fuel_2;
     }
 
-    public int getW_350kms() {
-        return w_350kms;
+    public String getWith_fuel_3() {
+        return with_fuel_3;
     }
 
-    public int getF_100kms() {
-        return f_100kms;
+    public String getWithout_fuel_1() {
+        return without_fuel_1;
     }
 
-    public int getF_200kms() {
-        return f_200kms;
+    public String getWithout_fuel_2() {
+        return without_fuel_2;
     }
 
-    public int getF_350kms() {
-        return f_350kms;
+    public String getWithout_fuel_3() {
+        return without_fuel_3;
     }
 
-    public int getSeater() {
+    public String getSeater() {
         return seater;
     }
 

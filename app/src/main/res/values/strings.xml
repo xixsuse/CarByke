@@ -72,4 +72,8 @@
     <string name="submit_to_verify">SUBMIT TO VERIFY</string>
     <string name="start_date">start date</string>
     <string name="filter">filter</string>
+    <string name="price">Price</string>
+    <string name="_100_kms_free">100 kms free</string>
+    <string name="_200_kms_free">200 kms free</string>
+    <string name="_350_kms_free">350 kms free</string>
 </resources>
