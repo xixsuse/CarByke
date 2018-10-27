@@ -14,7 +14,8 @@
         android:id="@+id/sc_background_iv"
         android:layout_width="match_parent"
         android:layout_height="300dp"
-        android:background="@drawable/tree"
+        android:background="@drawable/home_fade_background"
+        android:scaleType="center"
         android:contentDescription="@string/error_while_loading_image"/>
 
     <!--back button-->

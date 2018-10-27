@@ -1,11 +1,14 @@
 package com.carbyke.carbyke;
 
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +38,7 @@ public class CarListWithFuel extends Fragment {
     private RecyclerView.Adapter adapter ;
     private List<DataForRecyclerView> list = new ArrayList<>();
 
+
     private final static String VEHICLE_DETAILS = "vehicle_details";
     private final static String CARS = "cars";
     private DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child(VEHICLE_DETAILS).child(CARS);
@@ -47,7 +51,7 @@ public class CarListWithFuel extends Fragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view =  inflater.inflate(R.layout.fragment_car_list_with_fuel, container, false);
@@ -97,8 +101,11 @@ public class CarListWithFuel extends Fragment {
                 }
 
                 for (DataSnapshot postSnapshot : snapshot.getChildren()) {
-                    DataForRecyclerView data = postSnapshot.getValue(DataForRecyclerView.class);
-                    list.add(data);
+                    String enabled = postSnapshot.child("enabled").getValue(String.class);
+                    if (TextUtils.equals("true", enabled) || TextUtils.isEmpty(enabled)){
+                        DataForRecyclerView data = postSnapshot.getValue(DataForRecyclerView.class);
+                        list.add(data);
+                    }
                     }
 
                 adapter = new CarListWithFuelRecyclerViewAdapter(getContext(), list);

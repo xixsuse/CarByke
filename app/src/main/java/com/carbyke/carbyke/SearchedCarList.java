@@ -1,6 +1,7 @@
 package com.carbyke.carbyke;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
@@ -72,6 +73,7 @@ public class SearchedCarList extends AppCompatActivity implements View.OnClickLi
 
 
         back_b.setOnClickListener(this);
+        place_name_tv.setOnClickListener(this);
 
     }
 
@@ -118,8 +120,12 @@ public class SearchedCarList extends AppCompatActivity implements View.OnClickLi
 
         int id = view.getId();
 //  back button
-        if (id == R.id.cl_back_b){
+        if (id == R.id.cc_back_b){
             super.onBackPressed();
+        }
+
+        else if (id == R.id.cc_place_name_tv){
+            startActivity(new Intent(SearchedCarList.this, ChooseLocation.class));
         }
 
     }

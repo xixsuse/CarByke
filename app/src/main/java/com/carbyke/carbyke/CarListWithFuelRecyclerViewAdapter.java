@@ -17,6 +17,7 @@ import com.squareup.picasso.Picasso;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.List;
+import java.util.Objects;
 
 import mehdi.sakout.fancybuttons.FancyButton;
 
@@ -24,12 +25,17 @@ public class CarListWithFuelRecyclerViewAdapter extends RecyclerView.Adapter<Car
 
     private Context context;
     private List<DataForRecyclerView> UploadInfoList;
-    SharedPreferences sharedPreferencesLocation;
+    private SharedPreferences sharedPreferencesLocation;
     private static final String LOCATION = "location";
     private static final String STATION = "station";
     private static final String TYPE = "type";
-    private int selectedPos = RecyclerView.NO_POSITION;
-    private int selected_pos_for_background;
+
+
+
+    private ViewHolder h;
+    private int last_selection = 0;
+    private int count1 = 1;
+
 
     CarListWithFuelRecyclerViewAdapter(Context context, List<DataForRecyclerView> TempList) {
 
@@ -52,6 +58,13 @@ public class CarListWithFuelRecyclerViewAdapter extends RecyclerView.Adapter<Car
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
         final DataForRecyclerView info = UploadInfoList.get(position);
 
+        sharedPreferencesLocation = Objects.requireNonNull(context.getSharedPreferences(LOCATION, Context.MODE_PRIVATE));
+        String type = sharedPreferencesLocation.getString(TYPE, "");
+        if (TextUtils.equals(type, "DELIVERY")){
+           holder.distance_tv.setVisibility(View.GONE);
+           holder.self_pick_up_place_tv.setVisibility(View.GONE);
+        }
+
         setData(holder, info);
         setCarImage(holder, info);
 
@@ -63,10 +76,62 @@ public class CarListWithFuelRecyclerViewAdapter extends RecyclerView.Adapter<Car
         holder.price_1_rl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                holder.price_1_rl.setBackground(context.getResources().getDrawable(R.drawable.simple_rectangle));
-                selected_pos_for_background = position;
+                holder.price_1_rl.setBackground(context.getResources().getDrawable(R.drawable.simple_rectangle_green));
+                if (h == holder && last_selection == 1){
+                    return;
+                }
+                deSelectPreviousSelection(h);
+                h = holder;
+                last_selection = 1;
             }
         });
+
+        holder.price_2_rl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                holder.price_2_rl.setBackground(context.getResources().getDrawable(R.drawable.simple_rectangle_green));
+                if (h == holder && last_selection == 2){
+                    return;
+                }
+                deSelectPreviousSelection(h);
+                h = holder;
+                last_selection = 2;
+            }
+        });
+
+        holder.price_3_rl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                holder.price_3_rl.setBackground(context.getResources().getDrawable(R.drawable.simple_rectangle_green));
+                if (h == holder && last_selection == 3){
+                    return;
+                }
+                deSelectPreviousSelection(h);
+                h = holder;
+                last_selection = 3;
+            }
+        });
+
+
+    }
+
+
+    private void deSelectPreviousSelection(ViewHolder h) {
+        try {
+            if (last_selection == 1){
+                h.price_1_rl.setBackground(null);
+            }
+            else if (last_selection == 2){
+                h.price_2_rl.setBackground(null);
+            }
+            else if (last_selection == 3){
+                h.price_3_rl.setBackground(null);
+            }
+        }
+        catch (Exception e){
+            //
+        }
+
     }
 
     //    setting car image
@@ -122,7 +187,7 @@ public class CarListWithFuelRecyclerViewAdapter extends RecyclerView.Adapter<Car
                 price_2_tv, km200_dist_tv, price_3_tv, km350_dist_tv;
         private FancyButton book_fb;
         private ImageView car_image_iv;
-        private RelativeLayout price_1_rl;
+        private RelativeLayout price_1_rl, price_2_rl, price_3_rl;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -140,6 +205,8 @@ public class CarListWithFuelRecyclerViewAdapter extends RecyclerView.Adapter<Car
             book_fb = itemView.findViewById(R.id.rc_book_fb);
             car_image_iv = itemView.findViewById(R.id.rc_car_image_iv);
             price_1_rl = itemView.findViewById(R.id.rc_price_1_rl);
+            price_2_rl = itemView.findViewById(R.id.rc_price_2_rl);
+            price_3_rl = itemView.findViewById(R.id.rc_price_3_rl);
         }
     }
 //end

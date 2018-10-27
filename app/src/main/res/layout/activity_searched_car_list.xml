@@ -44,7 +44,7 @@
                 <ImageButton
                     android:id="@+id/cc_back_b"
                     android:layout_width="18dp"
-                    android:layout_height="14dp"
+                    android:layout_height="18dp"
                     android:background="@drawable/ic_return_back_black"
                     android:layout_centerVertical="true"
                     tools:ignore="ContentDescription" />
