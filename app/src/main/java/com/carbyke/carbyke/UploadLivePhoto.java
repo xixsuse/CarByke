@@ -48,8 +48,7 @@ public class UploadLivePhoto extends Fragment {
     private Uri ImageFilePath;
     private Button upload_b;
 
-    private final static String USER_PROFILES = "user_profiles";
-    private final static String IMAGES = "images";
+    private final static String USER_VERIFICATIONS = "user_verifications";
     private final static String IMAGE_NAME = "face_image.jpg";
 
 
@@ -146,7 +145,7 @@ public class UploadLivePhoto extends Fragment {
     //    deleting image
     private void deleteImage() {
         final String uid = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
-        databaseReference.child(USER_PROFILES).child(uid).child(IMAGES)
+        databaseReference.child(USER_VERIFICATIONS).child(uid)
                 .child("face_image").setValue(null).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
@@ -166,7 +165,7 @@ public class UploadLivePhoto extends Fragment {
     private void checkIfImageUploaded() {
         show1();
         final String uid = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
-        databaseReference.child(USER_PROFILES).child(uid).child(IMAGES)
+        databaseReference.child(USER_VERIFICATIONS).child(uid)
                 .child("face_image").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -213,7 +212,7 @@ public class UploadLivePhoto extends Fragment {
     private void selectImageToUpload() {
         CropImage.activity()
                 .setGuidelines(CropImageView.Guidelines.ON_TOUCH)
-                .setOutputCompressQuality(75)
+                .setOutputCompressQuality(30)
                 .setInitialCropWindowPaddingRatio(0)
                 .start(Objects.requireNonNull(getActivity()), this);
     }
@@ -268,8 +267,8 @@ public class UploadLivePhoto extends Fragment {
                 delete_ib.setVisibility(View.GONE);
                 final String uid = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
                 StorageReference storageReference = FirebaseStorage.getInstance().getReference();
-                final StorageReference imageStorageReference = storageReference.child(USER_PROFILES).child(uid)
-                        .child(IMAGES).child("face_image").child(IMAGE_NAME);
+                final StorageReference imageStorageReference = storageReference.child(USER_VERIFICATIONS).child(uid)
+                        .child("face_image").child(IMAGE_NAME);
 
                 imageStorageReference.putFile(ImageFilePath)
                         .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -281,7 +280,7 @@ public class UploadLivePhoto extends Fragment {
                                     public void onSuccess(Uri uri) {
                                         String url = uri.toString();
 
-                                        databaseReference.child(USER_PROFILES).child(uid).child(IMAGES)
+                                        databaseReference.child(USER_VERIFICATIONS).child(uid)
                                                 .child("face_image")
                                                 .setValue(url).addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override

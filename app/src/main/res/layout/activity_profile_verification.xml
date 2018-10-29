@@ -108,10 +108,23 @@
         android:layout_marginEnd="@dimen/activity_horizontal_margin"
         />
 
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/pv_horizontal_line"
+        android:layout_above="@+id/pv_submit_b"
+        >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+
+
     <!--driving licence relative layout-->
     <RelativeLayout
         android:id="@+id/pv_upload_driving_license_rl"
-        android:layout_below="@+id/pv_horizontal_line"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
@@ -168,10 +181,21 @@
         
     </RelativeLayout>
 
+    <ImageView
+        android:id="@+id/pv_driving_license_iv"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        android:layout_below="@+id/pv_upload_driving_license_rl"
+        android:layout_marginTop="4dp"
+        android:visibility="gone"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        tools:ignore="ContentDescription" />
+
     <!--adhar card relative layout-->
     <RelativeLayout
         android:id="@+id/pv_upload_adhar_rl"
-        android:layout_below="@+id/pv_upload_driving_license_rl"
+        android:layout_below="@+id/pv_driving_license_iv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/activity_vertical_margin"
@@ -228,10 +252,21 @@
 
     </RelativeLayout>
 
+    <ImageView
+        android:id="@+id/pv_upload_adhar_iv"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        android:layout_below="@+id/pv_upload_adhar_rl"
+        android:layout_marginTop="4dp"
+        android:layout_alignParentEnd="true"
+        android:visibility="gone"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        tools:ignore="ContentDescription" />
+
     <!--live photo relative layout-->
     <RelativeLayout
         android:id="@+id/pv_live_photo_rl"
-        android:layout_below="@+id/pv_upload_adhar_rl"
+        android:layout_below="@+id/pv_upload_adhar_iv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/activity_vertical_margin"
@@ -288,6 +323,35 @@
 
     </RelativeLayout>
 
+    <ImageView
+        android:id="@+id/pv_live_photo__iv"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        android:layout_below="@+id/pv_live_photo_rl"
+        android:layout_marginTop="4dp"
+        android:layout_alignParentEnd="true"
+        android:visibility="gone"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        tools:ignore="ContentDescription" />
+
+
+            <!--profile verification failed message-->
+            <TextView
+                android:id="@+id/pv_verification_failed_tv"
+                android:layout_below="@+id/pv_live_photo__iv"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                style="@style/CustomTextStyle14"
+                android:textColor="@color/red"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+
+
+        </RelativeLayout>
+
+    </android.support.v4.widget.NestedScrollView>
 
     <!--finish button-->
     <Button
@@ -303,6 +367,5 @@
         android:enabled="false"
         android:background="@color/buttonDisabledColor"
         />
-
 
 </RelativeLayout>
