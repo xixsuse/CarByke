@@ -285,6 +285,7 @@ public class UploadLivePhoto extends Fragment {
                                                 .setValue(url).addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void aVoid) {
+                                                databaseReference.child(uid).child("approval").child("re_evaluate").setValue("1");
                                                 ShowMessage showMessage = new ShowMessage(getActivity());
                                                 showMessage.successMessage("Success", "Driving License Image Uploaded Successfully");
                                                 dismiss();

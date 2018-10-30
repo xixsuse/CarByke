@@ -134,7 +134,7 @@ public class ProfileVerification extends AppCompatActivity implements View.OnCli
                                             }
                                             String message = dataSnapshot.child("message").getValue(String.class);
                                             if (!TextUtils.isEmpty(message)){
-                                                verification_failed_tv.setText("Verification Failed: \n"+message+"\n\nNote: No need to re-submit profile for verification. Just re-upload the disapproved image");
+                                                verification_failed_tv.setText("Verification Failed: "+message+"\n\nNote: No need to re-submit profile for verification. Just re-upload the disapproved image");
                                             }
 
 

@@ -277,7 +277,29 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
 
 //                profile verification
             case R.id.ep_profile_verification_rl:
-                startActivity(new Intent(EditProfile.this, ProfileVerification.class));
+
+                final String key = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
+                final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+                databaseReference.child("verified_accounts").child(key)
+                        .addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                String status = dataSnapshot.child("status").getValue(String.class);
+                                if (TextUtils.equals(status, "verified")){
+                                    Toast.makeText(EditProfile.this, "verified", Toast.LENGTH_SHORT).show();
+                                }
+                                else {
+                                    startActivity(new Intent(EditProfile.this, ProfileVerification.class));
+                                }
+
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                                Toast.makeText(EditProfile.this, ""+databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
                 break;
 
 //               link phone number
