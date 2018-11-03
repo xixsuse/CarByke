@@ -17,7 +17,6 @@ import com.squareup.picasso.Picasso;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.List;
-import java.util.Objects;
 
 import mehdi.sakout.fancybuttons.FancyButton;
 
@@ -58,8 +57,11 @@ public class CarListWithFuelRecyclerViewAdapter extends RecyclerView.Adapter<Car
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
         final DataForRecyclerView info = UploadInfoList.get(position);
 
-        sharedPreferencesLocation = Objects.requireNonNull(context.getSharedPreferences(LOCATION, Context.MODE_PRIVATE));
-        String type = sharedPreferencesLocation.getString(TYPE, "");
+//        sharedPreferencesLocation = Objects.requireNonNull(context.getSharedPreferences(LOCATION, Context.MODE_PRIVATE));
+//        String type = sharedPreferencesLocation.getString(TYPE, "");
+        MySharedPrefs mySharedPrefs = new MySharedPrefs(context);
+        String type = mySharedPrefs.getDeliveryOrPickUpType();
+
         if (TextUtils.equals(type, "DELIVERY")){
            holder.distance_tv.setVisibility(View.GONE);
            holder.self_pick_up_place_tv.setVisibility(View.GONE);

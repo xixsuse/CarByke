@@ -182,11 +182,13 @@ public class DeliveryLocation extends Fragment {
                         .onPositive(new MaterialDialog.SingleButtonCallback() {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                sharedPreferencesLocation = getActivity().getSharedPreferences(LOCATION, Context.MODE_PRIVATE);
-                                SharedPreferences.Editor editor = sharedPreferencesLocation.edit();
-                                editor.putString(STATION, address);
-                                editor.putString(TYPE, "DELIVERY");
-                                editor.apply();
+//                                sharedPreferencesLocation = getActivity().getSharedPreferences(LOCATION, Context.MODE_PRIVATE);
+//                                SharedPreferences.Editor editor = sharedPreferencesLocation.edit();
+//                                editor.putString(STATION, address);
+//                                editor.putString(TYPE, "DELIVERY");
+//                                editor.apply();
+                                MySharedPrefs mySharedPrefs = new MySharedPrefs(getActivity());
+                                mySharedPrefs.setDeliveryLocation(address, "DELIVERY");
                                 getActivity().finish();
                             }
                         })

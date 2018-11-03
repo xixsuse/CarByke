@@ -101,9 +101,14 @@ public class SearchedCarList extends AppCompatActivity implements View.OnClickLi
 
     //    setting location from shared pref
     private void setLocationAndDateTime() {
-        String station = sharedPreferencesLocation.getString(STATION, "");
-        String start_date_time = sharedPreferencesDateTime.getString(START_DATE_TIME, "");
-        String end_date_time = sharedPreferencesDateTime.getString(END_DATE_TIME, "");
+//        String station = sharedPreferencesLocation.getString(STATION, "");
+//        String start_date_time = sharedPreferencesDateTime.getString(START_DATE_TIME, "");
+//        String end_date_time = sharedPreferencesDateTime.getString(END_DATE_TIME, "");
+
+        MySharedPrefs mySharedPrefs = new MySharedPrefs(SearchedCarList.this);
+        String station = mySharedPrefs.getSelectedLocationOrStation();
+        String start_date_time = mySharedPrefs.getStartDateTime();
+        String end_date_time = mySharedPrefs.getEndDateTime();
 
         if (!TextUtils.isEmpty(station)){
             place_name_tv.setText(station);

@@ -101,7 +101,9 @@ public class PhoneLogin extends AppCompatActivity implements View.OnClickListene
     }
     //    show <!--signed as google acc info, when first logged in by google-->
     private void showSignInModeMessage() {
-        String mode = sharedPreferencesLoginMode.getString(LOGIN_MODE, "");
+        //String mode = sharedPreferencesLoginMode.getString(LOGIN_MODE, "");
+        MySharedPrefs mySharedPrefs = new MySharedPrefs(PhoneLogin.this);
+        String mode = mySharedPrefs.getLoginMode();
         if (TextUtils.equals(mode, "google")){
             String mail_id = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getEmail();
             signed_in_as.setVisibility(View.VISIBLE);
@@ -251,7 +253,9 @@ public class PhoneLogin extends AppCompatActivity implements View.OnClickListene
                         codeText.setText("");
 
                         // firebase login
-                        String mode = sharedPreferencesLoginMode.getString(LOGIN_MODE, "");
+                       // String mode = sharedPreferencesLoginMode.getString(LOGIN_MODE, "");
+                        MySharedPrefs mySharedPrefs = new MySharedPrefs(PhoneLogin.this);
+                        String mode = mySharedPrefs.getLoginMode();
                         if (TextUtils.equals(mode, "google")){
                             signInWithPhoneAuthCredentialMergeGoogle_Phone(credential);
                         }
@@ -360,7 +364,9 @@ public class PhoneLogin extends AppCompatActivity implements View.OnClickListene
                         codeText.setText("");
 
                         // firebase login
-                        String mode = sharedPreferencesLoginMode.getString(LOGIN_MODE, "");
+                       // String mode = sharedPreferencesLoginMode.getString(LOGIN_MODE, "");
+                        MySharedPrefs mySharedPrefs = new MySharedPrefs(PhoneLogin.this);
+                        String mode = mySharedPrefs.getLoginMode();
                         if (TextUtils.equals(mode, "google")){
                             signInWithPhoneAuthCredentialMergeGoogle_Phone(credential);
                         }
@@ -447,7 +453,9 @@ public class PhoneLogin extends AppCompatActivity implements View.OnClickListene
         PhoneAuthCredential credential = PhoneAuthProvider.getCredential(phoneVerificationId, code);
 
         // firebase login
-        String mode = sharedPreferencesLoginMode.getString(LOGIN_MODE, "");
+       // String mode = sharedPreferencesLoginMode.getString(LOGIN_MODE, "");
+        MySharedPrefs mySharedPrefs = new MySharedPrefs(PhoneLogin.this);
+        String mode = mySharedPrefs.getLoginMode();
         if (TextUtils.equals(mode, "google")){
             signInWithPhoneAuthCredentialMergeGoogle_Phone(credential);
         }
@@ -564,10 +572,13 @@ public class PhoneLogin extends AppCompatActivity implements View.OnClickListene
         databaseReference.child(PHONE_NUMBER).setValue(user.getPhoneNumber());
 
 
-        sharedPreferencesLogin = getSharedPreferences(LOGIN, MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferencesLogin.edit();
-        editor.putString(LOGGED_IN_OR_NOT, "true");
-        editor.apply();
+//        sharedPreferencesLogin = getSharedPreferences(LOGIN, MODE_PRIVATE);
+//        SharedPreferences.Editor editor = sharedPreferencesLogin.edit();
+//        editor.putString(LOGGED_IN_OR_NOT, "true");
+//        editor.apply();
+        MySharedPrefs mySharedPrefs = new MySharedPrefs(PhoneLogin.this);
+        mySharedPrefs.setLoginPref("true");
+
         if (TextUtils.isEmpty(Objects.requireNonNull(firebaseAuth.getCurrentUser()).getEmail())){
             // open new activity that will prompt to link google account
             startActivity(new Intent(PhoneLogin.this, PhoneToGoogle.class));

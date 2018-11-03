@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -40,6 +41,8 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
     RadioRealButtonGroup gender_radio;
 
     private final static String USER_PROFILES = "user_profiles";
+
+    private final static String PROFILE_DATA = "profile_data";
     private final static String PROFILE = "profile";
     private final static String EMAIL = "email";
     private final static String NAME = "name";
@@ -53,7 +56,7 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
     private RelativeLayout profile_verification_rl;
 
     private SharedPreferences sharedPreferences;
-    private final static String PROFILE_DATA = "profile_data";
+
 
     private DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child(USER_PROFILES);
     private FirebaseAuth mAuth;
@@ -73,7 +76,9 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
         update_fb = findViewById(R.id.ep_save_b);
         profile_verification_rl = findViewById(R.id.ep_profile_verification_rl);
 
-        sharedPreferences = getSharedPreferences(PROFILE_DATA, MODE_PRIVATE);
+       // sharedPreferences = getSharedPreferences(PROFILE_DATA, MODE_PRIVATE);
+        MySharedPrefs mySharedPrefs = new MySharedPrefs(EditProfile.this);
+        mySharedPrefs.initiateProfileData();
         mAuth = FirebaseAuth.getInstance();
 
 
@@ -109,10 +114,11 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
 
     public void getProfileDataFromSharedPref() {
         String name, email, phone, gender;
-        name = sharedPreferences.getString(NAME, "");
-        email = sharedPreferences.getString(EMAIL, "");
-        phone = sharedPreferences.getString(PHONE_NUMBER, "");
-        gender = sharedPreferences.getString(GENDER, "");
+        MySharedPrefs mySharedPrefs = new MySharedPrefs(EditProfile.this);
+        name = mySharedPrefs.getProfileName();
+        email = mySharedPrefs.getProfileEmail();
+        phone = mySharedPrefs.getProfilePhoneNumber();
+        gender = mySharedPrefs.getProfileGender();
 
         name_tv.setText(name);
         if (!TextUtils.equals(email, "Link google account!")){
@@ -211,21 +217,25 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
 
 //    saving data in shared pref
     private void saveFetchedDataInSharedPrefs(String name, String email, String phone, String gender) {
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(NAME, name);
-        editor.putString(EMAIL, email);
-        editor.putString(PHONE_NUMBER, phone);
-        editor.putString(GENDER, gender);
-        editor.apply();
+//        SharedPreferences.Editor editor = sharedPreferences.edit();
+//        editor.putString(NAME, name);
+//        editor.putString(EMAIL, email);
+//        editor.putString(PHONE_NUMBER, phone);
+//        editor.putString(GENDER, gender);
+//        editor.apply();
+        MySharedPrefs mySharedPrefs = new MySharedPrefs(EditProfile.this);
+        mySharedPrefs.setProfileData(name, email, phone, gender);
     }
     //    saving data in shared pref
 
     //    saving data in shared pref
     private void saveFetchedDataInSharedPrefsAfterUpdate(String name, String gender) {
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(NAME, name);
-        editor.putString(GENDER, gender);
-        editor.apply();
+//        SharedPreferences.Editor editor = sharedPreferences.edit();
+//        editor.putString(NAME, name);
+//        editor.putString(GENDER, gender);
+//        editor.apply();
+        MySharedPrefs mySharedPrefs = new MySharedPrefs(EditProfile.this);
+        mySharedPrefs.setProfileDataNAME_GENDER(name, gender);
     }
     //    saving data in shared pref
 
@@ -324,10 +334,12 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
                             @Override
                             public void onClick(@NonNull final MaterialDialog dialog, @NonNull DialogAction which) {
 
-                                SharedPreferences sharedPreferencesLogin = getSharedPreferences("login", MODE_PRIVATE);
-                                SharedPreferences.Editor editor = sharedPreferencesLogin.edit();
-                                editor.putString("logged_in", "false");
-                                editor.apply();
+//                                SharedPreferences sharedPreferencesLogin = getSharedPreferences("login", MODE_PRIVATE);
+//                                SharedPreferences.Editor editor = sharedPreferencesLogin.edit();
+//                                editor.putString("logged_in", "false");
+//                                editor.apply();
+                                MySharedPrefs mySharedPrefs = new MySharedPrefs(EditProfile.this);
+                                mySharedPrefs.setLoginPref("false");
                                 mAuth = FirebaseAuth.getInstance();
                                 mAuth.signOut();
 

@@ -57,11 +57,14 @@ public class PickUpLocationRecyclerViewAdapter extends RecyclerView.Adapter<Pick
             holder.tick_ib.setVisibility(View.VISIBLE);
             PickUpLocation.continue_b.setEnabled(true);
             PickUpLocation.continue_b.setBackgroundResource(R.color.lightGreen);
-            sharedPreferencesLocation = context.getSharedPreferences(LOCATION, Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPreferencesLocation.edit();
-            editor.putString(STATION, info.getStation());
-            editor.putString(TYPE, "SELF PICK-UP");
-            editor.apply();
+//            sharedPreferencesLocation = context.getSharedPreferences(LOCATION, Context.MODE_PRIVATE);
+//            SharedPreferences.Editor editor = sharedPreferencesLocation.edit();
+//            editor.putString(STATION, info.getStation());
+//            editor.putString(TYPE, "SELF PICK-UP");
+//            editor.apply();
+            MySharedPrefs mySharedPrefs = new MySharedPrefs(context);
+            mySharedPrefs.setDeliveryLocation(info.getStation(), "SELF PICK-UP");
+
         }
 
         holder.relativeLayout.setOnClickListener(new View.OnClickListener() {

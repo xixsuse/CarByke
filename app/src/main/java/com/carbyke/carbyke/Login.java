@@ -217,10 +217,12 @@ public class Login extends AppCompatActivity implements  GoogleApiClient.OnConne
                     }
                 });
 //        user is signed in so, need to save in prefs when phone linked
-                sharedPreferencesLogin = getSharedPreferences(LOGIN, MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferencesLogin.edit();
-                editor.putString(LOGGED_IN_OR_NOT, "true");
-                editor.apply();
+//                sharedPreferencesLogin = getSharedPreferences(LOGIN, MODE_PRIVATE);
+//                SharedPreferences.Editor editor = sharedPreferencesLogin.edit();
+//                editor.putString(LOGGED_IN_OR_NOT, "true");
+//                editor.apply();
+                MySharedPrefs mySharedPrefs = new MySharedPrefs(Login.this);
+                mySharedPrefs.setLoginPref("true");
 
             }
 
@@ -241,9 +243,12 @@ public class Login extends AppCompatActivity implements  GoogleApiClient.OnConne
 
         String phone_number = user.getPhoneNumber();
         if (TextUtils.isEmpty(phone_number)){
-            SharedPreferences.Editor editor = sharedPreferencesLoginMode.edit();
-            editor.putString(LOGIN_MODE, "google");
-            editor.apply();
+//            SharedPreferences.Editor editor = sharedPreferencesLoginMode.edit();
+//            editor.putString(LOGIN_MODE, "google");
+//            editor.apply();
+            MySharedPrefs mySharedPrefs = new MySharedPrefs(Login.this);
+            mySharedPrefs.setLoginMode("google");
+
             startActivity(new Intent(Login.this, PhoneLogin.class));
             Login.this.finish();
         }
@@ -308,9 +313,11 @@ public class Login extends AppCompatActivity implements  GoogleApiClient.OnConne
 
         //        phone login
         if (id == R.id.al_phone_fb){
-            SharedPreferences.Editor editor = sharedPreferencesLoginMode.edit();
-            editor.putString(LOGIN_MODE, "phone");
-            editor.apply();
+//            SharedPreferences.Editor editor = sharedPreferencesLoginMode.edit();
+//            editor.putString(LOGIN_MODE, "phone");
+//            editor.apply();
+            MySharedPrefs mySharedPrefs = new MySharedPrefs(Login.this);
+            mySharedPrefs.setLoginMode("phone");
             // sign out if any previous user logged in
             mAuth.signOut();
 //            listen for response from phone login activity to close login activity

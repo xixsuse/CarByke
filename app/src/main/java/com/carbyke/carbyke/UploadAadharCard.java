@@ -249,7 +249,7 @@ public class UploadAadharCard extends Fragment {
                         .positiveText("Try Again")
                         .positiveColorRes(R.color.black)
                         .backgroundColor(getResources().getColor(R.color.white))
-                        .icon(getResources().getDrawable(R.drawable.ic_warning))
+                        .icon(getResources().getDrawable(R.drawable.ic_error))
                         .show();
             }
         }
@@ -278,12 +278,26 @@ public class UploadAadharCard extends Fragment {
                                     public void onSuccess(Uri uri) {
                                         String url = uri.toString();
 
+                                        databaseReference.child("verification_status").child(uid).child("approval")
+                                                .addListenerForSingleValueEvent(new ValueEventListener() {
+                                                    @Override
+                                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                        if (dataSnapshot.hasChild("re_evaluate")){
+                                                            databaseReference.child("verification_status").child(uid).child("approval").child("re_evaluate").setValue("1");
+                                                        }
+                                                    }
+
+                                                    @Override
+                                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                    }
+                                                });
+
                                         databaseReference.child(USER_VERIFICATIONS).child(uid)
                                                 .child("aadhar_image")
                                                 .setValue(url).addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void aVoid) {
-                                                databaseReference.child(uid).child("approval").child("re_evaluate").setValue("1");
                                                 ShowMessage showMessage = new ShowMessage(getActivity());
                                                 showMessage.successMessage("Success", "Driving License Image Uploaded Successfully");
                                                 dismiss();

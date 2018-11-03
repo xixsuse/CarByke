@@ -75,9 +75,12 @@ public class SearchCar extends AppCompatActivity implements View.OnClickListener
 
 //    setting location from shared pref
     private void setLocation() {
-        String station = sharedPreferencesLocation.getString(STATION, "");
+        MySharedPrefs mySharedPrefs = new MySharedPrefs(SearchCar.this);
+        //String station = sharedPreferencesLocation.getString(STATION, "");
+        String  station = mySharedPrefs.getSelectedLocationOrStation();
         if (!TextUtils.isEmpty(station)){
-            String type = sharedPreferencesLocation.getString(TYPE, "");
+            //String type = sharedPreferencesLocation.getString(TYPE, "");
+            String type = mySharedPrefs.getDeliveryOrPickUpType();
             set_location_tv.setBackgroundResource(R.drawable.corner_rectangle_rent_home);
             set_location_tv.setText(station);
             set_location_tv.setCompoundDrawablesWithIntrinsicBounds(null,null,null,null);
@@ -101,15 +104,18 @@ public class SearchCar extends AppCompatActivity implements View.OnClickListener
 
 //    saving date and time in shared prefs
     private void saveDateTimeInSharedPrefs(String start_date_time, String end_date_time){
-        sharedPreferencesDateTime = getSharedPreferences(DATE_TIME, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferencesDateTime.edit();
+//        sharedPreferencesDateTime = getSharedPreferences(DATE_TIME, Context.MODE_PRIVATE);
+//        SharedPreferences.Editor editor = sharedPreferencesDateTime.edit();
 
         start_date_time = start_date_time.substring(start_date_time.length()-20, start_date_time.length()).replaceAll("\n"," ");
         end_date_time = end_date_time.substring(end_date_time.length()-20, end_date_time.length()).replaceAll("\n"," ");
 
-        editor.putString(START_DATE_TIME, start_date_time);
-        editor.putString(END_DATE_TIME, end_date_time);
-        editor.apply();
+//        editor.putString(START_DATE_TIME, start_date_time);
+//        editor.putString(END_DATE_TIME, end_date_time);
+//        editor.apply();
+        MySharedPrefs mySharedPrefs = new MySharedPrefs(SearchCar.this);
+        mySharedPrefs.setDatetimeBooking(start_date_time, end_date_time);
+
     }
 //    saving date and time in shared prefs
 

@@ -311,6 +311,13 @@ public class ProfileVerification extends AppCompatActivity implements View.OnCli
                                 }).execute();
                             }
                         })
+                        .onNegative(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull final MaterialDialog dialog, @NonNull DialogAction which) {
+                               dismiss();
+                            }
+                        })
+                        .cancelable(false)
                         .show();
                 break;
 
@@ -322,8 +329,9 @@ public class ProfileVerification extends AppCompatActivity implements View.OnCli
 
     private void submitForVerification() {
         final String uid = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("verification_status");
-        databaseReference.child(uid).child("verification").child("code").setValue("sent");
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("verification_status").child(uid);
+        databaseReference.child("approval").child("re_evaluate").setValue("1");
+        databaseReference.child("verification").child("code").setValue("sent");
         dismiss();
         Toast.makeText(this, "Profile Sent For Verification", Toast.LENGTH_SHORT).show();
 

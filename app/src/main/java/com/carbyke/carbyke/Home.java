@@ -124,8 +124,10 @@ public class Home extends AppCompatActivity
 
 //    if signed in then display profile data in profile
     private void checkIfSignedIn() {
-        sharedPreferencesLogin = getSharedPreferences(LOGIN, MODE_PRIVATE);
-        String val = sharedPreferencesLogin.getString(LOGGED_IN_OR_NOT, "");
+//        sharedPreferencesLogin = getSharedPreferences(LOGIN, MODE_PRIVATE);
+//        String val = sharedPreferencesLogin.getString(LOGGED_IN_OR_NOT, "");
+        MySharedPrefs mySharedPrefs = new MySharedPrefs(Home.this);
+        String val = mySharedPrefs.getLoggedInOrNot();
         if (TextUtils.equals(val, "true")){
             not_signed_in_rl.setVisibility(View.GONE);
             signed_in_rl.setVisibility(View.VISIBLE);
@@ -138,11 +140,17 @@ public class Home extends AppCompatActivity
 
 //    get user profile saved data from shared pref
     public void getProfileDataFromSharedPref() {
-        sharedPreferences = getSharedPreferences(PROFILE_DATA, MODE_PRIVATE);
+       // sharedPreferences = getSharedPreferences(PROFILE_DATA, MODE_PRIVATE);
         String name, email, phone;
-        name = sharedPreferences.getString(NAME, "");
-        email = sharedPreferences.getString(EMAIL, "");
-        phone = sharedPreferences.getString(PHONE_NUMBER, "");
+        MySharedPrefs mySharedPrefs = new MySharedPrefs(Home.this);
+        mySharedPrefs.initiateProfileData();
+        name = mySharedPrefs.getProfileName();
+        email = mySharedPrefs.getProfileEmail();
+        phone = mySharedPrefs.getProfilePhoneNumber();
+
+//        name = sharedPreferences.getString(NAME, "");
+//        email = sharedPreferences.getString(EMAIL, "");
+//        phone = sharedPreferences.getString(PHONE_NUMBER, "");
 
         if (TextUtils.isEmpty(name)){
             name_tv.setVisibility(View.GONE);
@@ -231,11 +239,13 @@ public class Home extends AppCompatActivity
 
 //    saving data in shared pref
 private void saveFetchedDataInSharedPrefs(String name, String email, String phone) {
-    SharedPreferences.Editor editor = sharedPreferences.edit();
-    editor.putString(NAME, name);
-    editor.putString(EMAIL, email);
-    editor.putString(PHONE_NUMBER, phone);
-    editor.apply();
+//    SharedPreferences.Editor editor = sharedPreferences.edit();
+//    editor.putString(NAME, name);
+//    editor.putString(EMAIL, email);
+//    editor.putString(PHONE_NUMBER, phone);
+//    editor.apply();
+    MySharedPrefs mySharedPrefs = new MySharedPrefs(Home.this);
+    mySharedPrefs.setProfileDataN_E_P(name, email, phone);
 }
 //    saving data in shared pref
 
