@@ -35,6 +35,17 @@ public class MySharedPrefs {
     private static final String START_DATE_TIME = "start_date_time";
     private static final String END_DATE_TIME = "end_date_time";
 
+//    user location lat and long
+    private static final String USER_LAT_LOG = "user_lat_long";
+    private static final String LATITUDE = "latitude";
+    private static final String LONGITUDE = "longitude";
+
+//    selected pick up station data
+    private static final String SELECTED_PICK_UP_LOCATION = "selected_pick_up_location";
+    private static final String MAP_LOCATION = "map_location";
+
+
+
     MySharedPrefs(Context context){
         this.context = context;
     }
@@ -64,7 +75,7 @@ public class MySharedPrefs {
     }
 
 //    delivery location
-    public void setDeliveryLocation(String station, String type){
+    public void setSelectedLocationOrStation(String station, String type){
         sharedPreferences = context.getSharedPreferences(LOCATION, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(STATION, station);
@@ -86,6 +97,7 @@ public class MySharedPrefs {
     }
 
     public void setProfileData(String name, String email, String phone, String gender){
+        sharedPreferences = context.getSharedPreferences(PROFILE_DATA, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(NAME, name);
         editor.putString(EMAIL, email);
@@ -94,6 +106,7 @@ public class MySharedPrefs {
         editor.apply();
     }
     public void setProfileDataN_E_P(String name, String email, String phone){
+        sharedPreferences = context.getSharedPreferences(PROFILE_DATA, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(NAME, name);
         editor.putString(EMAIL, email);
@@ -101,21 +114,26 @@ public class MySharedPrefs {
         editor.apply();
     }
     public void setProfileDataNAME_GENDER(String name, String gender){
+        sharedPreferences = context.getSharedPreferences(PROFILE_DATA, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(NAME, name);
         editor.putString(GENDER, gender);
         editor.apply();
     }
     public String getProfileName() {
+        sharedPreferences = context.getSharedPreferences(PROFILE_DATA, Context.MODE_PRIVATE);
         return sharedPreferences.getString(NAME, "");
     }
-    public String getProfileEmail() {
+    public String getProfileEmail()
+    {   sharedPreferences = context.getSharedPreferences(PROFILE_DATA, Context.MODE_PRIVATE);
         return sharedPreferences.getString(EMAIL, "");
     }
     public String getProfilePhoneNumber() {
+        sharedPreferences = context.getSharedPreferences(PROFILE_DATA, Context.MODE_PRIVATE);
         return sharedPreferences.getString(PHONE_NUMBER, "");
     }
     public String getProfileGender() {
+        sharedPreferences = context.getSharedPreferences(PROFILE_DATA, Context.MODE_PRIVATE);
         return sharedPreferences.getString(GENDER, "");
     }
 
@@ -136,4 +154,47 @@ public class MySharedPrefs {
         return sharedPreferences.getString(END_DATE_TIME, "");
     }
 
+
+//    user location lat and long
+    public void setUserLatLog(String latitude, String longitude){
+        sharedPreferences = context.getSharedPreferences(USER_LAT_LOG, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(LATITUDE, latitude);
+        editor.putString(LONGITUDE, longitude);
+        editor.apply();
+    }
+    public String getUserLatitude() {
+        sharedPreferences = context.getSharedPreferences(USER_LAT_LOG, Context.MODE_PRIVATE);
+        return sharedPreferences.getString(LATITUDE, "");
+    }
+    public String getUserLongitude() {
+        sharedPreferences = context.getSharedPreferences(USER_LAT_LOG, Context.MODE_PRIVATE);
+        return sharedPreferences.getString(LONGITUDE, "");
+    }
+
+
+//    selected pick up station data
+    public void setPickLocationData(String latitude, String longitude, String map_location){
+        sharedPreferences = context.getSharedPreferences(SELECTED_PICK_UP_LOCATION, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(LATITUDE, latitude);
+        editor.putString(LONGITUDE, longitude);
+        editor.putString(MAP_LOCATION, map_location);
+        editor.apply();
+    }
+    public String getPickLocationLat() {
+        sharedPreferences = context.getSharedPreferences(SELECTED_PICK_UP_LOCATION, Context.MODE_PRIVATE);
+        return sharedPreferences.getString(LATITUDE, "");
+    }
+    public String getPickLocationLong() {
+        sharedPreferences = context.getSharedPreferences(SELECTED_PICK_UP_LOCATION, Context.MODE_PRIVATE);
+        return sharedPreferences.getString(LONGITUDE, "");
+    }
+    public String getPickLocationMapLocation() {
+        sharedPreferences = context.getSharedPreferences(SELECTED_PICK_UP_LOCATION, Context.MODE_PRIVATE);
+        return sharedPreferences.getString(MAP_LOCATION, "");
+    }
+
+
+    //end
 }

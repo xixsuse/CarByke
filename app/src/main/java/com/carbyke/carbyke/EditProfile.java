@@ -296,6 +296,7 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 String status = dataSnapshot.child("status").getValue(String.class);
                                 if (TextUtils.equals(status, "verified")){
+                                    getSupportFragmentManager().beginTransaction().add(R.id.ep_fragment_container_edit_profile, new VerifiedProfile(), "verified_profile").addToBackStack("").commit();
                                     Toast.makeText(EditProfile.this, "verified", Toast.LENGTH_SHORT).show();
                                 }
                                 else {

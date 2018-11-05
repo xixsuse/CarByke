@@ -76,4 +76,7 @@
     <string name="_100_kms_free">100 kms free</string>
     <string name="_200_kms_free">200 kms free</string>
     <string name="_350_kms_free">350 kms free</string>
+    <string name="distance">distance</string>
+    <string name="pick_up_place_name">Pick up place name</string>
+    <string name="profile_approved">Profile Approved</string>
 </resources>

@@ -30,5 +30,6 @@
     <dimen name="fancy_button_elevation">2dp</dimen>
     <dimen name="car_list_layout_margin">8dp</dimen>
     <dimen name="car_list_layout_drawable_padding">5dp</dimen>
+    <dimen name="dp8">8dp</dimen>
 
 </resources>

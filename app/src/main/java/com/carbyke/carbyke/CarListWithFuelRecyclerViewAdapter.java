@@ -1,16 +1,21 @@
 package com.carbyke.carbyke;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.location.Location;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -66,12 +71,62 @@ public class CarListWithFuelRecyclerViewAdapter extends RecyclerView.Adapter<Car
            holder.distance_tv.setVisibility(View.GONE);
            holder.self_pick_up_place_tv.setVisibility(View.GONE);
         }
+        else {
+            calculateDistance(mySharedPrefs, holder, info);
+            holder.self_pick_up_place_tv.setText(mySharedPrefs.getPickLocationMapLocation());
+        }
 
         setData(holder, info);
         setCarImage(holder, info);
 
         setBackGround(holder, position);
 
+        addSpaceAtLast(position, holder);
+
+    }
+
+    @SuppressLint("SetTextI18n")
+    private void calculateDistance(MySharedPrefs mySharedPrefs, ViewHolder holder, DataForRecyclerView info){
+        String my_lat, my_long, station_lat, station_long;
+        my_lat = mySharedPrefs.getUserLatitude();
+        my_long = mySharedPrefs.getUserLongitude();
+        station_lat = mySharedPrefs.getPickLocationLat();
+        station_long = mySharedPrefs.getPickLocationLong();
+
+        try {
+            Location my_location = new Location("");
+            my_location.setLatitude(Double.parseDouble(my_lat));
+            my_location.setLongitude(Double.parseDouble(my_long));
+
+            Location station_location = new Location("");
+            station_location.setLatitude(Double.parseDouble(station_lat));
+            station_location.setLongitude(Double.parseDouble(station_long));
+
+            float distance = my_location.distanceTo(station_location) / 1000;
+            DecimalFormat df = new DecimalFormat("###.#");
+            String l = df.format(distance);
+            holder.distance_tv.setText(l+" km");
+
+        }
+        catch (Exception e){
+            holder.distance_tv.setText("...");
+            //
+        }
+    }
+
+    private void addSpaceAtLast(int position, ViewHolder holder) {
+        //adding padding to last card view
+        //adding padding to last card view
+        if( position == getItemCount() -1){
+            FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
+                    FrameLayout.LayoutParams.WRAP_CONTENT,
+                    FrameLayout.LayoutParams.WRAP_CONTENT);
+            params.setMargins(0
+                    ,(int) context.getResources().getDimension(R.dimen.dp8)
+                    , 0
+                    , (int) context.getResources().getDimension(R.dimen.dp8));
+            holder.cardView.setLayoutParams(params);
+        }
     }
 
     private void setBackGround(final ViewHolder holder, final int position) {
@@ -190,6 +245,7 @@ public class CarListWithFuelRecyclerViewAdapter extends RecyclerView.Adapter<Car
         private FancyButton book_fb;
         private ImageView car_image_iv;
         private RelativeLayout price_1_rl, price_2_rl, price_3_rl;
+        private CardView cardView;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -209,6 +265,7 @@ public class CarListWithFuelRecyclerViewAdapter extends RecyclerView.Adapter<Car
             price_1_rl = itemView.findViewById(R.id.rc_price_1_rl);
             price_2_rl = itemView.findViewById(R.id.rc_price_2_rl);
             price_3_rl = itemView.findViewById(R.id.rc_price_3_rl);
+            cardView = itemView.findViewById(R.id.rc_cardView);
         }
     }
 //end

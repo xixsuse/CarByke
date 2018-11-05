@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:fancy="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white"
+    android:clickable="true"
+    android:focusable="true"
+    tools:context=".VerifiedProfile">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/ap_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/topBarColor"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        >
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <!--back button-->
+            <ImageButton
+                android:id="@+id/ap_back_ib"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_return_back_white_smoke"
+                android:contentDescription="@string/error_while_loading_image" />
+
+
+            <TextView
+                android:layout_toEndOf="@+id/ap_back_ib"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/profile_approved"
+                style="@style/CustomTextStyle16"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:paddingStart="@dimen/activity_horizontal_margin"
+                tools:ignore="RtlSymmetry" />
+
+            <!--loading view-->
+            <com.github.ybq.android.spinkit.SpinKitView
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/ap_spin_kit"
+                android:visibility="gone"
+                style="@style/SpinKitView.Small.Circle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                app:SpinKit_Color="@color/white" />
+
+        </RelativeLayout>
+    </android.support.v7.widget.Toolbar>
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_below="@+id/ap_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:overScrollMode="ifContentScrolls"
+        >
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!--license-->
+            <TextView
+                android:id="@+id/ap_license_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/driving_license"
+                style="@style/CustomTextStyle18"
+                android:textStyle="bold"
+                android:textAllCaps="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:background="@drawable/simple_rectangle"
+                android:padding="7dp"
+                />
+
+            <com.jsibbold.zoomage.ZoomageView
+                android:id="@+id/ap_license_iv"
+                android:layout_below="@+id/ap_license_tv"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                app:zoomage_restrictBounds="true"
+                app:zoomage_animateOnReset="true"
+                app:zoomage_autoResetMode="UNDER"
+                app:zoomage_autoCenter="true"
+                app:zoomage_zoomable="true"
+                fancy:zoomage_doubleTapToZoom="true"
+                app:zoomage_translatable="true"
+                app:zoomage_minScale="0.6"
+                app:zoomage_maxScale="10"
+                android:layout_marginTop="8dp"
+                />
+
+            <View
+                android:id="@+id/ap_v1"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@color/gray"
+                android:layout_below="@+id/ap_license_iv"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                />
+
+
+            <!--aadhar-->
+            <TextView
+                android:id="@+id/ap_aadhar_tv"
+                android:layout_below="@+id/ap_v1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/aadhaar_card"
+                style="@style/CustomTextStyle18"
+                android:textStyle="bold"
+                android:textAllCaps="true"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/simple_rectangle"
+                android:padding="7dp"
+                />
+
+            <com.jsibbold.zoomage.ZoomageView
+                android:id="@+id/ap_aadhar_iv"
+                android:layout_below="@+id/ap_aadhar_tv"
+                android:layout_marginTop="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                app:zoomage_restrictBounds="true"
+                app:zoomage_animateOnReset="true"
+                app:zoomage_autoResetMode="UNDER"
+                app:zoomage_autoCenter="true"
+                app:zoomage_zoomable="true"
+                fancy:zoomage_doubleTapToZoom="true"
+                app:zoomage_translatable="true"
+                app:zoomage_minScale="0.6"
+                app:zoomage_maxScale="10"
+                />
+
+            <View
+                android:id="@+id/ap_v2"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@color/gray"
+                android:layout_below="@+id/ap_aadhar_iv"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                />
+
+            <!--photo-->
+            <TextView
+                android:id="@+id/ap_photo_tv"
+                android:layout_below="@+id/ap_v2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/live_photo"
+                style="@style/CustomTextStyle16"
+                android:textStyle="bold"
+                android:textAllCaps="true"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/simple_rectangle"
+                android:padding="7dp"
+                />
+
+            <com.jsibbold.zoomage.ZoomageView
+                android:id="@+id/ap_photo_iv"
+                android:layout_below="@+id/ap_photo_tv"
+                android:layout_marginTop="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                app:zoomage_restrictBounds="true"
+                app:zoomage_animateOnReset="true"
+                app:zoomage_autoResetMode="UNDER"
+                app:zoomage_autoCenter="true"
+                app:zoomage_zoomable="true"
+                fancy:zoomage_doubleTapToZoom="true"
+                app:zoomage_translatable="true"
+                app:zoomage_minScale="0.6"
+                app:zoomage_maxScale="10"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"
+                />
+
+
+        </RelativeLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+</RelativeLayout>

@@ -1,9 +1,15 @@
 package com.carbyke.carbyke;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.os.Build;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -13,16 +19,24 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.kunzisoft.switchdatetime.SwitchDateTimeDialogFragment;
 import com.squareup.picasso.Picasso;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import mehdi.sakout.fancybuttons.FancyButton;
+import pub.devrel.easypermissions.AfterPermissionGranted;
+import pub.devrel.easypermissions.AppSettingsDialog;
+import pub.devrel.easypermissions.EasyPermissions;
 
-public class SearchCar extends AppCompatActivity implements View.OnClickListener {
+public class SearchCar extends AppCompatActivity implements View.OnClickListener, EasyPermissions.PermissionCallbacks {
 
     private ImageView background_iv;
     private ImageButton back_btn;
@@ -39,6 +53,8 @@ public class SearchCar extends AppCompatActivity implements View.OnClickListener
     private static final String DATE_TIME = "date_time";
     private static final String START_DATE_TIME = "start_date_time";
     private static final String END_DATE_TIME = "end_date_time";
+
+    private static final int DEVICE_LOCATION = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -150,7 +166,7 @@ public class SearchCar extends AppCompatActivity implements View.OnClickListener
 
 //            set location
             case R.id.sc_set_location_tv:
-                startActivity(new Intent(SearchCar.this, ChooseLocation.class));
+                grantPermission();
                 break;
 
 //            back button
@@ -203,7 +219,74 @@ public class SearchCar extends AppCompatActivity implements View.OnClickListener
     //   onclick
 
 
-//    pick up time
+    @AfterPermissionGranted(DEVICE_LOCATION)
+    private void grantPermission() {
+        String[] perms = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
+        if (EasyPermissions.hasPermissions(this, perms)) {
+            MySharedPrefs mySharedPrefs = new MySharedPrefs(SearchCar.this  );
+            mySharedPrefs.setUserLatLog(null, null);
+            startActivity(new Intent(SearchCar.this, ChooseLocation.class));
+
+            //Toast.makeText(this, "Permission granted 1", Toast.LENGTH_SHORT).show();
+            // Already have permission, do the thing
+            // ...
+        } else {
+            // Do not have permissions, request them now
+            EasyPermissions.requestPermissions(this, "Grant Permission to Access Device Location.",
+                    DEVICE_LOCATION, perms);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        // Forward results to EasyPermissions
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
+    }
+
+    @Override
+    public void onPermissionsGranted(int requestCode, List<String> list) {
+        //Toast.makeText(this, "Some permissions have been granted!", Toast.LENGTH_SHORT).show();
+        // Some permissions have been granted
+        // ...
+    }
+
+    @Override
+    public void onPermissionsDenied(int requestCode, List<String> list) {
+        String[] perms = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
+        if (EasyPermissions.somePermissionPermanentlyDenied(this, Arrays.asList(perms))) {
+            new MaterialDialog.Builder(this)
+                    .title("Grant Permission")
+                    .titleColor(getResources().getColor(R.color.black))
+                    .content("Please grant permission to access your location. Otherwise, We can not proceed further.")
+                    .contentColor(getResources().getColor(R.color.black))
+                    .icon(getResources().getDrawable(R.drawable.ic_error))
+                    .backgroundColor(getResources().getColor(R.color.white))
+                    .positiveText("Grant Permission")
+                    .positiveColor(getResources().getColor(R.color.lightGreen))
+                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            new AppSettingsDialog.Builder(SearchCar.this).build().show();
+                        }
+                    })
+                    .negativeText("Decline")
+                    .negativeColor(getResources().getColor(R.color.red))
+                    .onNegative(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .show();
+            //new AppSettingsDialog.Builder(this).build().show();
+        }
+
+    }
+
+
+    //    pick up time
     private void handlePickUpTime(final SwitchDateTimeDialogFragment dateTimeDialogFragment) {
         dateTimeDialogFragment.setOnButtonClickListener(new SwitchDateTimeDialogFragment.OnButtonClickListener() {
             @SuppressLint({"SetTextI18n", "SimpleDateFormat"})

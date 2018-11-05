@@ -117,6 +117,8 @@ public class Home extends AppCompatActivity
     //    on start
     public void onStart(){
         super.onStart();
+        MySharedPrefs mySharedPrefs = new MySharedPrefs(Home.this);
+        mySharedPrefs.initiateProfileData();;
         checkIfSignedIn();
     }
     //    on Start

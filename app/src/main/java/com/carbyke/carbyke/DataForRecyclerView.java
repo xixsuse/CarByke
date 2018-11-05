@@ -2,7 +2,8 @@ package com.carbyke.carbyke;
 
 public class DataForRecyclerView {
 
-    private String station, car_name, image_url, with_fuel_1, with_fuel_2, with_fuel_3, without_fuel_1, without_fuel_2, without_fuel_3, seater;
+    private String station, car_name, image_url, with_fuel_1, with_fuel_2, with_fuel_3, without_fuel_1, without_fuel_2
+            , without_fuel_3, seater, latitude, longitude, map_location;
 
     DataForRecyclerView(){
         }
@@ -49,5 +50,17 @@ public class DataForRecyclerView {
 
     public String getImage_url() {
         return image_url;
+    }
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public String getMap_location() {
+        return map_location;
     }
 }

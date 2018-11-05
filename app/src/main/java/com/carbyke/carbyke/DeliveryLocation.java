@@ -2,7 +2,6 @@ package com.carbyke.carbyke;
 
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -46,8 +45,6 @@ import java.util.Locale;
 import java.util.Objects;
 
 import im.delight.android.location.SimpleLocation;
-
-import static android.app.Activity.RESULT_CANCELED;
 
 
 /**
@@ -188,7 +185,7 @@ public class DeliveryLocation extends Fragment {
 //                                editor.putString(TYPE, "DELIVERY");
 //                                editor.apply();
                                 MySharedPrefs mySharedPrefs = new MySharedPrefs(getActivity());
-                                mySharedPrefs.setDeliveryLocation(address, "DELIVERY");
+                                mySharedPrefs.setSelectedLocationOrStation(address, "DELIVERY");
                                 getActivity().finish();
                             }
                         })

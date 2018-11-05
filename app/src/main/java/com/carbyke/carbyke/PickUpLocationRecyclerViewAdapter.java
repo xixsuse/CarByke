@@ -2,7 +2,6 @@ package com.carbyke.carbyke;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,9 +10,6 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import com.afollestad.materialdialogs.DialogAction;
-import com.afollestad.materialdialogs.MaterialDialog;
 
 import java.util.List;
 
@@ -57,13 +53,11 @@ public class PickUpLocationRecyclerViewAdapter extends RecyclerView.Adapter<Pick
             holder.tick_ib.setVisibility(View.VISIBLE);
             PickUpLocation.continue_b.setEnabled(true);
             PickUpLocation.continue_b.setBackgroundResource(R.color.lightGreen);
-//            sharedPreferencesLocation = context.getSharedPreferences(LOCATION, Context.MODE_PRIVATE);
-//            SharedPreferences.Editor editor = sharedPreferencesLocation.edit();
-//            editor.putString(STATION, info.getStation());
-//            editor.putString(TYPE, "SELF PICK-UP");
-//            editor.apply();
+
             MySharedPrefs mySharedPrefs = new MySharedPrefs(context);
-            mySharedPrefs.setDeliveryLocation(info.getStation(), "SELF PICK-UP");
+            mySharedPrefs.setSelectedLocationOrStation(info.getStation(), "SELF PICK-UP");
+
+            mySharedPrefs.setPickLocationData(info.getLatitude(), info.getLongitude(), info.getMap_location());
 
         }
 
