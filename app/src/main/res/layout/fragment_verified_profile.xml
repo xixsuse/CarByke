@@ -38,6 +38,8 @@
                 android:textStyle="bold"
                 android:textColor="@color/white"
                 android:paddingStart="@dimen/activity_horizontal_margin"
+                android:drawableEnd="@drawable/ic_verified"
+                android:drawablePadding="5dp"
                 tools:ignore="RtlSymmetry" />
 
             <!--loading view-->
@@ -92,10 +94,11 @@
                 app:zoomage_autoCenter="true"
                 app:zoomage_zoomable="true"
                 fancy:zoomage_doubleTapToZoom="true"
-                app:zoomage_translatable="true"
+                app:zoomage_translatable="false"
                 app:zoomage_minScale="0.6"
                 app:zoomage_maxScale="10"
                 android:layout_marginTop="8dp"
+                android:adjustViewBounds="true"
                 />
 
             <View
@@ -137,9 +140,10 @@
                 app:zoomage_autoCenter="true"
                 app:zoomage_zoomable="true"
                 fancy:zoomage_doubleTapToZoom="true"
-                app:zoomage_translatable="true"
+                app:zoomage_translatable="false"
                 app:zoomage_minScale="0.6"
                 app:zoomage_maxScale="10"
+                android:adjustViewBounds="true"
                 />
 
             <View
@@ -180,7 +184,7 @@
                 app:zoomage_autoCenter="true"
                 app:zoomage_zoomable="true"
                 fancy:zoomage_doubleTapToZoom="true"
-                app:zoomage_translatable="true"
+                app:zoomage_translatable="false"
                 app:zoomage_minScale="0.6"
                 app:zoomage_maxScale="10"
                 android:layout_marginBottom="@dimen/activity_vertical_margin"

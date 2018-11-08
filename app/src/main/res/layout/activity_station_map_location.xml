@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".StationMapLocation">
+
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/ml_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/topBarColor"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        >
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <!--back button-->
+            <ImageButton
+                android:id="@+id/ml_back_ib"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_return_back_white_smoke"
+                android:contentDescription="@string/error_while_loading_image" />
+
+            <TextView
+                android:layout_toEndOf="@+id/ml_back_ib"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/station_location"
+                style="@style/CustomTextStyle16"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:paddingStart="@dimen/activity_horizontal_margin"
+                tools:ignore="RtlSymmetry" />
+
+        </RelativeLayout>
+
+    </android.support.v7.widget.Toolbar>
+
+
+    <com.google.android.gms.maps.MapView
+        android:id="@+id/ml_mapview"
+        android:layout_below="@+id/ml_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <TextView
+        android:id="@+id/ml_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/CustomTextStyle12"
+        android:layout_below="@+id/ml_toolbar"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:background="@drawable/simple_rectangle"
+        android:padding="5dp"
+        android:drawableStart="@drawable/ic_location"
+        android:drawablePadding="5dp"
+        />
+
+
+</RelativeLayout>

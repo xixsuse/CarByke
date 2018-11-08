@@ -81,17 +81,12 @@ public class PickUpLocation extends Fragment{
         recyclerView.setLayoutManager(mLayoutManager);
 
 
-
-        sharedPreferencesStationDataOffline = Objects.requireNonNull(getActivity()).getSharedPreferences(STATION_DATA_PREF, Context.MODE_PRIVATE);
-
-
-
 //  continue button
         continue_b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 try {
-                    getActivity().finish();
+                    Objects.requireNonNull(getActivity()).finish();
                 }
                 catch (NullPointerException e){
                     //
@@ -122,6 +117,8 @@ public class PickUpLocation extends Fragment{
             }
         });
 
+        CheckConnection();
+        FetchDataOnline();
 
         return view;
     }
@@ -129,8 +126,7 @@ public class PickUpLocation extends Fragment{
 //    on start
     public void onStart(){
         super.onStart();
-        CheckConnection();
-        FetchDataOnline();
+
       //  LoadStationDataFromPrefs();
        // LoadData();
     }
@@ -198,20 +194,8 @@ public class PickUpLocation extends Fragment{
                 for (DataSnapshot postSnapshot : snapshot.getChildren()) {
                     DataForRecyclerView data = postSnapshot.getValue(DataForRecyclerView.class);
                     list.add(data);
-
-                    // storing data in shared pref for offline
-//                    try {
-//                        editor.putString(String.valueOf(station_count), data.getStation());
-//                        station_count++;
-//                    }
-//                    catch (NullPointerException e){
-//                        //
-//                    }
-
                 }
 
-//                editor.putString(COUNT, String.valueOf(station_count));
-//                editor.apply();
 
                 adapter = new PickUpLocationRecyclerViewAdapter(getContext(), list);
                 recyclerView.setAdapter(adapter);
@@ -229,32 +213,6 @@ public class PickUpLocation extends Fragment{
         });
 
     }//    fetch data if internet is available
-
-//    loading data from
-//    private void LoadStationDataFromPrefs(){
-//        String station;
-//        String cs;
-//        int ci;
-//        cs = sharedPreferencesStationDataOffline.getString(COUNT, "");
-//        if (TextUtils.isEmpty(cs)){
-//            FetchDataOnline();
-//            return;
-//        }
-//        ci = Integer.parseInt(cs);
-//        for (int i=0 ; i < ci ; i++){
-//            station = sharedPreferencesStationDataOffline.getString(String.valueOf(i),"");
-//            DataForRecyclerView dataForRecyclerView = new DataForRecyclerView();
-//            dataForRecyclerView.setStation(station);
-//            list.add(dataForRecyclerView);
-//            }
-//        adapter = new PickUpLocationRecyclerViewAdapter(getContext(), list);
-//        recyclerView.setAdapter(adapter);
-//        FetchDataOnline();
-//    }
-//
-    private void showNoInternetToast(){
-        Toast.makeText(getContext(), "No internet connection detected", Toast.LENGTH_SHORT).show();
-        }
 
 //        spin kit loading methods
         private void show(){

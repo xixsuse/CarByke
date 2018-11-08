@@ -8,9 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -18,7 +16,7 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.google.android.gms.auth.api.Auth;
+import com.github.ybq.android.spinkit.SpinKitView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -27,7 +25,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
-import java.io.File;
 import java.util.Objects;
 
 import co.ceryle.radiorealbutton.RadioRealButtonGroup;
@@ -49,13 +46,14 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
     private final static String PHONE_NUMBER = "phone_number";
     private final static String GENDER = "gender";
 
-    private ImageButton back_ib, logout_ib;
+    private ImageButton back_ib, logout_ib, if_verified_ib;
 
     private FancyButton update_fb;
 
     private RelativeLayout profile_verification_rl;
 
     private SharedPreferences sharedPreferences;
+    private SpinKitView loading;
 
 
     private DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child(USER_PROFILES);
@@ -75,6 +73,9 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
         gender_radio = findViewById(R.id.ep_radio_gender);
         update_fb = findViewById(R.id.ep_save_b);
         profile_verification_rl = findViewById(R.id.ep_profile_verification_rl);
+        loading = findViewById(R.id.ep_spin_kit);
+        if_verified_ib = findViewById(R.id.ep_if_verified_ib);
+
 
        // sharedPreferences = getSharedPreferences(PROFILE_DATA, MODE_PRIVATE);
         MySharedPrefs mySharedPrefs = new MySharedPrefs(EditProfile.this);
@@ -87,6 +88,8 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
         update_fb.setOnClickListener(this);
         phone_tv.setOnClickListener(this);
         profile_verification_rl.setOnClickListener(this);
+
+
     }
 
 
@@ -95,9 +98,29 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
         super.onStart();
         getProfileDataFromSharedPref();
         checkIfMailLinked();
+        checkIfProfileVerified();
     }
 
-//    checking if email linked
+    private void checkIfProfileVerified() {
+        final String key = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
+        final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+        databaseReference.child("verified_accounts").child(key)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        String status = dataSnapshot.child("status").getValue(String.class);
+                        if (TextUtils.equals(status, "verified")){
+                            if_verified_ib.setBackground(getResources().getDrawable(R.drawable.ic_verified));
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                    }
+                });
+    }
+
+    //    checking if email linked
     private void checkIfMailLinked() {
         mAuth = FirebaseAuth.getInstance();
         if (!Objects.requireNonNull(Objects.requireNonNull(mAuth.getCurrentUser()).getProviders()).contains("google.com")){
@@ -153,6 +176,7 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
 
 //    setting user data
     private void setData() {
+        show();
         String uid = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
         databaseReference.child(uid).child(PROFILE)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -204,12 +228,13 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
                                 .into(profile_image_iv);
 
                         saveFetchedDataInSharedPrefs(name, email, phone, gender);
+                        dismiss();
 
                     }
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                        dismiss();
                     }
                 });
     }
@@ -287,7 +312,7 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
 
 //                profile verification
             case R.id.ep_profile_verification_rl:
-
+                loading.setVisibility(View.VISIBLE);
                 final String key = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
                 final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
                 databaseReference.child("verified_accounts").child(key)
@@ -297,17 +322,16 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
                                 String status = dataSnapshot.child("status").getValue(String.class);
                                 if (TextUtils.equals(status, "verified")){
                                     getSupportFragmentManager().beginTransaction().add(R.id.ep_fragment_container_edit_profile, new VerifiedProfile(), "verified_profile").addToBackStack("").commit();
-                                    Toast.makeText(EditProfile.this, "verified", Toast.LENGTH_SHORT).show();
                                 }
                                 else {
                                     startActivity(new Intent(EditProfile.this, ProfileVerification.class));
                                 }
-
+                                loading.setVisibility(View.GONE);
                             }
 
                             @Override
                             public void onCancelled(@NonNull DatabaseError databaseError) {
-                                Toast.makeText(EditProfile.this, ""+databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+                                loading.setVisibility(View.GONE);
                             }
                         });
 
@@ -369,6 +393,12 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
     }
 //    on click
 
+    private void show(){
+        loading.setVisibility(View.VISIBLE);
+    }
+    private void dismiss(){
+        loading.setVisibility(View.GONE);
+    }
 
 //    end
 }

@@ -1,15 +1,18 @@
 package com.carbyke.carbyke;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -72,6 +75,27 @@ public class PickUpLocationRecyclerViewAdapter extends RecyclerView.Adapter<Pick
             }
         });
 
+        holder.relativeLayout.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                if (position == RecyclerView.NO_POSITION) return false;   // just a precaution in case if previous value is a null
+                // Updating old as well as new positions
+                notifyItemChanged(selectedPos);
+                selectedPos = position;
+                notifyItemChanged(selectedPos);
+                String station_lat, station_long;
+                station_lat = info.getLatitude();
+                station_long = info.getLongitude();
+                if (TextUtils.isEmpty(station_lat) || TextUtils.isEmpty(station_long)){
+                    Toast.makeText(context, "unable to fetch location", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    context.startActivity(new Intent(context, StationMapLocation.class));
+                }
+                return true;
+            }
+        });
+
     }
 
 
@@ -92,9 +116,9 @@ public class PickUpLocationRecyclerViewAdapter extends RecyclerView.Adapter<Pick
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView base_name_tv;
-        ImageButton tick_ib;
-        RelativeLayout relativeLayout;
+        private TextView base_name_tv;
+        private ImageButton tick_ib;
+        private RelativeLayout relativeLayout;
 
         ViewHolder(View itemView) {
             super(itemView);

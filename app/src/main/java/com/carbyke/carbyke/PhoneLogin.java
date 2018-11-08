@@ -217,10 +217,11 @@ public class PhoneLogin extends AppCompatActivity implements View.OnClickListene
 
         if (TextUtils.isEmpty(phoneNumber) || phoneNumber.length() < 10){
             Toast.makeText(PhoneLogin.this, "incorrect Phone Number", Toast.LENGTH_SHORT).show();
+            spinKitView.setVisibility(View.GONE);
             return;
         }
 
-        spinKitView.setVisibility(View.VISIBLE);
+       // spinKitView.setVisibility(View.VISIBLE);
         phoneNumber = countryCode+phoneNumber;
 
         setUpVerificationCallbacksSendCode();
@@ -471,7 +472,7 @@ public class PhoneLogin extends AppCompatActivity implements View.OnClickListene
         //ic
         String phoneNumber = phone_number_et.getText().toString();
 
-        spinKitView.setVisibility(View.VISIBLE);
+       // spinKitView.setVisibility(View.VISIBLE);
 
         phoneNumber = countryCode+phoneNumber;
         setUpVerificationCallbacksReSendCode();
@@ -502,9 +503,11 @@ public class PhoneLogin extends AppCompatActivity implements View.OnClickListene
                             verifyButton.setEnabled(false);
                             saveUserProfileDataInFirebaseDataBaseGOOGLE_PHONE(Objects.requireNonNull(task.getResult()).getUser());
                             Toast.makeText(PhoneLogin.this, "Congratulations! Login Successful.", Toast.LENGTH_SHORT).show();
+                            spinKitView.setVisibility(View.GONE);
                             PhoneLogin.this.finish();
                         } else {
                             showSignInFailedMessage((Objects.requireNonNull(task.getException())).getLocalizedMessage());
+                            spinKitView.setVisibility(View.GONE);
                         }
                     }
                 });
@@ -612,15 +615,54 @@ public class PhoneLogin extends AppCompatActivity implements View.OnClickListene
         switch (id){
 //            send code button
             case R.id.sendButton:
-                sendCode();
+                spinKitView.setVisibility(View.VISIBLE);
+                new CheckNetworkConnection(PhoneLogin.this, new CheckNetworkConnection.OnConnectionCallback() {
+                    @Override
+                    public void onConnectionSuccess() {
+                        sendCode();
+                    }
+                    @Override
+                    public void onConnectionFail(String msg) {
+                        NoInternetConnectionAlert noInternetConnectionAlert = new NoInternetConnectionAlert(PhoneLogin.this);
+                        noInternetConnectionAlert.DisplayNoInternetConnection();
+                        spinKitView.setVisibility(View.GONE);
+                    }
+                }).execute();
+
                 break;
 //            verify code
             case R.id.verifyButton:
-                verifyCode();
+                spinKitView.setVisibility(View.VISIBLE);
+                new CheckNetworkConnection(PhoneLogin.this, new CheckNetworkConnection.OnConnectionCallback() {
+                    @Override
+                    public void onConnectionSuccess() {
+                        verifyCode();
+                    }
+                    @Override
+                    public void onConnectionFail(String msg) {
+                        NoInternetConnectionAlert noInternetConnectionAlert = new NoInternetConnectionAlert(PhoneLogin.this);
+                        noInternetConnectionAlert.DisplayNoInternetConnection();
+                        spinKitView.setVisibility(View.GONE);
+                    }
+                }).execute();
+
                 break;
 //            resend code
             case R.id.resendButton:
-                resendCode();
+                spinKitView.setVisibility(View.VISIBLE);
+                new CheckNetworkConnection(PhoneLogin.this, new CheckNetworkConnection.OnConnectionCallback() {
+                    @Override
+                    public void onConnectionSuccess() {
+                        resendCode();
+                    }
+                    @Override
+                    public void onConnectionFail(String msg) {
+                        NoInternetConnectionAlert noInternetConnectionAlert = new NoInternetConnectionAlert(PhoneLogin.this);
+                        noInternetConnectionAlert.DisplayNoInternetConnection();
+                        spinKitView.setVisibility(View.GONE);
+                    }
+                }).execute();
+
                 break;
 //                wrong number
             case R.id.pl_wrong_number_tv:

@@ -23,7 +23,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="jar:file:/G:/AndroidStudio2.3.3/plugins/android/lib/android.jar!/images/material_design_icons/alert/ic_error_black_24dp.xml" />
+                                      <entry key="url" value="jar:file:/G:/AndroidStudio2.3.3/plugins/android/lib/android.jar!/images/material_design_icons/hardware/ic_keyboard_arrow_right_black_24dp.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -33,9 +33,11 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="outputName" value="ic_erro" />
+                            <entry key="height" value="16" />
+                            <entry key="outputName" value="ic_keyboard_arrow_right" />
                             <entry key="overrideSize" value="true" />
                             <entry key="sourceFile" value="C:\Users\Dell\Downloads\controls.svg" />
+                            <entry key="width" value="16" />
                           </map>
                         </option>
                       </PersistentState>

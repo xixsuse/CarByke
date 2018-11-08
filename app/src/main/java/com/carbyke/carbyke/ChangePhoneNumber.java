@@ -189,7 +189,7 @@ public class ChangePhoneNumber extends AppCompatActivity implements View.OnClick
         }
 
 
-        spinKitView.setVisibility(View.VISIBLE);
+        //spinKitView.setVisibility(View.VISIBLE);
         phoneNumber = countryCode+phoneNumber;
         firebaseAuth = FirebaseAuth.getInstance();
 
@@ -451,13 +451,14 @@ public class ChangePhoneNumber extends AppCompatActivity implements View.OnClick
                             //  statusText.setText("Signed In");
                             resendButton.setEnabled(false);
                             verifyButton.setEnabled(false);
-                            signInWithPhoneAuthCredential(credential);
+                          //  signInWithPhoneAuthCredential(credential);
                             saveUserProfileDataInFirebaseDataBase();
                             Toast.makeText(ChangePhoneNumber.this, "Successful.", Toast.LENGTH_SHORT).show();
 
                         } else {
                             ShowMessage showMessage = new ShowMessage(ChangePhoneNumber.this);
                             showMessage.failMessageWithTitle("failed", Objects.requireNonNull(task.getException()).getMessage());
+                            spinKitView.setVisibility(View.GONE);
                         }
                     }
                 });
@@ -473,6 +474,7 @@ public class ChangePhoneNumber extends AppCompatActivity implements View.OnClick
         DatabaseReference databaseReference = FirebaseDatabase.getInstance()
                 .getReference().child(USER_PROFILES).child(uid).child(PROFILE);
         databaseReference.child(PHONE_NUMBER).setValue(number);
+        spinKitView.setVisibility(View.GONE);
         ChangePhoneNumber.this.finish();
     }
 //    saving data at firebase database
@@ -483,7 +485,7 @@ public class ChangePhoneNumber extends AppCompatActivity implements View.OnClick
         //ic
         String phoneNumber = phone_number_et.getText().toString();
 
-        spinKitView.setVisibility(View.VISIBLE);
+        //spinKitView.setVisibility(View.VISIBLE);
 
         phoneNumber = countryCode+phoneNumber;
         //        check if using same number
@@ -517,15 +519,51 @@ public class ChangePhoneNumber extends AppCompatActivity implements View.OnClick
         switch (id){
 //            send code button
             case R.id.pn_sendButton:
-                sendCode();
+                spinKitView.setVisibility(View.VISIBLE);
+                new CheckNetworkConnection(ChangePhoneNumber.this, new CheckNetworkConnection.OnConnectionCallback() {
+                    @Override
+                    public void onConnectionSuccess() {
+                        sendCode();
+                    }
+                    @Override
+                    public void onConnectionFail(String msg) {
+                        NoInternetConnectionAlert noInternetConnectionAlert = new NoInternetConnectionAlert(ChangePhoneNumber.this);
+                        noInternetConnectionAlert.DisplayNoInternetConnection();
+                        spinKitView.setVisibility(View.GONE);
+                    }
+                }).execute();
                 break;
 //            verify code
             case R.id.pn_verifyButton:
-                verifyCode();
+                spinKitView.setVisibility(View.VISIBLE);
+                new CheckNetworkConnection(ChangePhoneNumber.this, new CheckNetworkConnection.OnConnectionCallback() {
+                    @Override
+                    public void onConnectionSuccess() {
+                        verifyCode();
+                    }
+                    @Override
+                    public void onConnectionFail(String msg) {
+                        NoInternetConnectionAlert noInternetConnectionAlert = new NoInternetConnectionAlert(ChangePhoneNumber.this);
+                        noInternetConnectionAlert.DisplayNoInternetConnection();
+                        spinKitView.setVisibility(View.GONE);
+                    }
+                }).execute();
                 break;
 //            resend code
             case R.id.pn_resendButton:
-                resendCode();
+                spinKitView.setVisibility(View.VISIBLE);
+                new CheckNetworkConnection(ChangePhoneNumber.this, new CheckNetworkConnection.OnConnectionCallback() {
+                    @Override
+                    public void onConnectionSuccess() {
+                        resendCode();
+                    }
+                    @Override
+                    public void onConnectionFail(String msg) {
+                        NoInternetConnectionAlert noInternetConnectionAlert = new NoInternetConnectionAlert(ChangePhoneNumber.this);
+                        noInternetConnectionAlert.DisplayNoInternetConnection();
+                        spinKitView.setVisibility(View.GONE);
+                    }
+                }).execute();
                 break;
 //                wrong number
             case R.id.pn_wrong_number_tv:

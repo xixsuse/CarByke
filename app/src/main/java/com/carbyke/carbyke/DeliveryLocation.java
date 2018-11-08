@@ -223,7 +223,7 @@ public class DeliveryLocation extends Fragment {
                 googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
                 googleMap.getUiSettings().setZoomControlsEnabled(false);
                 googleMap.getUiSettings().setRotateGesturesEnabled(true);
-                googleMap.getUiSettings().setCompassEnabled(true);
+                googleMap.getUiSettings().setCompassEnabled(false);
                 googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
             }
         });
