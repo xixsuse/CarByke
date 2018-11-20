@@ -13,7 +13,7 @@
     <ImageView
         android:id="@+id/sc_background_iv"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="250dp"
         android:background="@drawable/home_fade_background"
         android:scaleType="center"
         android:contentDescription="@string/error_while_loading_image"/>
@@ -236,3 +236,95 @@
 
 
 </RelativeLayout>
+
+
+
+
+<!--<RelativeLayout-->
+<!--android:id="@+id/sc_set_time_rl"-->
+<!--android:layout_width="match_parent"-->
+<!--android:layout_height="wrap_content"-->
+<!--android:layout_below="@+id/ff_cv2"-->
+<!--android:layout_marginTop="24dp"-->
+<!--android:layout_marginStart="@dimen/activity_horizontal_margin"-->
+<!--android:layout_marginEnd="@dimen/activity_horizontal_margin"-->
+    <!--&gt;-->
+
+<!--&lt;!&ndash;pick up date time relative layout&ndash;&gt;-->
+<!--<RelativeLayout-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--&gt;-->
+    <!--&lt;!&ndash;from&ndash;&gt;-->
+    <!--<TextView-->
+        <!--android:id="@+id/sc_from_tv"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="@string/from"-->
+        <!--style="@style/CustomTextStyle12"-->
+        <!--android:textStyle="bold"-->
+        <!--/>-->
+    <!--&lt;!&ndash;pick up date and time&ndash;&gt;-->
+    <!--<TextView-->
+        <!--android:id="@+id/sc_pick_up_time_tv"-->
+        <!--android:layout_below="@+id/sc_from_tv"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:hint="@string/pick_up"-->
+        <!--style="@style/CustomTextStyle16"-->
+        <!--android:padding="@dimen/textViewPaddingBottom"-->
+        <!--android:layout_marginTop="3dp"-->
+        <!--android:background="@drawable/under_line_textview"-->
+        <!--android:drawableStart="@drawable/ic_start_date"-->
+        <!--android:drawablePadding="@dimen/textViewPaddingBottom"-->
+        <!--android:paddingEnd="@dimen/textViewPadding"-->
+        <!--tools:ignore="RtlSymmetry" />-->
+
+<!--</RelativeLayout>-->
+
+<!--<ImageButton-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:background="@drawable/ic_right_arrow"-->
+    <!--android:layout_centerHorizontal="true"-->
+    <!--android:layout_centerInParent="true"-->
+    <!--android:contentDescription="@string/error_while_loading_image" />-->
+
+
+<!--&lt;!&ndash;drop off date time relative layout&ndash;&gt;-->
+<!--<RelativeLayout-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--&gt;-->
+    <!--&lt;!&ndash;until&ndash;&gt;-->
+    <!--<TextView-->
+        <!--android:id="@+id/sc_until_tv"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="@string/until"-->
+        <!--style="@style/CustomTextStyle12"-->
+        <!--android:textStyle="bold"-->
+        <!--android:layout_alignParentEnd="true"-->
+        <!--/>-->
+    <!--&lt;!&ndash;pick up date and time&ndash;&gt;-->
+    <!--<TextView-->
+        <!--android:id="@+id/sc_drop_off_time_tv"-->
+        <!--android:layout_below="@+id/sc_until_tv"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:hint="@string/drop_off"-->
+        <!--style="@style/CustomTextStyle16"-->
+        <!--android:padding="@dimen/textViewPaddingBottom"-->
+        <!--android:layout_marginTop="3dp"-->
+        <!--android:background="@drawable/under_line_textview"-->
+        <!--android:drawableStart="@drawable/ic_time_end_disabled"-->
+        <!--android:drawablePadding="@dimen/textViewPaddingBottom"-->
+        <!--android:paddingEnd="@dimen/textViewPadding"-->
+        <!--android:layout_alignParentEnd="true"-->
+        <!--tools:ignore="RtlSymmetry"-->
+        <!--android:textColorHint="@color/lightCoral"-->
+        <!--android:enabled="false"-->
+        <!--/>-->
+
+<!--</RelativeLayout>-->
+<!--</RelativeLayout>-->

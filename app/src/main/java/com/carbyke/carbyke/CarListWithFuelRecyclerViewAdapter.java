@@ -91,6 +91,7 @@ public class CarListWithFuelRecyclerViewAdapter extends RecyclerView.Adapter<Car
             @Override
             public void onClick(View view) {
                 String station_lat, station_long;
+
                 station_lat = mySharedPrefs.getPickLocationLat();
                 station_long = mySharedPrefs.getPickLocationLong();
                 if (TextUtils.isEmpty(station_lat) || TextUtils.isEmpty(station_long)){

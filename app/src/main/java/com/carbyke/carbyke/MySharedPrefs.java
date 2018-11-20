@@ -43,8 +43,13 @@ public class MySharedPrefs {
 //    selected pick up station data
     private static final String SELECTED_PICK_UP_LOCATION = "selected_pick_up_location";
     private static final String MAP_LOCATION = "map_location";
+    private static final String KEY = "key";
 
+//    came from search activity or searched list activity
+    private static final String CAME_FROM_S_OR_SL = "came_from_s_or_sl";
+    private static final String VALUE = "value";
 
+//    -----------------------------------------------------------------------------------------------------------------------------------------
 
     MySharedPrefs(Context context){
         this.context = context;
@@ -74,6 +79,7 @@ public class MySharedPrefs {
         return sharedPreferences.getString(LOGIN_MODE, "");
     }
 
+    //    -----------------------------------------------------------------------------------------------------------------------------------------
 //    delivery location
     public void setSelectedLocationOrStation(String station, String type){
         sharedPreferences = context.getSharedPreferences(LOCATION, Context.MODE_PRIVATE);
@@ -91,6 +97,7 @@ public class MySharedPrefs {
         return sharedPreferences.getString(TYPE, "");
     }
 
+    //    -----------------------------------------------------------------------------------------------------------------------------------------
 //    edit profile data
     public void initiateProfileData(){
         sharedPreferences = context.getSharedPreferences(PROFILE_DATA, Context.MODE_PRIVATE);
@@ -154,7 +161,7 @@ public class MySharedPrefs {
         return sharedPreferences.getString(END_DATE_TIME, "");
     }
 
-
+    //    -----------------------------------------------------------------------------------------------------------------------------------------
 //    user location lat and long
     public void setUserLatLog(String latitude, String longitude){
         sharedPreferences = context.getSharedPreferences(USER_LAT_LOG, Context.MODE_PRIVATE);
@@ -172,8 +179,14 @@ public class MySharedPrefs {
         return sharedPreferences.getString(LONGITUDE, "");
     }
 
-
+    //    -----------------------------------------------------------------------------------------------------------------------------------------
 //    selected pick up station data
+    public void setPickLocationDataKey(String key){
+        sharedPreferences = context.getSharedPreferences(SELECTED_PICK_UP_LOCATION, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(KEY, key);
+        editor.apply();
+    }
     public void setPickLocationData(String latitude, String longitude, String map_location){
         sharedPreferences = context.getSharedPreferences(SELECTED_PICK_UP_LOCATION, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -181,6 +194,10 @@ public class MySharedPrefs {
         editor.putString(LONGITUDE, longitude);
         editor.putString(MAP_LOCATION, map_location);
         editor.apply();
+    }
+    public String getPickLocationKey() {
+        sharedPreferences = context.getSharedPreferences(SELECTED_PICK_UP_LOCATION, Context.MODE_PRIVATE);
+        return sharedPreferences.getString(KEY, "");
     }
     public String getPickLocationLat() {
         sharedPreferences = context.getSharedPreferences(SELECTED_PICK_UP_LOCATION, Context.MODE_PRIVATE);
@@ -193,6 +210,19 @@ public class MySharedPrefs {
     public String getPickLocationMapLocation() {
         sharedPreferences = context.getSharedPreferences(SELECTED_PICK_UP_LOCATION, Context.MODE_PRIVATE);
         return sharedPreferences.getString(MAP_LOCATION, "");
+    }
+
+    //    -----------------------------------------------------------------------------------------------------------------------------------------
+    //    came from search activity or searched list activity
+    public void setCameFromSOrSl(String value){
+        sharedPreferences = context.getSharedPreferences(CAME_FROM_S_OR_SL, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(VALUE, value);
+        editor.apply();
+    }
+    public String getCameFromSOrSl() {
+        sharedPreferences = context.getSharedPreferences(CAME_FROM_S_OR_SL, Context.MODE_PRIVATE);
+        return sharedPreferences.getString(VALUE, "");
     }
 
 

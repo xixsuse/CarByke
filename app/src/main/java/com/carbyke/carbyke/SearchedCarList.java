@@ -130,6 +130,9 @@ public class SearchedCarList extends AppCompatActivity implements View.OnClickLi
         }
 
         else if (id == R.id.cc_place_name_tv){
+            MySharedPrefs mySharedPrefs = new MySharedPrefs(SearchedCarList.this);
+            mySharedPrefs.setCameFromSOrSl("searched_list_car");
+            SearchedCarList.this.finish();
             startActivity(new Intent(SearchedCarList.this, ChooseLocation.class));
         }
 

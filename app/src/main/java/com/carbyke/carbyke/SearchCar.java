@@ -131,6 +131,8 @@ public class SearchCar extends AppCompatActivity implements View.OnClickListener
 //        editor.apply();
         MySharedPrefs mySharedPrefs = new MySharedPrefs(SearchCar.this);
         mySharedPrefs.setDatetimeBooking(start_date_time, end_date_time);
+        mySharedPrefs.setUserLatLog(null, null);
+        mySharedPrefs.setPickLocationData(null, null, null);
 
     }
 //    saving date and time in shared prefs
@@ -206,7 +208,7 @@ public class SearchCar extends AppCompatActivity implements View.OnClickListener
             //                drop off date and time
             case R.id.sc_drop_off_time_tv:
                 if (TextUtils.isEmpty(pick_up_time_tv.getText().toString())){
-                    Toast.makeText(this, "Please Select Pick up time first", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Please Select Pick up time !", Toast.LENGTH_SHORT).show();
                 }
                 else {
                     handleDropOffTime();
@@ -225,6 +227,8 @@ public class SearchCar extends AppCompatActivity implements View.OnClickListener
         if (EasyPermissions.hasPermissions(this, perms)) {
             MySharedPrefs mySharedPrefs = new MySharedPrefs(SearchCar.this  );
             mySharedPrefs.setUserLatLog(null, null);
+            mySharedPrefs.setPickLocationData(null, null, null);
+            mySharedPrefs.setCameFromSOrSl("search");
             startActivity(new Intent(SearchCar.this, ChooseLocation.class));
 
             //Toast.makeText(this, "Permission granted 1", Toast.LENGTH_SHORT).show();
@@ -295,7 +299,7 @@ public class SearchCar extends AppCompatActivity implements View.OnClickListener
 
                 if (checkIfPickTimeIsNotLessThanCurrentTime(date)){
                     pick_up_time_tv.callOnClick();
-                    Toast.makeText(SearchCar.this, "Pick time can not be earlier than current time...", Toast.LENGTH_LONG).show();
+                    Toast.makeText(SearchCar.this, "Pick time can not be earlier than current time !", Toast.LENGTH_LONG).show();
                     //if (TextUtils.isEmpty(pick_up_time_tv.getText().toString())) date_to_be_set_for_pick_up = new Date();
                     return;
                 }
@@ -314,7 +318,7 @@ public class SearchCar extends AppCompatActivity implements View.OnClickListener
                         drop_off_time_tv.setBackgroundResource(R.drawable.corner_rectangle_rent_home);
                         drop_off_time_tv.setText(day.format(date_to_be_set_for_drop_off)+"\n"+dateMonthYear.format(date_to_be_set_for_drop_off)+"\n"+time.format(date_to_be_set_for_drop_off));
 
-                        Toast.makeText(SearchCar.this, "drop off time updated...", Toast.LENGTH_LONG).show();
+                        Toast.makeText(SearchCar.this, "drop off time updated !", Toast.LENGTH_LONG).show();
                     }
                 }
 
@@ -389,7 +393,7 @@ public class SearchCar extends AppCompatActivity implements View.OnClickListener
 
                 if (checkIfDropOffTimeIsNotLessThanPickUpTime(date)){
                     drop_off_time_tv.callOnClick();
-                    Toast.makeText(SearchCar.this, "Drop off time can not be earlier/equal to pick-up time...", Toast.LENGTH_LONG).show();
+                    Toast.makeText(SearchCar.this, "Drop off time can not be earlier than pick-up time !", Toast.LENGTH_LONG).show();
                     return;
                 }
 

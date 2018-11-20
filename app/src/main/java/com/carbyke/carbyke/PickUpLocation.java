@@ -2,7 +2,7 @@ package com.carbyke.carbyke;
 
 
 import android.annotation.SuppressLint;
-import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -12,7 +12,6 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +26,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
@@ -76,7 +74,7 @@ public class PickUpLocation extends Fragment{
         recyclerView = view.findViewById(R.id.ul_recyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.isDuplicateParentStateEnabled();
-        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
+        final LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         // Setting RecyclerView layout as LinearLayout.
         recyclerView.setLayoutManager(mLayoutManager);
 
@@ -86,7 +84,16 @@ public class PickUpLocation extends Fragment{
             @Override
             public void onClick(View view) {
                 try {
-                    Objects.requireNonNull(getActivity()).finish();
+                    MySharedPrefs mySharedPrefs = new MySharedPrefs(getActivity());
+                    String value = mySharedPrefs.getCameFromSOrSl();
+                    if (TextUtils.equals(value, "search")){
+                        Objects.requireNonNull(getActivity()).finish();
+                    }
+                    else if (TextUtils.equals(value, "searched_list_car")){
+                        Objects.requireNonNull(getActivity()).finish();
+                        startActivity(new Intent(getActivity(), SearchedCarList.class));
+                    }
+
                 }
                 catch (NullPointerException e){
                     //
@@ -142,12 +149,16 @@ public class PickUpLocation extends Fragment{
                 }
 
                 for (DataSnapshot postSnapshot : snapshot.getChildren()) {
-                    DataForRecyclerView data = postSnapshot.getValue(DataForRecyclerView.class);
+                    DataForRecyclerView data = new DataForRecyclerView();
                     // filtering
-                    if (data != null && data.getStation().toLowerCase().contains(s.toString().toLowerCase())) {
-                        list.add(data);
-                    }
+                    if (!TextUtils.isEmpty(data.getStation())) {
+                        if (data.getStation().toLowerCase().contains(s.toString().toLowerCase())) {
 
+                            data.setStation(postSnapshot.child("station").getValue(String.class));
+                            data.setPickUpLocationKey(postSnapshot.getKey());
+                            list.add(data);
+                        }
+                    }
                 }
 
                 adapter = new PickUpLocationRecyclerViewAdapter(getContext(), list);
@@ -189,10 +200,13 @@ public class PickUpLocation extends Fragment{
                 if(list!=null) {
                     list.clear();  // v v v v important (eliminate duplication of data)
                 }
-
-                //SharedPreferences.Editor editor = sharedPreferencesStationDataOffline.edit();
                 for (DataSnapshot postSnapshot : snapshot.getChildren()) {
-                    DataForRecyclerView data = postSnapshot.getValue(DataForRecyclerView.class);
+                    DataForRecyclerView data = new DataForRecyclerView();
+                    data.setStation(postSnapshot.child("station").getValue(String.class));
+                    data.setLatitude(postSnapshot.child("latitude").getValue(String.class));
+                    data.setLongitude(postSnapshot.child("longitude").getValue(String.class));
+                    data.setMap_location(postSnapshot.child("map_location").getValue(String.class));
+                    data.setPickUpLocationKey(postSnapshot.getKey());
                     list.add(data);
                 }
 

@@ -26,6 +26,7 @@ import com.github.ybq.android.spinkit.SpinKitView;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -120,19 +121,56 @@ public class CarListWithFuel extends Fragment implements EasyPermissions.Permiss
                 ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
             }
             else{
-
+                final MySharedPrefs mySharedPrefs = new MySharedPrefs(getActivity());
                 try {
                     // googleMap.setMyLocationEnabled(true);
                     String latitude = String.valueOf(getLatitude());
                     String longitude = String.valueOf(getLongitude());
-                    MySharedPrefs mySharedPrefs = new MySharedPrefs(getActivity());
+
                     mySharedPrefs.setUserLatLog(latitude, longitude);
 
-                    FetchDataOnline();
+                    final String key = mySharedPrefs.getPickLocationKey();
+                    final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("pick_up_base");
+                    databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            String latitude, longitude, map_location;
+                            dataSnapshot = dataSnapshot.child(key);
+                            latitude = dataSnapshot.child("latitude").getValue(String.class);
+                            longitude = dataSnapshot.child("longitude").getValue(String.class);
+                            map_location = dataSnapshot.child("map_location").getValue(String.class);
+                            mySharedPrefs.setPickLocationData(latitude, longitude, map_location);
+                            FetchDataOnline();
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            FetchDataOnline();
+                        }
+                    });
+
+
 
                 } catch (IndexOutOfBoundsException | NullPointerException e) {
                     e.printStackTrace();
-                    FetchDataOnline();
+                    String key = mySharedPrefs.getPickLocationKey();
+                    final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("pick_up_base").child(key);
+                    databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            String latitude, longitude, map_location;
+                            latitude = dataSnapshot.child("latitude").getValue(String.class);
+                            longitude = dataSnapshot.child("longitude").getValue(String.class);
+                            map_location = dataSnapshot.child("map_location").getValue(String.class);
+                            mySharedPrefs.setPickLocationData(latitude, longitude, map_location);
+                            FetchDataOnline();
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            FetchDataOnline();
+                        }
+                    });
                     dismiss();
                 }
             }

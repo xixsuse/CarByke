@@ -249,7 +249,7 @@ public class ChangePhoneNumber extends AppCompatActivity implements View.OnClick
                                     .positiveText("Try Again")
                                     .positiveColorRes(R.color.green)
                                     .backgroundColor(getResources().getColor(R.color.white))
-                                    .icon(getResources().getDrawable(R.drawable.ic_warning))
+                                    .icon(getResources().getDrawable(R.drawable.ic_error))
                                     .show();
                             spinKitView.setVisibility(View.GONE);
 
@@ -359,14 +359,14 @@ public class ChangePhoneNumber extends AppCompatActivity implements View.OnClick
                         if (e instanceof FirebaseAuthInvalidCredentialsException) {
                             // Invalid request
                             new MaterialDialog.Builder(ChangePhoneNumber.this)
-                                    .title("Invalid credential")
+                                    .title("Invalid Credential")
                                     .titleColor(getResources().getColor(R.color.black))
                                     .content(e.getLocalizedMessage())
                                     .contentColorRes(R.color.black)
                                     .positiveText("Okay")
                                     .positiveColorRes(R.color.green)
                                     .backgroundColor(getResources().getColor(R.color.white))
-                                    .icon(getResources().getDrawable(R.drawable.ic_warning))
+                                    .icon(getResources().getDrawable(R.drawable.ic_error))
                                     .show();
                             spinKitView.setVisibility(View.GONE);
 
@@ -457,7 +457,7 @@ public class ChangePhoneNumber extends AppCompatActivity implements View.OnClick
 
                         } else {
                             ShowMessage showMessage = new ShowMessage(ChangePhoneNumber.this);
-                            showMessage.failMessageWithTitle("failed", Objects.requireNonNull(task.getException()).getMessage());
+                            showMessage.failMessageWithTitle("Failed", Objects.requireNonNull(task.getException()).getMessage());
                             spinKitView.setVisibility(View.GONE);
                         }
                     }

@@ -129,7 +129,7 @@
                     android:background="@drawable/corner_rectangle_rent_home"
                     android:padding="@dimen/textViewPadding"
                     android:drawableEnd="@drawable/ic_mobile"
-                    android:inputType="phone"
+                    android:inputType="number"
                     android:textStyle="bold"
                     android:maxLength="10"
                     android:layout_marginStart="@dimen/activity_horizontal_margin"

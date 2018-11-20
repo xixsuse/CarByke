@@ -45,7 +45,7 @@ public class ShowMessage {
                     .positiveText("Okay")
                     .positiveColorRes(R.color.black)
                     .backgroundColor(context.getResources().getColor(R.color.white))
-                    .icon(context.getResources().getDrawable(R.drawable.ic_warning))
+                    .icon(context.getResources().getDrawable(R.drawable.ic_error))
                     .show();
         }
         catch (Exception e){

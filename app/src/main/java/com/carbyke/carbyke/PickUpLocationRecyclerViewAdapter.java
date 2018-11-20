@@ -60,6 +60,7 @@ public class PickUpLocationRecyclerViewAdapter extends RecyclerView.Adapter<Pick
             MySharedPrefs mySharedPrefs = new MySharedPrefs(context);
             mySharedPrefs.setSelectedLocationOrStation(info.getStation(), "SELF PICK-UP");
 
+            mySharedPrefs.setPickLocationDataKey(info.getPickUpLocationKey());
             mySharedPrefs.setPickLocationData(info.getLatitude(), info.getLongitude(), info.getMap_location());
 
         }

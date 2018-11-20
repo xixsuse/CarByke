@@ -271,14 +271,14 @@ public class PhoneLogin extends AppCompatActivity implements View.OnClickListene
                         if (e instanceof FirebaseAuthInvalidCredentialsException) {
                             // Invalid request
                             new MaterialDialog.Builder(PhoneLogin.this)
-                                    .title("Invalid credential")
+                                    .title("Invalid Credential")
                                     .titleColor(getResources().getColor(R.color.black))
                                     .content(e.getLocalizedMessage())
                                     .contentColorRes(R.color.black)
                                     .positiveText("Try Again")
                                     .positiveColorRes(R.color.green)
                                     .backgroundColor(getResources().getColor(R.color.white))
-                                    .icon(getResources().getDrawable(R.drawable.ic_warning))
+                                    .icon(getResources().getDrawable(R.drawable.ic_error))
                                     .show();
                             spinKitView.setVisibility(View.GONE);
 
@@ -382,14 +382,14 @@ public class PhoneLogin extends AppCompatActivity implements View.OnClickListene
                         if (e instanceof FirebaseAuthInvalidCredentialsException) {
                             // Invalid request
                             new MaterialDialog.Builder(PhoneLogin.this)
-                                    .title("Invalid credential")
+                                    .title("Invalid Credential")
                                     .titleColor(getResources().getColor(R.color.black))
                                     .content(e.getLocalizedMessage())
                                     .contentColorRes(R.color.black)
                                     .positiveText("Okay")
                                     .positiveColorRes(R.color.green)
                                     .backgroundColor(getResources().getColor(R.color.white))
-                                    .icon(getResources().getDrawable(R.drawable.ic_warning))
+                                    .icon(getResources().getDrawable(R.drawable.ic_error))
                                     .show();
                             spinKitView.setVisibility(View.GONE);
 
@@ -544,7 +544,7 @@ public class PhoneLogin extends AppCompatActivity implements View.OnClickListene
     private void showSignInFailedMessage(String errorMessage){
         try{
             new MaterialDialog.Builder(PhoneLogin.this)
-                    .title("Account linking failed")
+                    .title("Account Linking Failed")
                     .content(Objects.requireNonNull(errorMessage))
                     .contentColorRes(R.color.black)
                     .titleColor(getResources().getColor(R.color.googleRed))
@@ -552,7 +552,7 @@ public class PhoneLogin extends AppCompatActivity implements View.OnClickListene
                     .positiveText("Okay")
                     .positiveColorRes(R.color.black)
                     .backgroundColor(getResources().getColor(R.color.white))
-                    .icon(getResources().getDrawable(R.drawable.ic_warning))
+                    .icon(getResources().getDrawable(R.drawable.ic_error))
                     .onPositive(new MaterialDialog.SingleButtonCallback() {
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {

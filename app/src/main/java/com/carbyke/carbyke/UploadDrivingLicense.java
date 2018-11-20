@@ -212,7 +212,7 @@ public class UploadDrivingLicense extends Fragment {
     private void selectImageToUpload() {
         CropImage.activity()
                 .setGuidelines(CropImageView.Guidelines.ON_TOUCH)
-                .setOutputCompressQuality(30)
+                .setOutputCompressQuality(15)
                 .setInitialCropWindowPaddingRatio(0)
                 .start(Objects.requireNonNull(getActivity()), this);
     }

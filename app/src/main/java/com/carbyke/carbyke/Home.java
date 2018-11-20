@@ -22,6 +22,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -120,6 +126,29 @@ public class Home extends AppCompatActivity
         MySharedPrefs mySharedPrefs = new MySharedPrefs(Home.this);
         mySharedPrefs.initiateProfileData();;
         checkIfSignedIn();
+
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String url ="https://us-central1-carbyke-a3301.cloudfunctions.net/pickBase?text=-LMzea0bkxgwJROhBVPE";
+
+// Request a string response from the provided URL.
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // Display the first 500 characters of the response string.
+                        Toast.makeText(Home.this, ""+response, Toast.LENGTH_LONG).show();
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(Home.this, ""+error.getMessage(), Toast.LENGTH_SHORT).show();
+                //mTextView.setText("That didn't work!");
+            }
+        });
+
+// Add the request to the RequestQueue.
+        queue.add(stringRequest);
+
     }
     //    on Start
 
@@ -330,7 +359,7 @@ private void saveFetchedDataInSharedPrefs(String name, String email, String phon
 //            open search car activity
             case R.id.ch_car_ib:
                startActivity(new Intent(Home.this, SearchCar.class));
-                //Log.w("r23", databaseReference.push().getKey());
+                //Log.w("r23", databaseReference.push().getPickUpLocationKey());
                 break;
 //            open search bike activity
             case R.id.ch_bike_ib:
