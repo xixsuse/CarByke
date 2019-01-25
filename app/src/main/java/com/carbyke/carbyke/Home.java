@@ -136,12 +136,12 @@ public class Home extends AppCompatActivity
                     @Override
                     public void onResponse(String response) {
                         // Display the first 500 characters of the response string.
-                        Toast.makeText(Home.this, ""+response, Toast.LENGTH_LONG).show();
+                       // Toast.makeText(Home.this, ""+response, Toast.LENGTH_LONG).show();
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(Home.this, ""+error.getMessage(), Toast.LENGTH_SHORT).show();
+             //   Toast.makeText(Home.this, ""+error.getMessage(), Toast.LENGTH_SHORT).show();
                 //mTextView.setText("That didn't work!");
             }
         });

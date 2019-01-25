@@ -50,7 +50,7 @@ public class SearchedCarList extends AppCompatActivity implements View.OnClickLi
         sharedPreferencesLocation = getSharedPreferences(LOCATION, Context.MODE_PRIVATE);
         sharedPreferencesDateTime = getSharedPreferences(DATE_TIME, Context.MODE_PRIVATE);
 
-        //Initializing the tablayout
+        //Initializing the tab layout
         tabLayout = findViewById(R.id.cc_tabLayout);
 
         //Adding the tabs using addTab() method

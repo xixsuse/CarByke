@@ -100,19 +100,20 @@ class NetWorkInfoUtility {
     }
 
     private boolean isOnline() {
-        try {
-            HttpURLConnection httpURLConnection =
-                    (HttpURLConnection)(new URL("http://www.google.com").openConnection());
-            httpURLConnection.setRequestProperty("User-Agent", "Test");
-            httpURLConnection.setRequestProperty("Connection", "close");
-            httpURLConnection.setConnectTimeout(7000);
-            httpURLConnection.setReadTimeout(7000);
-            httpURLConnection.connect();
-            return (httpURLConnection.getResponseCode() == 200); // 200 is for success
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
+        return true;
+//        try {
+//            HttpURLConnection httpURLConnection =
+//                    (HttpURLConnection)(new URL("http://www.google.com").openConnection());
+//            httpURLConnection.setRequestProperty("User-Agent", "Test");
+//            httpURLConnection.setRequestProperty("Connection", "close");
+//            httpURLConnection.setConnectTimeout(7000);
+//            httpURLConnection.setReadTimeout(7000);
+//            httpURLConnection.connect();
+//            return (httpURLConnection.getResponseCode() == 200); // 200 is for success
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            return false;
+//        }
     }
 
 //    private boolean isOnline() {

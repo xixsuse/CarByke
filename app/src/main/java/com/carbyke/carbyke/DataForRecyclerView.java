@@ -3,10 +3,35 @@ package com.carbyke.carbyke;
 public class DataForRecyclerView {
 
     private String station, car_name, image_url, with_fuel_1, with_fuel_2, with_fuel_3, without_fuel_1, without_fuel_2
-            , without_fuel_3, seater, latitude, longitude, map_location, pickUpLocationKey;
+            , without_fuel_3, seater, latitude, longitude, map_location, pickUpLocationKey, general_vehicle_key, number_plate_key, number_plate;
 
     DataForRecyclerView(){
         }
+
+
+    public String getNumber_plate() {
+        return number_plate;
+    }
+
+    public void setNumber_plate(String number_plate) {
+        this.number_plate = number_plate;
+    }
+
+    public String getNumber_plate_key() {
+        return number_plate_key;
+    }
+
+    public String getGeneral_vehicle_key() {
+        return general_vehicle_key;
+    }
+
+    public void setNumber_plate_key(String number_plate_key) {
+        this.number_plate_key = number_plate_key;
+    }
+
+    public void setGeneral_vehicle_key(String general_vehicle_key) {
+        this.general_vehicle_key = general_vehicle_key;
+    }
 
     public String getStation() {
         return station;

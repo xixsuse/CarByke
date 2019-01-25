@@ -13,6 +13,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -21,12 +22,21 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.kunzisoft.switchdatetime.SwitchDateTimeDialogFragment;
 import com.squareup.picasso.Picasso;
+
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
@@ -123,8 +133,10 @@ public class SearchCar extends AppCompatActivity implements View.OnClickListener
 //        sharedPreferencesDateTime = getSharedPreferences(DATE_TIME, Context.MODE_PRIVATE);
 //        SharedPreferences.Editor editor = sharedPreferencesDateTime.edit();
 
-        start_date_time = start_date_time.substring(start_date_time.length()-20, start_date_time.length()).replaceAll("\n"," ");
-        end_date_time = end_date_time.substring(end_date_time.length()-20, end_date_time.length()).replaceAll("\n"," ");
+        start_date_time = start_date_time.substring(start_date_time.length()-20, start_date_time.length())
+                .replaceAll("\n"," ");
+        end_date_time = end_date_time.substring(end_date_time.length()-20, end_date_time.length())
+                .replaceAll("\n"," ");
 
 //        editor.putString(START_DATE_TIME, start_date_time);
 //        editor.putString(END_DATE_TIME, end_date_time);
@@ -159,7 +171,9 @@ public class SearchCar extends AppCompatActivity implements View.OnClickListener
                 // check if both dates are selected
                 if (!TextUtils.isEmpty(start_date_time) && !TextUtils.isEmpty(end_date_time)){
                     saveDateTimeInSharedPrefs(start_date_time, end_date_time);
-                    startActivity(new Intent(SearchCar.this, SearchedCarList.class));
+                    Intent intent = new Intent(SearchCar.this, SearchedCarList.class);
+                    intent.putExtra("start_date", date_to_be_set_for_pick_up.getTime());
+                    startActivity(intent);
                 }
                 else {
                     Toast.makeText(this, "Select date time", Toast.LENGTH_SHORT).show();

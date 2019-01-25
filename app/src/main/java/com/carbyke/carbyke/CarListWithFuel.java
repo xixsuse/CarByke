@@ -2,6 +2,7 @@ package com.carbyke.carbyke;
 
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -15,6 +16,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,10 +36,16 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Objects;
 
 import im.delight.android.location.SimpleLocation;
@@ -140,12 +148,14 @@ public class CarListWithFuel extends Fragment implements EasyPermissions.Permiss
                             longitude = dataSnapshot.child("longitude").getValue(String.class);
                             map_location = dataSnapshot.child("map_location").getValue(String.class);
                             mySharedPrefs.setPickLocationData(latitude, longitude, map_location);
-                            FetchDataOnline();
+                            //FetchDataOnline();
+                            getListOfAvailableCars();
                         }
 
                         @Override
                         public void onCancelled(@NonNull DatabaseError databaseError) {
-                            FetchDataOnline();
+                            //FetchDataOnline();
+                            getListOfAvailableCars();
                         }
                     });
 
@@ -163,12 +173,14 @@ public class CarListWithFuel extends Fragment implements EasyPermissions.Permiss
                             longitude = dataSnapshot.child("longitude").getValue(String.class);
                             map_location = dataSnapshot.child("map_location").getValue(String.class);
                             mySharedPrefs.setPickLocationData(latitude, longitude, map_location);
-                            FetchDataOnline();
+                            //FetchDataOnline();
+                            getListOfAvailableCars();
                         }
 
                         @Override
                         public void onCancelled(@NonNull DatabaseError databaseError) {
-                            FetchDataOnline();
+                            //FetchDataOnline();
+                            getListOfAvailableCars();
                         }
                     });
                     dismiss();
@@ -229,6 +241,111 @@ public class CarListWithFuel extends Fragment implements EasyPermissions.Permiss
             //new AppSettingsDialog.Builder(this).build().show();
         }
 
+    }
+
+
+    //    getting list of available cars for booking
+    private void getListOfAvailableCars() {
+        final long start_millis;
+
+        start_millis = Objects.requireNonNull(getActivity()).getIntent().getLongExtra("start_date", 0);
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("book_vehicle").child("cars");
+        databaseReference
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        String general_vehicle_key = null;
+                        ArrayList<String> arrayList = new ArrayList<>();
+                        HashMap<String, String> hashMap = new HashMap<>();
+
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()){ // for 1
+                            general_vehicle_key = null;
+
+                            for (DataSnapshot postshot : snapshot.getChildren()){ // for 2
+
+                                final long booked_end_millis;
+                                long booked_end_millis1;
+                                final String end_date, number_plate;
+
+                                end_date = postshot.child("end_date").getValue(String.class);
+                                number_plate = postshot.child("number_plate").getValue(String.class);
+                                @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("EEEE MMM dd yyyy hh:mm a");
+                                try {
+                                    Date mDate = sdf.parse(end_date);
+                                    booked_end_millis1 = mDate.getTime();
+                                } catch (ParseException e) {
+                                    booked_end_millis1 = 0;
+                                    e.printStackTrace();
+                                }
+                                booked_end_millis = booked_end_millis1;
+
+
+                                long t = booked_end_millis + 3600000;
+                                if (start_millis >= t){ // if vehicle is not booked in that time (+3600000 for 1 hour addition)
+                                    general_vehicle_key = snapshot.getKey();
+                                    arrayList.add(postshot.getKey());
+                                    hashMap.put(postshot.getKey(), number_plate);
+//
+                                }
+                            } // for 2
+                             setData(general_vehicle_key, hashMap);
+                             hashMap.clear();
+                             arrayList.clear();
+                        } //for 1
+
+                    } // on data change
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        Log.w("sd5", "error "+databaseError);
+                    }
+                });
+    }
+    //    getting list of available cars for booking
+
+    private void setData(final String general_vehicle_key, final HashMap<String, String> hashMap){
+        if (TextUtils.isEmpty(general_vehicle_key)) return;
+
+      //  final ArrayList<String> k = new ArrayList<>(arrayList);
+        final HashMap<String, String > k = new HashMap<>(hashMap);
+
+        databaseReference.child(general_vehicle_key)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                        for (Object o : k.entrySet()) {
+                            Map.Entry pair = (Map.Entry) o;
+                            DataForRecyclerView data = dataSnapshot.getValue(DataForRecyclerView.class);
+                            data.setGeneral_vehicle_key(general_vehicle_key);
+                            data.setNumber_plate(pair.getValue().toString());
+                            data.setNumber_plate_key(pair.getKey().toString());
+                            list.add(data);
+                        }
+
+//                        for (String item: k) {
+//                            Log.w("sd5", "error "+general_vehicle_key+" "+item);
+//                            DataForRecyclerView data = dataSnapshot.getValue(DataForRecyclerView.class);
+//                            data.setGeneral_vehicle_key(general_vehicle_key);
+//                            data.setNumber_plate_key(item);
+//                            list.add(data);
+//                        }
+                        adapter = new CarListWithFuelRecyclerViewAdapter(getContext(), list);
+                        recyclerView.setAdapter(adapter);
+
+                        if (list.isEmpty()){
+                         //   Toast.makeText(getActivity(), "No Cars Available", Toast.LENGTH_SHORT).show();
+                        }
+                        dismiss();
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        Toast.makeText(getActivity(), "  "+databaseError, Toast.LENGTH_SHORT).show();
+                        dismiss();
+                    }
+                });
     }
 
 

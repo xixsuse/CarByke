@@ -19,6 +19,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
 
 import java.text.DecimalFormat;
@@ -31,7 +32,6 @@ public class CarListWithFuelRecyclerViewAdapter extends RecyclerView.Adapter<Car
 
     private Context context;
     private List<DataForRecyclerView> UploadInfoList;
-    private SharedPreferences sharedPreferencesLocation;
     private static final String LOCATION = "location";
     private static final String STATION = "station";
     private static final String TYPE = "type";
@@ -212,7 +212,7 @@ public class CarListWithFuelRecyclerViewAdapter extends RecyclerView.Adapter<Car
 
     //    setting car image
     private void setCarImage(ViewHolder holder, DataForRecyclerView info) {
-        Picasso.with(context)
+        Glide.with(context)
                 .load(info.getImage_url())
                 .into(holder.car_image_iv);
     }
@@ -220,7 +220,8 @@ public class CarListWithFuelRecyclerViewAdapter extends RecyclerView.Adapter<Car
 
     //    setting data
     private void setData(ViewHolder holder, DataForRecyclerView info) {
-        holder.car_name_tv.setText(info.getCar_name());
+
+        holder.car_name_tv.setText(info.getCar_name()+" ("+info.getNumber_plate()+")");
         if (!TextUtils.isEmpty(info.getSeater())){
             holder.seat_tv.setText(String.format("%s Seater", String.valueOf(info.getSeater())));
         }

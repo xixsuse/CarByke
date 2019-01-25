@@ -3,6 +3,9 @@ package com.carbyke.carbyke;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import java.util.HashMap;
+import java.util.Set;
+
 public class MySharedPrefs {
 
     private Context context;
@@ -144,20 +147,20 @@ public class MySharedPrefs {
         return sharedPreferences.getString(GENDER, "");
     }
 
-//    date time booking
+//    date time booking ---------------------------------------------------------------------------------------------------
     public void setDatetimeBooking(String start_date_time, String end_date_time){
-        sharedPreferences = context.getSharedPreferences(START_DATE_TIME, Context.MODE_PRIVATE);
+        sharedPreferences = context.getSharedPreferences(DATE_TIME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(START_DATE_TIME, start_date_time);
         editor.putString(END_DATE_TIME, end_date_time);
         editor.apply();
     }
     public String getStartDateTime() {
-        sharedPreferences = context.getSharedPreferences(START_DATE_TIME, Context.MODE_PRIVATE);
+        sharedPreferences = context.getSharedPreferences(DATE_TIME, Context.MODE_PRIVATE);
         return sharedPreferences.getString(START_DATE_TIME, "");
     }
     public String getEndDateTime() {
-        sharedPreferences = context.getSharedPreferences(START_DATE_TIME, Context.MODE_PRIVATE);
+        sharedPreferences = context.getSharedPreferences(DATE_TIME, Context.MODE_PRIVATE);
         return sharedPreferences.getString(END_DATE_TIME, "");
     }
 
