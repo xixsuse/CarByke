@@ -249,7 +249,7 @@ public class CarListWithFuel extends Fragment implements EasyPermissions.Permiss
         final long start_millis;
 
         start_millis = Objects.requireNonNull(getActivity()).getIntent().getLongExtra("start_date", 0);
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("book_vehicle").child("cars");
+        final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("book_vehicle").child("cars");
         databaseReference
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -257,6 +257,9 @@ public class CarListWithFuel extends Fragment implements EasyPermissions.Permiss
                         String general_vehicle_key = null;
                         ArrayList<String> arrayList = new ArrayList<>();
                         HashMap<String, String> hashMap = new HashMap<>();
+
+                        HashMap<String, String> NPKGK = new HashMap<>(); // number plate key, general key
+                        HashMap<String, String> GKNP = new HashMap<>(); // general key, number plate
 
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()){ // for 1
                             general_vehicle_key = null;
@@ -285,13 +288,16 @@ public class CarListWithFuel extends Fragment implements EasyPermissions.Permiss
                                     general_vehicle_key = snapshot.getKey();
                                     arrayList.add(postshot.getKey());
                                     hashMap.put(postshot.getKey(), number_plate);
-//
+                                    NPKGK.put(postshot.getKey(), snapshot.getKey());
+                                    GKNP.put(postshot.getKey(), number_plate);
                                 }
                             } // for 2
-                             setData(general_vehicle_key, hashMap);
+                            // setData(general_vehicle_key, hashMap);
                              hashMap.clear();
                              arrayList.clear();
                         } //for 1
+
+                        setData1(NPKGK, GKNP);
 
                     } // on data change
 
@@ -301,6 +307,47 @@ public class CarListWithFuel extends Fragment implements EasyPermissions.Permiss
                     }
                 });
     }
+
+    private void setData1(HashMap<String, String> NPKGK, HashMap<String, String> GKNP) {
+
+        Log.w("sds3", NPKGK+" "+GKNP);
+
+        if (NPKGK.isEmpty()){
+            Toast.makeText(getActivity(), "No Car Available", Toast.LENGTH_SHORT).show();
+            dismiss();
+            return;
+        }
+
+        for (Object o : NPKGK.entrySet()){
+            final Map.Entry pair = (Map.Entry) o;
+            final String number_plate = GKNP.get(pair.getKey().toString());
+            databaseReference.child(pair.getValue().toString())
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                            DataForRecyclerView data = dataSnapshot.getValue(DataForRecyclerView.class);
+                            data.setGeneral_vehicle_key(pair.getValue().toString());
+                            data.setNumber_plate(number_plate);
+                            data.setNumber_plate_key(pair.getKey().toString());
+                            list.add(data);
+
+                            adapter = new CarListWithFuelRecyclerViewAdapter(getContext(), list);
+                            recyclerView.setAdapter(adapter);
+
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            Toast.makeText(getActivity(), "  "+databaseError, Toast.LENGTH_SHORT).show();
+                            dismiss();
+                        }
+                    });
+
+        }
+
+    }
+
     //    getting list of available cars for booking
 
     private void setData(final String general_vehicle_key, final HashMap<String, String> hashMap){
