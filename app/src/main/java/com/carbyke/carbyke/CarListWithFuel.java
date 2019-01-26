@@ -149,13 +149,22 @@ public class CarListWithFuel extends Fragment implements EasyPermissions.Permiss
                             map_location = dataSnapshot.child("map_location").getValue(String.class);
                             mySharedPrefs.setPickLocationData(latitude, longitude, map_location);
                             //FetchDataOnline();
-                            getListOfAvailableCars();
+                            try{
+                                getListOfAvailableCars();
+                            }catch (Exception e){
+                                //
+                            }
                         }
 
                         @Override
                         public void onCancelled(@NonNull DatabaseError databaseError) {
                             //FetchDataOnline();
-                            getListOfAvailableCars();
+                            try{
+                                getListOfAvailableCars();
+                            }catch (Exception e){
+                                //
+                            }
+
                         }
                     });
 
@@ -174,13 +183,21 @@ public class CarListWithFuel extends Fragment implements EasyPermissions.Permiss
                             map_location = dataSnapshot.child("map_location").getValue(String.class);
                             mySharedPrefs.setPickLocationData(latitude, longitude, map_location);
                             //FetchDataOnline();
-                            getListOfAvailableCars();
+                            try{
+                                getListOfAvailableCars();
+                            }catch (Exception e){
+                                //
+                            }
                         }
 
                         @Override
                         public void onCancelled(@NonNull DatabaseError databaseError) {
                             //FetchDataOnline();
-                            getListOfAvailableCars();
+                            try{
+                                getListOfAvailableCars();
+                            }catch (Exception e){
+                                //
+                            }
                         }
                     });
                     dismiss();
@@ -248,7 +265,7 @@ public class CarListWithFuel extends Fragment implements EasyPermissions.Permiss
     private void getListOfAvailableCars() {
         final long start_millis;
 
-        start_millis = Objects.requireNonNull(getActivity()).getIntent().getLongExtra("start_date", 0);
+        start_millis = getActivity().getIntent().getLongExtra("start_date", 0);
         final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("book_vehicle").child("cars");
         databaseReference
                 .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -334,6 +351,7 @@ public class CarListWithFuel extends Fragment implements EasyPermissions.Permiss
 
                             adapter = new CarListWithFuelRecyclerViewAdapter(getContext(), list);
                             recyclerView.setAdapter(adapter);
+                            dismiss();
 
                         }
 
@@ -370,13 +388,6 @@ public class CarListWithFuel extends Fragment implements EasyPermissions.Permiss
                             list.add(data);
                         }
 
-//                        for (String item: k) {
-//                            Log.w("sd5", "error "+general_vehicle_key+" "+item);
-//                            DataForRecyclerView data = dataSnapshot.getValue(DataForRecyclerView.class);
-//                            data.setGeneral_vehicle_key(general_vehicle_key);
-//                            data.setNumber_plate_key(item);
-//                            list.add(data);
-//                        }
                         adapter = new CarListWithFuelRecyclerViewAdapter(getContext(), list);
                         recyclerView.setAdapter(adapter);
 

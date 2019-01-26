@@ -133,7 +133,10 @@ public class SearchedCarList extends AppCompatActivity implements View.OnClickLi
             MySharedPrefs mySharedPrefs = new MySharedPrefs(SearchedCarList.this);
             mySharedPrefs.setCameFromSOrSl("searched_list_car");
             SearchedCarList.this.finish();
-            startActivity(new Intent(SearchedCarList.this, ChooseLocation.class));
+            Intent intent = new Intent(SearchedCarList.this, ChooseLocation.class);
+            intent.putExtra("start_date", getIntent().getLongExtra("start_date",0));
+            intent.putExtra("duration", getIntent().getStringExtra("duration"));
+            startActivity(intent);
         }
 
     }

@@ -138,11 +138,8 @@ public class SearchCar extends AppCompatActivity implements View.OnClickListener
         end_date_time = end_date_time.substring(end_date_time.length()-20, end_date_time.length())
                 .replaceAll("\n"," ");
 
-//        editor.putString(START_DATE_TIME, start_date_time);
-//        editor.putString(END_DATE_TIME, end_date_time);
-//        editor.apply();
         MySharedPrefs mySharedPrefs = new MySharedPrefs(SearchCar.this);
-        mySharedPrefs.setDatetimeBooking(start_date_time, end_date_time);
+        mySharedPrefs.setDatetimeBooking(start_date_time, end_date_time, calculated_days_or_hours.getText().toString().trim());
         mySharedPrefs.setUserLatLog(null, null);
         mySharedPrefs.setPickLocationData(null, null, null);
 

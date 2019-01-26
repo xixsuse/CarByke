@@ -37,6 +37,7 @@ public class MySharedPrefs {
     private static final String DATE_TIME = "date_time";
     private static final String START_DATE_TIME = "start_date_time";
     private static final String END_DATE_TIME = "end_date_time";
+    private static final String DURATION = "duration";
 
 //    user location lat and long
     private static final String USER_LAT_LOG = "user_lat_long";
@@ -69,6 +70,7 @@ public class MySharedPrefs {
         sharedPreferences = context.getSharedPreferences(LOGIN, Context.MODE_PRIVATE);
         return sharedPreferences.getString(LOGGED_IN_OR_NOT, "");
     }
+
 
     //    shared pref login mode
     public void setLoginMode(String login_mode){
@@ -148,11 +150,12 @@ public class MySharedPrefs {
     }
 
 //    date time booking ---------------------------------------------------------------------------------------------------
-    public void setDatetimeBooking(String start_date_time, String end_date_time){
+    public void setDatetimeBooking(String start_date_time, String end_date_time, String duration){
         sharedPreferences = context.getSharedPreferences(DATE_TIME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(START_DATE_TIME, start_date_time);
         editor.putString(END_DATE_TIME, end_date_time);
+        editor.putString(DURATION, duration);
         editor.apply();
     }
     public String getStartDateTime() {
@@ -162,6 +165,10 @@ public class MySharedPrefs {
     public String getEndDateTime() {
         sharedPreferences = context.getSharedPreferences(DATE_TIME, Context.MODE_PRIVATE);
         return sharedPreferences.getString(END_DATE_TIME, "");
+    }
+    public String getDuration() {
+        sharedPreferences = context.getSharedPreferences(DATE_TIME, Context.MODE_PRIVATE);
+        return sharedPreferences.getString(DURATION, "");
     }
 
     //    -----------------------------------------------------------------------------------------------------------------------------------------

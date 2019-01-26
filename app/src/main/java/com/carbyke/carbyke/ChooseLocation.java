@@ -1,9 +1,11 @@
 package com.carbyke.carbyke;
 
+import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageButton;
 
@@ -78,10 +80,25 @@ public class ChooseLocation extends AppCompatActivity implements View.OnClickLis
         int id = view.getId();
 
         if (id == R.id.cl_back_b){
-            super.onBackPressed();
+            onBackPressed();
         }
     }
 //    on click
+
+    public void onBackPressed(){
+        MySharedPrefs mySharedPrefs = new MySharedPrefs(ChooseLocation.this);
+        String came_from = mySharedPrefs.getCameFromSOrSl();
+        if (TextUtils.equals(came_from,"searched_list_car")){
+         ChooseLocation.this.finish();
+            Intent intent = new Intent(ChooseLocation.this, SearchedCarList.class);
+            intent.putExtra("start_date",getIntent().getLongExtra("start_date",0));
+            intent.putExtra("duration", getIntent().getStringExtra("duration"));
+            startActivity(intent);
+        }
+        else {
+            ChooseLocation.this.finish();
+        }
+    }
 
     //ends
 }

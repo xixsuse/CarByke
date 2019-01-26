@@ -102,6 +102,22 @@ public class CarListWithFuelRecyclerViewAdapter extends RecyclerView.Adapter<Car
             }
         });
 
+        holder.book_fb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intent = new Intent(context, BookVehicle.class);
+                intent.putExtra("car_image_url", info.getImage_url());
+                intent.putExtra("general_vehicle_key", info.getGeneral_vehicle_key());
+                intent.putExtra("number_plate_key", info.getNumber_plate_key());
+                intent.putExtra("seater", info.getSeater());
+                intent.putExtra("car_name", info.getCar_name());
+                intent.putExtra("number_plate", info.getNumber_plate());
+
+                context.startActivity(intent);
+            }
+        });
+
     }
 
     @SuppressLint("SetTextI18n")
