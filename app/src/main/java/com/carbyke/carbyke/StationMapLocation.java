@@ -51,7 +51,7 @@ public class StationMapLocation extends AppCompatActivity {
                 markerOptions.title(mySharedPrefs.getPickLocationMapLocation());
                 googleMap.addMarker(markerOptions);
                 CameraPosition cameraPosition = new CameraPosition.Builder().target(
-                        new LatLng(latitude, longitude)).zoom(12).build();
+                        new LatLng(latitude, longitude)).zoom(15).build();
                 googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
                 googleMap.getUiSettings().setZoomControlsEnabled(true);
                 googleMap.getUiSettings().setRotateGesturesEnabled(true);

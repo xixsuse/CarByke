@@ -142,6 +142,7 @@ public class SearchCar extends AppCompatActivity implements View.OnClickListener
         mySharedPrefs.setDatetimeBooking(start_date_time, end_date_time, calculated_days_or_hours.getText().toString().trim());
         mySharedPrefs.setUserLatLog(null, null);
         mySharedPrefs.setPickLocationData(null, null, null);
+        mySharedPrefs.setSelectedPosition(-1);
 
     }
 //    saving date and time in shared prefs

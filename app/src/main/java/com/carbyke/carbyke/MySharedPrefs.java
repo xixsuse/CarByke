@@ -53,6 +53,11 @@ public class MySharedPrefs {
     private static final String CAME_FROM_S_OR_SL = "came_from_s_or_sl";
     private static final String VALUE = "value";
 
+//    select price from recycler view for vehicle
+    private static final String SELECTED_PRICE = "selected_price";
+    private static final String PRICE = "price";
+    private static final String SELECTED_POSITION = "selected_position";
+
 //    -----------------------------------------------------------------------------------------------------------------------------------------
 
     MySharedPrefs(Context context){
@@ -233,6 +238,30 @@ public class MySharedPrefs {
     public String getCameFromSOrSl() {
         sharedPreferences = context.getSharedPreferences(CAME_FROM_S_OR_SL, Context.MODE_PRIVATE);
         return sharedPreferences.getString(VALUE, "");
+    }
+
+    //    -----------------------------------------------------------------------------------------------------------------------------------------
+//    user location lat and long
+    public void setSelectedPrice(String price, int position){
+        sharedPreferences = context.getSharedPreferences(SELECTED_PRICE, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(PRICE, price);
+        editor.putInt(SELECTED_POSITION, position);
+        editor.apply();
+    }
+    public void setSelectedPosition(int position){
+        sharedPreferences = context.getSharedPreferences(SELECTED_PRICE, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(SELECTED_POSITION, position);
+        editor.apply();
+    }
+    public String getSelectedPrice() {
+        sharedPreferences = context.getSharedPreferences(SELECTED_PRICE, Context.MODE_PRIVATE);
+        return sharedPreferences.getString(PRICE, "");
+    }
+    public int getSelectedPosition() {
+        sharedPreferences = context.getSharedPreferences(SELECTED_PRICE, Context.MODE_PRIVATE);
+        return sharedPreferences.getInt(SELECTED_POSITION, -1);
     }
 
 

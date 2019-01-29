@@ -47,6 +47,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 import im.delight.android.location.SimpleLocation;
 import pub.devrel.easypermissions.AfterPermissionGranted;
@@ -73,6 +74,7 @@ public class CarListWithFuel extends Fragment implements EasyPermissions.Permiss
 
     private static final int DEVICE_LOCATION = 1;
     SpinKitView loading;
+    float multiplier = 0.0f;
 
     public CarListWithFuel() {
         // Required empty public constructor
@@ -89,10 +91,12 @@ public class CarListWithFuel extends Fragment implements EasyPermissions.Permiss
 
         recyclerView = view.findViewById(R.id.ww_recyclerView);
         recyclerView.setHasFixedSize(true);
-        recyclerView.isDuplicateParentStateEnabled();
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         // Setting RecyclerView layout as LinearLayout.
         recyclerView.setLayoutManager(mLayoutManager);
+
+//        generate multiplier
+        SetCalculatedDaysOrHours();
 
         show();
         new CheckNetworkConnection(getActivity(), new CheckNetworkConnection.OnConnectionCallback() {
@@ -347,6 +351,8 @@ public class CarListWithFuel extends Fragment implements EasyPermissions.Permiss
                             data.setGeneral_vehicle_key(pair.getValue().toString());
                             data.setNumber_plate(number_plate);
                             data.setNumber_plate_key(pair.getKey().toString());
+                            data.setNumber_plate_key(pair.getKey().toString());
+                            data.setTrip_cost_multiplier(multiplier);
                             list.add(data);
 
                             adapter = new CarListWithFuelRecyclerViewAdapter(getContext(), list);
@@ -385,6 +391,7 @@ public class CarListWithFuel extends Fragment implements EasyPermissions.Permiss
                             data.setGeneral_vehicle_key(general_vehicle_key);
                             data.setNumber_plate(pair.getValue().toString());
                             data.setNumber_plate_key(pair.getKey().toString());
+                            data.setTrip_cost_multiplier(multiplier);
                             list.add(data);
                         }
 
@@ -468,6 +475,41 @@ public class CarListWithFuel extends Fragment implements EasyPermissions.Permiss
         return location.getLongitude();
     }
 
+    private void SetCalculatedDaysOrHours() {
+        MySharedPrefs mySharedPrefs = new MySharedPrefs(getActivity());
+        try {
+            int time, trip_days, trip_hours, trip_minutes, total_minutes;
+            Date d1 = new Date(mySharedPrefs.getStartDateTime());
+            Date d2 = new Date(mySharedPrefs.getEndDateTime());
+
+            time = (int) TimeUnit.MINUTES.convert(d2.getTime() - d1.getTime(), TimeUnit.MILLISECONDS);
+            trip_days = time / (24 * 60);
+            trip_hours = time % (24 * 60) / 60;
+            trip_minutes = time % (24 * 60) % 60;
+            total_minutes = trip_minutes + trip_hours * 60;
+
+//            converting minutes into multiplier
+            if (total_minutes < 720 && total_minutes > 0){
+                multiplier = 0.5f;
+            }
+            else if (total_minutes >= 720 && total_minutes <=1440){
+                multiplier = 1.0f;
+            }
+
+//            converting days into multiplier
+            if (trip_days <= 0 ){
+                Log.w("dffd", "d "+trip_days+" h "+trip_hours+" m "+total_minutes+" mu "+multiplier+" t t"+total_minutes);
+            }
+
+            else {
+                multiplier = trip_days + multiplier;
+                Log.w("dffd", "d "+trip_days+" h "+trip_hours+" m "+total_minutes+" mu "+multiplier+" tt "+total_minutes);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     private void show(){
         loading.setVisibility(View.VISIBLE);

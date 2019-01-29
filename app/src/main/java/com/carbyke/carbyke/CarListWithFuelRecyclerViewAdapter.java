@@ -24,7 +24,9 @@ import com.squareup.picasso.Picasso;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import mehdi.sakout.fancybuttons.FancyButton;
 
@@ -36,11 +38,11 @@ public class CarListWithFuelRecyclerViewAdapter extends RecyclerView.Adapter<Car
     private static final String STATION = "station";
     private static final String TYPE = "type";
 
-
-
     private ViewHolder h;
     private int last_selection = 0;
     private int count1 = 1;
+
+    String payable_amount;
 
 
     CarListWithFuelRecyclerViewAdapter(Context context, List<DataForRecyclerView> TempList) {
@@ -83,7 +85,7 @@ public class CarListWithFuelRecyclerViewAdapter extends RecyclerView.Adapter<Car
         setData(holder, info);
         setCarImage(holder, info);
 
-        setBackGround(holder, position);
+        setBackGround(holder, info);
 
         addSpaceAtLast(position, holder);
 
@@ -106,6 +108,11 @@ public class CarListWithFuelRecyclerViewAdapter extends RecyclerView.Adapter<Car
             @Override
             public void onClick(View view) {
 
+                if (mySharedPrefs.getSelectedPosition() != holder.getAdapterPosition()){
+                    Toast.makeText(context, "Select Price !", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 Intent intent = new Intent(context, BookVehicle.class);
                 intent.putExtra("car_image_url", info.getImage_url());
                 intent.putExtra("general_vehicle_key", info.getGeneral_vehicle_key());
@@ -113,6 +120,9 @@ public class CarListWithFuelRecyclerViewAdapter extends RecyclerView.Adapter<Car
                 intent.putExtra("seater", info.getSeater());
                 intent.putExtra("car_name", info.getCar_name());
                 intent.putExtra("number_plate", info.getNumber_plate());
+                intent.putExtra("latitude", mySharedPrefs.getPickLocationLat());
+                intent.putExtra("longitude", mySharedPrefs.getPickLocationLong());
+                intent.putExtra("pick_up_location_name", mySharedPrefs.getPickLocationMapLocation());
 
                 context.startActivity(intent);
             }
@@ -164,11 +174,14 @@ public class CarListWithFuelRecyclerViewAdapter extends RecyclerView.Adapter<Car
         }
     }
 
-    private void setBackGround(final ViewHolder holder, final int position) {
+    private void setBackGround(final ViewHolder holder, final DataForRecyclerView info) {
         holder.price_1_rl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 holder.price_1_rl.setBackground(context.getResources().getDrawable(R.drawable.simple_rectangle_green));
+                float price = Float.valueOf(info.getWith_fuel_1()) * info.getTrip_cost_multiplier();
+                MySharedPrefs mySharedPrefs = new MySharedPrefs(context);
+                mySharedPrefs.setSelectedPrice(String.valueOf((int)price), holder.getAdapterPosition());
                 if (h == holder && last_selection == 1){
                     return;
                 }
@@ -182,6 +195,9 @@ public class CarListWithFuelRecyclerViewAdapter extends RecyclerView.Adapter<Car
             @Override
             public void onClick(View view) {
                 holder.price_2_rl.setBackground(context.getResources().getDrawable(R.drawable.simple_rectangle_green));
+                float price = Float.valueOf(info.getWith_fuel_2()) * info.getTrip_cost_multiplier();
+                MySharedPrefs mySharedPrefs = new MySharedPrefs(context);
+                mySharedPrefs.setSelectedPrice(String.valueOf((int)price), holder.getAdapterPosition());
                 if (h == holder && last_selection == 2){
                     return;
                 }
@@ -195,6 +211,9 @@ public class CarListWithFuelRecyclerViewAdapter extends RecyclerView.Adapter<Car
             @Override
             public void onClick(View view) {
                 holder.price_3_rl.setBackground(context.getResources().getDrawable(R.drawable.simple_rectangle_green));
+                float price = Float.valueOf(info.getWith_fuel_3()) * info.getTrip_cost_multiplier();
+                MySharedPrefs mySharedPrefs = new MySharedPrefs(context);
+                mySharedPrefs.setSelectedPrice(String.valueOf((int)price), holder.getAdapterPosition());
                 if (h == holder && last_selection == 3){
                     return;
                 }
@@ -241,23 +260,25 @@ public class CarListWithFuelRecyclerViewAdapter extends RecyclerView.Adapter<Car
         if (!TextUtils.isEmpty(info.getSeater())){
             holder.seat_tv.setText(String.format("%s Seater", String.valueOf(info.getSeater())));
         }
-        holder.price_1_tv.setText(addComma(info.getWith_fuel_1()));
-        holder.price_2_tv.setText(addComma(info.getWith_fuel_2()));
-        holder.price_3_tv.setText(addComma(info.getWith_fuel_3()));
+        holder.price_1_tv.setText(addComma(info.getWith_fuel_1(), info));
+        holder.price_2_tv.setText(addComma(info.getWith_fuel_2(), info));
+        holder.price_3_tv.setText(addComma(info.getWith_fuel_3(), info));
     }
 //    setting data
 
 
-    private String addComma(String number){
+//    setting price
+    private String addComma(String number, DataForRecyclerView info){
         try {
+            float multiplier = info.getTrip_cost_multiplier();
+            float new_cost = Float.valueOf(number) * multiplier;
             NumberFormat formatter = new DecimalFormat("#,###");
-            return formatter.format(Integer.parseInt(number));
+            return formatter.format((int)new_cost);
         }
         catch (Exception e){
             return "N.A";
         }
     }
-
 
     @Override
     public long getItemId(int position) {

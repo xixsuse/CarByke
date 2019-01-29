@@ -19,6 +19,7 @@
     <color name="navajoWhite">#90FFDEAD</color>
     <color name="lavender">#E6E6FA</color>
     <color name="light_steel_blue">#B0C4DE</color>
+    <color name="light_steel_blue20">#20B0C4DE</color>
     <color name="dimGray">#696969</color>
     <color name="black90">#90000000</color>
     <color name="darkBlack">#1C1818</color>
@@ -34,6 +35,7 @@
     <color name="lightCoral">#F08080</color>
     <color name="paleGreen">#98FB98</color>
     <color name="lightGreen">#75B84D</color>
+    <color name="lightGreen30">#3075B84D</color>
     <color name="oliveDrab">#9ACD32</color>
     <color name="loginButtonColors">#FFFFFF</color>
     <color name="googleGreen">#B6E9B5</color>

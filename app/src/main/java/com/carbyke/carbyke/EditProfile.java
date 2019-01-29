@@ -16,6 +16,8 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.github.ybq.android.spinkit.SpinKitView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -221,10 +223,10 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
                         else {
                             gender_radio.setPosition(0);
                         }
-
-                        Picasso.with(EditProfile.this)
+                        Glide.with(EditProfile.this)
+                                .applyDefaultRequestOptions(new RequestOptions()
+                                        .centerCrop().error(R.drawable.ic_placeholder_profile_pic))
                                 .load(profile_image_url)
-                                .placeholder(R.drawable.ic_placeholder_profile_pic)
                                 .into(profile_image_iv);
 
                         saveFetchedDataInSharedPrefs(name, email, phone, gender);

@@ -28,6 +28,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -126,29 +128,6 @@ public class Home extends AppCompatActivity
         MySharedPrefs mySharedPrefs = new MySharedPrefs(Home.this);
         mySharedPrefs.initiateProfileData();;
         checkIfSignedIn();
-
-        RequestQueue queue = Volley.newRequestQueue(this);
-        String url ="https://us-central1-carbyke-a3301.cloudfunctions.net/pickBase?text=-LMzea0bkxgwJROhBVPE";
-
-// Request a string response from the provided URL.
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        // Display the first 500 characters of the response string.
-                       // Toast.makeText(Home.this, ""+response, Toast.LENGTH_LONG).show();
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-             //   Toast.makeText(Home.this, ""+error.getMessage(), Toast.LENGTH_SHORT).show();
-                //mTextView.setText("That didn't work!");
-            }
-        });
-
-// Add the request to the RequestQueue.
-        queue.add(stringRequest);
-
     }
     //    on Start
 
@@ -252,9 +231,9 @@ public class Home extends AppCompatActivity
                             phone = "Link phone number!";
                         }
 
-                        Picasso.with(Home.this)
+                        Glide.with(Home.this)
                                 .load(profile_image_url)
-                                .placeholder(R.drawable.ic_placeholder_profile_pic)
+                                .apply(new RequestOptions().placeholder(R.drawable.ic_placeholder_profile_pic))
                                 .into(profile_image_iv);
 
                         saveFetchedDataInSharedPrefs(name, email, phone);
@@ -284,9 +263,10 @@ private void saveFetchedDataInSharedPrefs(String name, String email, String phon
 
 //    set background image
     private void setBackGroundImage() {
-        Picasso.with(Home.this)
+        Glide.with(Home.this)
+                .applyDefaultRequestOptions(new RequestOptions()
+                 .centerCrop().error(R.drawable.ic_placeholder_profile_pic))
                 .load(R.drawable.home_fade_background)
-                .fit()
                 .into(background_iv);
     }
 //    set background image
