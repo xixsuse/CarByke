@@ -157,7 +157,7 @@
                     android:id="@+id/bv_start_date_tv1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Start Time"
+                    android:text="@string/from"
                     style="@style/CustomTextStyle12"
                     android:textColor="@color/black90"
                     android:layout_marginStart="8dp"
@@ -203,7 +203,7 @@
                     android:id="@+id/bv_end_date_tv1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Start Time"
+                    android:text="@string/until"
                     style="@style/CustomTextStyle12"
                     android:textColor="@color/black90"
                     android:layout_alignParentEnd="true"
@@ -367,6 +367,7 @@
         </android.support.v4.widget.NestedScrollView>
 
         <Button
+            android:id="@+id/bv_proceed"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"

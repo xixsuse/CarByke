@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.bumptech.glide.Glide;
 import com.daimajia.numberprogressbar.NumberProgressBar;
 import com.github.ybq.android.spinkit.SpinKitView;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -150,7 +151,7 @@ public class UploadAadharCard extends Fragment {
                 delete_ib.setVisibility(View.GONE);
                 upload_b.setEnabled(false);
                 upload_b.setBackgroundColor(Objects.requireNonNull(getActivity()).getResources().getColor(R.color.buttonDisabledColor));
-                Picasso.with(getActivity())
+                Glide.with(getActivity())
                         .load(R.drawable.ic_upload_image)
                         .into(select_license_ib);
                 dismiss();
@@ -169,7 +170,7 @@ public class UploadAadharCard extends Fragment {
 
                 String url = dataSnapshot.getValue(String.class);
                 if (!TextUtils.isEmpty(url)) {
-                    Picasso.with(getActivity())
+                    Glide.with(getActivity())
                             .load(url)
                             .into(select_license_ib);
                     delete_ib.setVisibility(View.VISIBLE);
@@ -228,7 +229,7 @@ public class UploadAadharCard extends Fragment {
                 //  File actualImage = FileUtils.getFile(getActivity(), ImageFilePath);
                 //if (getExtension(actualImage)){
                 select_license_ib.setBackground(null);
-                Picasso.with(getActivity())
+                Glide.with(getActivity())
                         .load(ImageFilePath)
                         .into(select_license_ib);
                 upload_b.setEnabled(true);

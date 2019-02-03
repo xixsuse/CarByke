@@ -216,13 +216,9 @@ public class Login extends AppCompatActivity implements  GoogleApiClient.OnConne
                         showSignInFailedMessage(e.getLocalizedMessage());
                     }
                 });
-//        user is signed in so, need to save in prefs when phone linked
-//                sharedPreferencesLogin = getSharedPreferences(LOGIN, MODE_PRIVATE);
-//                SharedPreferences.Editor editor = sharedPreferencesLogin.edit();
-//                editor.putString(LOGGED_IN_OR_NOT, "true");
-//                editor.apply();
+
                 MySharedPrefs mySharedPrefs = new MySharedPrefs(Login.this);
-                mySharedPrefs.setLoginPref("true");
+                mySharedPrefs.setLoginPref("true", user.getUid());
 
             }
 
@@ -243,9 +239,6 @@ public class Login extends AppCompatActivity implements  GoogleApiClient.OnConne
 
         String phone_number = user.getPhoneNumber();
         if (TextUtils.isEmpty(phone_number)){
-//            SharedPreferences.Editor editor = sharedPreferencesLoginMode.edit();
-//            editor.putString(LOGIN_MODE, "google");
-//            editor.apply();
             MySharedPrefs mySharedPrefs = new MySharedPrefs(Login.this);
             mySharedPrefs.setLoginMode("google");
 
@@ -256,31 +249,6 @@ public class Login extends AppCompatActivity implements  GoogleApiClient.OnConne
             // save in shared pref that user is logged in and then exit this activity if second time log in, other wise prompt for phone auth link
             Login.this.finish();
         }
-
-//        databaseReferenceUID.addListenerForSingleValueEvent(new ValueEventListener() {
-//                    @Override
-//                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                        if (!dataSnapshot.hasChild(PHONE_NUMBER)){
-//                            SharedPreferences.Editor editor = sharedPreferencesLoginMode.edit();
-//                            editor.putString(LOGIN_MODE, "google");
-//                            editor.apply();
-//                            getSupportFragmentManager().beginTransaction().add(R.id.fragment_container_login, new PhoneLogin()).addToBackStack("phoneLogin").commit();
-//                        }
-//                        else {
-//                            // save in shared pref that user is logged in and then exit this activity if second time log in, other wise prompt for phone auth link
-//                            Login.this.finish();
-//                        }
-//                        sharedPreferencesLogin = getSharedPreferences(LOGIN, MODE_PRIVATE);
-//                        SharedPreferences.Editor editor = sharedPreferencesLogin.edit();
-//                        editor.putString(LOGGED_IN_OR_NOT, "true");
-//                        editor.apply();
-//                    }
-//
-//                    @Override
-//                    public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//                    }
-//                });
     }
 //  checkIfUserDetailsAreSaved
 

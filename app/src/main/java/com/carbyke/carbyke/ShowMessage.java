@@ -55,7 +55,7 @@ public class ShowMessage {
 
 
     //    failed Message without title
-    public void failMessageWithoutTitle(String title, String message){
+    public void failMessageWithoutTitle(String message){
         try {
             new MaterialDialog.Builder(context)
                     .content(message)
@@ -63,7 +63,7 @@ public class ShowMessage {
                     .positiveText("Okay")
                     .positiveColorRes(R.color.black)
                     .backgroundColor(context.getResources().getColor(R.color.white))
-                    .icon(context.getResources().getDrawable(R.drawable.ic_warning))
+                    .icon(context.getResources().getDrawable(R.drawable.ic_error))
                     .show();
         }
         catch (Exception e){

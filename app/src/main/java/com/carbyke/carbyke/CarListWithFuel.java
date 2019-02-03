@@ -171,9 +171,6 @@ public class CarListWithFuel extends Fragment implements EasyPermissions.Permiss
 
                         }
                     });
-
-
-
                 } catch (IndexOutOfBoundsException | NullPointerException e) {
                     e.printStackTrace();
                     String key = mySharedPrefs.getPickLocationKey();
@@ -276,8 +273,8 @@ public class CarListWithFuel extends Fragment implements EasyPermissions.Permiss
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         String general_vehicle_key = null;
-                        ArrayList<String> arrayList = new ArrayList<>();
-                        HashMap<String, String> hashMap = new HashMap<>();
+                       // ArrayList<String> arrayList = new ArrayList<>();
+                       // HashMap<String, String> hashMap = new HashMap<>();
 
                         HashMap<String, String> NPKGK = new HashMap<>(); // number plate key, general key
                         HashMap<String, String> GKNP = new HashMap<>(); // general key, number plate
@@ -303,19 +300,18 @@ public class CarListWithFuel extends Fragment implements EasyPermissions.Permiss
                                 }
                                 booked_end_millis = booked_end_millis1;
 
-
                                 long t = booked_end_millis + 3600000;
                                 if (start_millis >= t){ // if vehicle is not booked in that time (+3600000 for 1 hour addition)
                                     general_vehicle_key = snapshot.getKey();
-                                    arrayList.add(postshot.getKey());
-                                    hashMap.put(postshot.getKey(), number_plate);
+                                   // arrayList.add(postshot.getKey());
+                                  //  hashMap.put(postshot.getKey(), number_plate);
                                     NPKGK.put(postshot.getKey(), snapshot.getKey());
                                     GKNP.put(postshot.getKey(), number_plate);
                                 }
                             } // for 2
                             // setData(general_vehicle_key, hashMap);
-                             hashMap.clear();
-                             arrayList.clear();
+                            // hashMap.clear();
+                            // arrayList.clear();
                         } //for 1
 
                         setData1(NPKGK, GKNP);

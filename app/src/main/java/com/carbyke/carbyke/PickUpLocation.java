@@ -2,11 +2,14 @@ package com.carbyke.carbyke;
 
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -42,8 +45,8 @@ public class PickUpLocation extends Fragment{
     int station_count = 0;
 
     private RecyclerView recyclerView;
-    private View view;
 
+    FragmentActivity context;
     // Creating RecyclerView.Adapter.
     private RecyclerView.Adapter adapter ;
     private List<DataForRecyclerView> list = new ArrayList<>();
@@ -60,13 +63,25 @@ public class PickUpLocation extends Fragment{
         // Required empty public constructor
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof Activity){
+            this.context = (FragmentActivity) context;
+        }
+    }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        view = inflater.inflate(R.layout.fragment_pick_up_location, container, false);
+        return inflater.inflate(R.layout.fragment_pick_up_location, container, false);
 
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         TextView search_et = view.findViewById(R.id.ul_search_et);
         continue_b = view.findViewById(R.id.ul_continue_b);
         sv = view.findViewById(R.id.dl_spin);
@@ -74,7 +89,7 @@ public class PickUpLocation extends Fragment{
         recyclerView = view.findViewById(R.id.ul_recyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.isDuplicateParentStateEnabled();
-        final LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
+        final LinearLayoutManager mLayoutManager = new LinearLayoutManager(context);
         // Setting RecyclerView layout as LinearLayout.
         recyclerView.setLayoutManager(mLayoutManager);
 
@@ -84,14 +99,14 @@ public class PickUpLocation extends Fragment{
             @Override
             public void onClick(View view) {
                 try {
-                    MySharedPrefs mySharedPrefs = new MySharedPrefs(getActivity());
+                    MySharedPrefs mySharedPrefs = new MySharedPrefs(context);
                     String value = mySharedPrefs.getCameFromSOrSl();
                     if (TextUtils.equals(value, "search")){
-                        Objects.requireNonNull(getActivity()).finish();
+                        Objects.requireNonNull(context).finish();
                     }
                     else if (TextUtils.equals(value, "searched_list_car")){
-                        Objects.requireNonNull(getActivity()).finish();
-                        startActivity(new Intent(getActivity(), SearchedCarList.class));
+                        Objects.requireNonNull(context).finish();
+                        startActivity(new Intent(context, SearchedCarList.class));
                     }
 
                 }
@@ -126,8 +141,6 @@ public class PickUpLocation extends Fragment{
 
         CheckConnection();
         FetchDataOnline();
-
-        return view;
     }
 
 //    on start
@@ -161,7 +174,7 @@ public class PickUpLocation extends Fragment{
                     }
                 }
 
-                adapter = new PickUpLocationRecyclerViewAdapter(getContext(), list);
+                adapter = new PickUpLocationRecyclerViewAdapter(context, list);
                 recyclerView.setAdapter(adapter);
 
 
@@ -179,7 +192,7 @@ public class PickUpLocation extends Fragment{
 
     //check internet connection and load data
     private void CheckConnection() {
-//        new CheckNetworkConnection(getActivity(), new CheckNetworkConnection.OnConnectionCallback() {
+//        new CheckNetworkConnection(context, new CheckNetworkConnection.OnConnectionCallback() {
 //            @Override
 //            public void onConnectionSuccess() {
 //
@@ -211,11 +224,11 @@ public class PickUpLocation extends Fragment{
                 }
 
 
-                adapter = new PickUpLocationRecyclerViewAdapter(getContext(), list);
+                adapter = new PickUpLocationRecyclerViewAdapter(context, list);
                 recyclerView.setAdapter(adapter);
 
                 if (list.isEmpty()){
-                    Toast.makeText(getActivity(), "No pick up place available", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "No pick up place available", Toast.LENGTH_SHORT).show();
                 }
             dismiss();
             }
@@ -227,6 +240,12 @@ public class PickUpLocation extends Fragment{
         });
 
     }//    fetch data if internet is available
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        this.context = null;
+    }
 
 //        spin kit loading methods
         private void show(){

@@ -27,6 +27,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import java.util.HashMap;
 import java.util.Objects;
 
 import co.ceryle.radiorealbutton.RadioRealButtonGroup;
@@ -285,9 +286,16 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
                 if (position == 0) gender = "male";
                 else if (position == 1) gender = "female";
 
-                final String uid = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
-                databaseReference.child(uid).child(PROFILE).child(GENDER).setValue(gender);
-                databaseReference.child(uid).child(PROFILE).child(NAME).setValue(name);
+                MySharedPrefs mySharedPrefs = new MySharedPrefs(EditProfile.this);
+                final String UID = mySharedPrefs.getUID();
+
+                HashMap<String, String> hashMap = new HashMap<>();
+                hashMap.put(GENDER, gender);
+                hashMap.put(NAME, name);
+
+                databaseReference.child(UID).child(PROFILE).setValue(hashMap);
+                //databaseReference.child(UID).child(PROFILE).child(GENDER).setValue(gender);
+                //databaseReference.child(UID).child(PROFILE).child(NAME).setValue(name);
                 saveFetchedDataInSharedPrefsAfterUpdate(name, gender);
                 Toast.makeText(this, "profile updated", Toast.LENGTH_SHORT).show();
                 break;
@@ -361,17 +369,15 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
                             @Override
                             public void onClick(@NonNull final MaterialDialog dialog, @NonNull DialogAction which) {
 
-//                                SharedPreferences sharedPreferencesLogin = getSharedPreferences("login", MODE_PRIVATE);
-//                                SharedPreferences.Editor editor = sharedPreferencesLogin.edit();
-//                                editor.putString("logged_in", "false");
-//                                editor.apply();
+
                                 MySharedPrefs mySharedPrefs = new MySharedPrefs(EditProfile.this);
-                                mySharedPrefs.setLoginPref("false");
+                                mySharedPrefs.clearAllPrefs(); // clearing all prefs
+                                mySharedPrefs.setLoginPref("false", "");
                                 mAuth = FirebaseAuth.getInstance();
                                 mAuth.signOut();
 
                                 EditProfile.this.finish();
-                                finishAffinity();
+                                finishAffinity(); // finishing all activities
                                 startActivity(new Intent(EditProfile.this, Home.class));
 
                                 // TODO

@@ -14,6 +14,7 @@ public class MySharedPrefs {
 //    login
     private final static String LOGIN = "login";
     private final static String LOGGED_IN_OR_NOT = "logged_in";
+    private final static String UID = "uid";
 
 //    shared pref login mode
     private SharedPreferences sharedPreferencesLoginMode;
@@ -58,6 +59,7 @@ public class MySharedPrefs {
     private static final String PRICE = "price";
     private static final String SELECTED_POSITION = "selected_position";
 
+
 //    -----------------------------------------------------------------------------------------------------------------------------------------
 
     MySharedPrefs(Context context){
@@ -65,15 +67,20 @@ public class MySharedPrefs {
     }
 
 //    login, setter login page
-    public void setLoginPref(String value){
+    public void setLoginPref(String value, String uid){
         sharedPreferences = context.getSharedPreferences(LOGIN, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(LOGGED_IN_OR_NOT, value);
+        editor.putString(UID, uid);
         editor.apply();
     }
     public String getLoggedInOrNot() {
         sharedPreferences = context.getSharedPreferences(LOGIN, Context.MODE_PRIVATE);
         return sharedPreferences.getString(LOGGED_IN_OR_NOT, "");
+    }
+    public String getUID() {
+        sharedPreferences = context.getSharedPreferences(LOGIN, Context.MODE_PRIVATE);
+        return sharedPreferences.getString(UID, "");
     }
 
 
@@ -262,6 +269,29 @@ public class MySharedPrefs {
     public int getSelectedPosition() {
         sharedPreferences = context.getSharedPreferences(SELECTED_PRICE, Context.MODE_PRIVATE);
         return sharedPreferences.getInt(SELECTED_POSITION, -1);
+    }
+
+
+//    clearing all prefs -------------------------------------------------------------------------------
+    public void clearAllPrefs(){
+        SharedPreferences sharedPreferences = context.getSharedPreferences(LOGIN, Context.MODE_PRIVATE);
+        sharedPreferences.edit().clear().apply();
+        sharedPreferences = context.getSharedPreferences(MODE, Context.MODE_PRIVATE);
+        sharedPreferences.edit().clear().apply();
+        sharedPreferences = context.getSharedPreferences(LOCATION, Context.MODE_PRIVATE);
+        sharedPreferences.edit().clear().apply();
+        sharedPreferences = context.getSharedPreferences(PROFILE_DATA, Context.MODE_PRIVATE);
+        sharedPreferences.edit().clear().apply();
+        sharedPreferences = context.getSharedPreferences(DATE_TIME, Context.MODE_PRIVATE);
+        sharedPreferences.edit().clear().apply();
+        sharedPreferences = context.getSharedPreferences(USER_LAT_LOG, Context.MODE_PRIVATE);
+        sharedPreferences.edit().clear().apply();
+        sharedPreferences = context.getSharedPreferences(SELECTED_PICK_UP_LOCATION, Context.MODE_PRIVATE);
+        sharedPreferences.edit().clear().apply();
+        sharedPreferences = context.getSharedPreferences(CAME_FROM_S_OR_SL, Context.MODE_PRIVATE);
+        sharedPreferences.edit().clear().apply();
+        sharedPreferences = context.getSharedPreferences(SELECTED_PRICE, Context.MODE_PRIVATE);
+        sharedPreferences.edit().clear().apply();
     }
 
 

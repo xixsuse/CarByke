@@ -29,6 +29,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -165,11 +166,13 @@ public class Home extends AppCompatActivity
         if (TextUtils.isEmpty(name)){
             name_tv.setVisibility(View.GONE);
         }else {
+            name_tv.setVisibility(View.VISIBLE);
             name_tv.setText(name);
         }
 
 //        email
         if (!TextUtils.isEmpty(email) && !TextUtils.equals(email,"Link google account!")){
+            email_tv.setVisibility(View.VISIBLE);
             email_tv.setText(email);
         }
         else {
@@ -177,6 +180,7 @@ public class Home extends AppCompatActivity
         }
 //        phone
         if (!TextUtils.isEmpty(phone)  && !TextUtils.equals(phone,"Link phone number!")){
+            phone_tv.setVisibility(View.VISIBLE);
             phone_tv.setText(phone);
         }
         else {
@@ -192,8 +196,8 @@ public class Home extends AppCompatActivity
 
     //    setting user data
     private void setUserDataFromFirebase() {
-        mAuth = FirebaseAuth.getInstance();
-        String uid = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
+        MySharedPrefs mySharedPrefs = new MySharedPrefs(Home.this);
+        String uid = mySharedPrefs.getUID();
         databaseReference.child(uid).child(PROFILE)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -208,14 +212,15 @@ public class Home extends AppCompatActivity
                         profile_image_url = mAuth.getCurrentUser().getPhotoUrl();
 
 
-
                         if (TextUtils.isEmpty(name)){
                             name_tv.setVisibility(View.GONE);
                         }else {
+                            name_tv.setVisibility(View.VISIBLE);
                             name_tv.setText(name);
                         }
 //        email
                         if (!TextUtils.isEmpty(email)){
+                            email_tv.setVisibility(View.VISIBLE);
                             email_tv.setText(email);
                         }
                         else {
@@ -224,6 +229,7 @@ public class Home extends AppCompatActivity
                         }
 //        phone
                         if (!TextUtils.isEmpty(phone)){
+                            phone_tv.setVisibility(View.VISIBLE);
                             phone_tv.setText(phone);
                         }
                         else {
@@ -233,7 +239,8 @@ public class Home extends AppCompatActivity
 
                         Glide.with(Home.this)
                                 .load(profile_image_url)
-                                .apply(new RequestOptions().placeholder(R.drawable.ic_placeholder_profile_pic))
+                                .apply(new RequestOptions().placeholder(R.drawable.ic_placeholder_profile_pic)
+                                .diskCacheStrategy(DiskCacheStrategy.ALL))
                                 .into(profile_image_iv);
 
                         saveFetchedDataInSharedPrefs(name, email, phone);

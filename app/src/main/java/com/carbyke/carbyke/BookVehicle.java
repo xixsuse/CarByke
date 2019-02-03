@@ -1,18 +1,28 @@
 package com.carbyke.carbyke;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -23,13 +33,19 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.auth.FirebaseAuth;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
-public class BookVehicle extends AppCompatActivity {
+import cn.pedant.SweetAlert.SweetAlertDialog;
+
+public class BookVehicle extends AppCompatActivity implements View.OnClickListener {
 
     private String car_image_url, car_name, number_plate
             , general_key, number_plate_key, duration, latitude, longitude, pick_up_location_name, payable_amount;
@@ -40,6 +56,9 @@ public class BookVehicle extends AppCompatActivity {
     private GoogleMap googleMap;
     private MapView mMapView;
     private ImageButton back_ib;
+    private ProgressDialog progressDialog;
+    private Button proceed_b;
+    private FirebaseAuth firebaseAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,22 +75,20 @@ public class BookVehicle extends AppCompatActivity {
         location_name_tv= findViewById(R.id.bv_location_name);
         back_ib = findViewById(R.id.bv_back_ib);
         location_name_tv = findViewById(R.id.bv_location_name);
+        proceed_b = findViewById(R.id.bv_proceed);
         Toolbar toolbar = findViewById(R.id.bv_toolbar);
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Please wait...");
+
+        firebaseAuth = FirebaseAuth.getInstance();
+
+
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 BookVehicle.this.finish();
             }
         });
-
-
-        back_ib.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                BookVehicle.this.finish();
-            }
-        });
-
 
         setSupportActionBar(toolbar);
 
@@ -90,16 +107,8 @@ public class BookVehicle extends AppCompatActivity {
         location_name_tv.setText(pick_up_location_name);
         initiateMap(savedInstanceState);
 
-        location_name_tv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (TextUtils.isEmpty(latitude) || TextUtils.isEmpty(longitude)){
-                    Toast.makeText(BookVehicle.this, "unable to fetch location", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                startActivity(new Intent(BookVehicle.this, StationMapLocation.class));
-            }
-        });
+        location_name_tv.setOnClickListener(this);
+        proceed_b.setOnClickListener(this);
     }
 
     @Override
@@ -239,6 +248,131 @@ public class BookVehicle extends AppCompatActivity {
                 .load(car_image_url)
                 .into(car_image_iv);
     }
-//    set image
+    //    set image
+
+
+
+//    on click
+    @Override
+    public void onClick(View view) {
+        int id = view.getId();
+
+//        map location of station
+        if (id == R.id.bv_location_name){
+            if (TextUtils.isEmpty(latitude) || TextUtils.isEmpty(longitude)){
+                Toast.makeText(BookVehicle.this, "unable to fetch location", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            startActivity(new Intent(BookVehicle.this, StationMapLocation.class));
+        }
+        else if (id == R.id.bv_proceed){
+//            pick up method
+            if (!validations()){
+                return;
+            }
+            proceed();
+        }
+    }
+    //    on click
+
+
+//    proceed for booking
+    private void proceed() {
+
+        progressDialog.show();
+
+        MySharedPrefs mySharedPrefs = new MySharedPrefs(BookVehicle.this);
+        RequestQueue queue = Volley.newRequestQueue(BookVehicle.this);
+
+        final String url ="https://us-central1-carbyke-a3301.cloudfunctions.net/onlineCarBooking/";
+        final String type = mySharedPrefs.getDeliveryOrPickUpType();
+        final String uid = mySharedPrefs.getUID();
+
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("general_vehicle_key",general_key);
+            jsonObject.put("number_plate_key",number_plate_key);
+            jsonObject.put("start_date", mySharedPrefs.getStartDateTime());
+            jsonObject.put("end_date", mySharedPrefs.getEndDateTime());
+            jsonObject.put("station_key", mySharedPrefs.getPickLocationKey());
+            jsonObject.put("user_UID", uid);
+            jsonObject.put("method_of_car_picking", type);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            progressDialog.dismiss();
+        }
+
+        JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.POST, url, jsonObject,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.w("sds4", response.toString());
+                        try {
+                            final int status = response.getInt("status");
+                            if (status == 1280){ // success
+                                String message = response.getString("message");
+                                new SweetAlertDialog(BookVehicle.this, SweetAlertDialog.SUCCESS_TYPE)
+                                        .setTitleText(car_name + " Booking Successful")
+                                        .setContentText(message)
+                                        .setConfirmText("Got it")
+                                        .show();
+                            }
+                            else if (status == 1100 || status == 1700){  //failed or error
+                                final String error = response.getString("error");
+                                new SweetAlertDialog(BookVehicle.this, SweetAlertDialog.WARNING_TYPE)
+                                        .setTitleText(car_name+" Booking Failed")
+                                        .setContentText(error)
+                                        .setConfirmText("Got it")
+                                        .show();
+                            }
+
+                        } catch (JSONException e) {
+                            new SweetAlertDialog(BookVehicle.this, SweetAlertDialog.ERROR_TYPE)
+                                    .setTitleText(e.getMessage())
+                                    .setContentText("Something went wrong")
+                                    .setConfirmText("oops")
+                                    .show();
+                            e.printStackTrace();
+                        }
+                        progressDialog.dismiss();
+                    }
+                }, new Response.ErrorListener() {    // response error
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                new SweetAlertDialog(BookVehicle.this, SweetAlertDialog.WARNING_TYPE)
+                        .setTitleText(error.getLocalizedMessage() + " Booking Failed")
+                        .setContentText(error.getMessage())
+                        .setConfirmText("Got it")
+                        .show();
+                progressDialog.dismiss();
+            }
+        });
+
+        queue.add(stringRequest);
+    }
+    //    proceed for booking
+
+//    checking validations
+    private boolean validations() {
+        ShowMessage showMessage = new ShowMessage(BookVehicle.this);
+        MySharedPrefs mySharedPrefs = new MySharedPrefs(BookVehicle.this);
+        if (TextUtils.isEmpty(general_key) || TextUtils.isEmpty(number_plate)){
+            showMessage.failMessageWithoutTitle("something went wrong");
+            return false;
+        }
+        if (TextUtils.isEmpty(mySharedPrefs.getStartDateTime()) || TextUtils.isEmpty(mySharedPrefs.getEndDateTime())){
+            showMessage.failMessageWithoutTitle("start or end date not selected");
+            return false;
+        }
+        if (TextUtils.isEmpty(mySharedPrefs.getPickLocationKey())){
+            showMessage.failMessageWithoutTitle("unable to find pick-up location");
+            return false;
+        }
+        return true;
+    }
+    //    checking validations
+
+
+
 
 }

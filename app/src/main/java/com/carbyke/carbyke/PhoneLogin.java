@@ -574,13 +574,8 @@ public class PhoneLogin extends AppCompatActivity implements View.OnClickListene
         databaseReference.child(GENDER).setValue("male");
         databaseReference.child(PHONE_NUMBER).setValue(user.getPhoneNumber());
 
-
-//        sharedPreferencesLogin = getSharedPreferences(LOGIN, MODE_PRIVATE);
-//        SharedPreferences.Editor editor = sharedPreferencesLogin.edit();
-//        editor.putString(LOGGED_IN_OR_NOT, "true");
-//        editor.apply();
         MySharedPrefs mySharedPrefs = new MySharedPrefs(PhoneLogin.this);
-        mySharedPrefs.setLoginPref("true");
+        mySharedPrefs.setLoginPref("true", user.getUid());
 
         if (TextUtils.isEmpty(Objects.requireNonNull(firebaseAuth.getCurrentUser()).getEmail())){
             // open new activity that will prompt to link google account
