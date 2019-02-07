@@ -59,6 +59,7 @@ public class MySharedPrefs {
 //    select price from recycler view for vehicle
     private static final String SELECTED_PRICE = "selected_price";
     private static final String PRICE = "price";
+    private static final String PRICE_PACK = "price_pack";
     private static final String SELECTED_POSITION = "selected_position";
 
 
@@ -261,11 +262,12 @@ public class MySharedPrefs {
 
     //    -----------------------------------------------------------------------------------------------------------------------------------------
 //    user location lat and long
-    public void setSelectedPrice(String price, int position){
+    public void setSelectedPrice(String price, int position, int price_package){ // price package is a plan (freem kms)
         sharedPreferences = context.getSharedPreferences(SELECTED_PRICE, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(PRICE, price);
         editor.putInt(SELECTED_POSITION, position);
+        editor.putInt(PRICE_PACK, price_package);
         editor.apply();
     }
     public void setSelectedPosition(int position){
@@ -281,6 +283,10 @@ public class MySharedPrefs {
     public int getSelectedPosition() {
         sharedPreferences = context.getSharedPreferences(SELECTED_PRICE, Context.MODE_PRIVATE);
         return sharedPreferences.getInt(SELECTED_POSITION, -1);
+    }
+    public int getPricePackage() {
+        sharedPreferences = context.getSharedPreferences(SELECTED_PRICE, Context.MODE_PRIVATE);
+        return sharedPreferences.getInt(PRICE_PACK, 0);
     }
 
 

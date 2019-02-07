@@ -161,7 +161,7 @@ public class CarListWithFuelRecyclerViewAdapter extends RecyclerView.Adapter<Car
 
     private void addSpaceAtLast(int position, ViewHolder holder) {
         //adding padding to last card view
-        //adding padding to last card view
+
         if( position == getItemCount() -1){
             FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
                     FrameLayout.LayoutParams.WRAP_CONTENT,
@@ -181,7 +181,7 @@ public class CarListWithFuelRecyclerViewAdapter extends RecyclerView.Adapter<Car
                 holder.price_1_rl.setBackground(context.getResources().getDrawable(R.drawable.simple_rectangle_green));
                 float price = Float.valueOf(info.getWith_fuel_1()) * info.getTrip_cost_multiplier();
                 MySharedPrefs mySharedPrefs = new MySharedPrefs(context);
-                mySharedPrefs.setSelectedPrice(String.valueOf((int)price), holder.getAdapterPosition());
+                mySharedPrefs.setSelectedPrice(String.valueOf((int)price), holder.getAdapterPosition(), 1);
                 if (h == holder && last_selection == 1){
                     return;
                 }
@@ -197,7 +197,7 @@ public class CarListWithFuelRecyclerViewAdapter extends RecyclerView.Adapter<Car
                 holder.price_2_rl.setBackground(context.getResources().getDrawable(R.drawable.simple_rectangle_green));
                 float price = Float.valueOf(info.getWith_fuel_2()) * info.getTrip_cost_multiplier();
                 MySharedPrefs mySharedPrefs = new MySharedPrefs(context);
-                mySharedPrefs.setSelectedPrice(String.valueOf((int)price), holder.getAdapterPosition());
+                mySharedPrefs.setSelectedPrice(String.valueOf((int)price), holder.getAdapterPosition(), 2);
                 if (h == holder && last_selection == 2){
                     return;
                 }
@@ -213,7 +213,7 @@ public class CarListWithFuelRecyclerViewAdapter extends RecyclerView.Adapter<Car
                 holder.price_3_rl.setBackground(context.getResources().getDrawable(R.drawable.simple_rectangle_green));
                 float price = Float.valueOf(info.getWith_fuel_3()) * info.getTrip_cost_multiplier();
                 MySharedPrefs mySharedPrefs = new MySharedPrefs(context);
-                mySharedPrefs.setSelectedPrice(String.valueOf((int)price), holder.getAdapterPosition());
+                mySharedPrefs.setSelectedPrice(String.valueOf((int)price), holder.getAdapterPosition(), 3);
                 if (h == holder && last_selection == 3){
                     return;
                 }

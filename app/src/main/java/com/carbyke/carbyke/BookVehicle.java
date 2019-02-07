@@ -79,6 +79,7 @@ public class BookVehicle extends AppCompatActivity implements View.OnClickListen
         Toolbar toolbar = findViewById(R.id.bv_toolbar);
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Please wait...");
+        progressDialog.setCancelable(false);
 
         firebaseAuth = FirebaseAuth.getInstance();
 
@@ -181,6 +182,7 @@ public class BookVehicle extends AppCompatActivity implements View.OnClickListen
 
         MySharedPrefs mySharedPrefs = new MySharedPrefs(BookVehicle.this);
         payable_amount = mySharedPrefs.getSelectedPrice();
+
         try {
             NumberFormat formatter = new DecimalFormat("#,###");
             payable_amount_tv.setText(formatter.format(Integer.parseInt(payable_amount)));
@@ -270,7 +272,29 @@ public class BookVehicle extends AppCompatActivity implements View.OnClickListen
             if (!validations()){
                 return;
             }
-            proceed();
+
+            new SweetAlertDialog(this, SweetAlertDialog.CUSTOM_IMAGE_TYPE)
+                    .setTitleText("Confirm?")
+                    .setContentText("Please click on confirm \nto book car.")
+                    .setConfirmText("Confirm")
+                    .setCustomImage(R.drawable.ic_car_booking)
+                    .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                        @Override
+                        public void onClick(SweetAlertDialog sDialog) {
+                            sDialog.dismissWithAnimation();
+                            proceed();
+                        }
+                    })
+                    .setCancelText("Cancel")
+                    .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                        @Override
+                        public void onClick(SweetAlertDialog sDialog) {
+                            sDialog.dismissWithAnimation();
+                        }
+                    })
+                    .show();
+
+
         }
     }
     //    on click
@@ -295,6 +319,7 @@ public class BookVehicle extends AppCompatActivity implements View.OnClickListen
             jsonObject.put("start_date", mySharedPrefs.getFullFormatStartDateTime());
             jsonObject.put("end_date", mySharedPrefs.getFullFormatEndDateTime());
             jsonObject.put("station_key", mySharedPrefs.getPickLocationKey());
+            jsonObject.put("price_package", mySharedPrefs.getPricePackage());
             jsonObject.put("user_UID", uid);
             jsonObject.put("method_of_car_picking", type);
         } catch (JSONException e) {
