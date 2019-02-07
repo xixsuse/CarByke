@@ -138,8 +138,13 @@ public class SearchCar extends AppCompatActivity implements View.OnClickListener
         end_date_time = end_date_time.substring(end_date_time.length()-20, end_date_time.length())
                 .replaceAll("\n"," ");
 
+        String full_format_start_date = pick_up_time_tv.getText().toString().trim().replaceAll("\n", " ");
+        String full_format_end_date = drop_off_time_tv.getText().toString().trim().replaceAll("\n", " ");
+
         MySharedPrefs mySharedPrefs = new MySharedPrefs(SearchCar.this);
-        mySharedPrefs.setDatetimeBooking(start_date_time, end_date_time, calculated_days_or_hours.getText().toString().trim());
+        mySharedPrefs.setDatetimeBooking(start_date_time, end_date_time, full_format_start_date, full_format_end_date
+                , calculated_days_or_hours.getText().toString().trim());
+
         mySharedPrefs.setUserLatLog(null, null);
         mySharedPrefs.setPickLocationData(null, null, null);
         mySharedPrefs.setSelectedPosition(-1);
@@ -171,6 +176,7 @@ public class SearchCar extends AppCompatActivity implements View.OnClickListener
                     saveDateTimeInSharedPrefs(start_date_time, end_date_time);
                     Intent intent = new Intent(SearchCar.this, SearchedCarList.class);
                     intent.putExtra("start_date", date_to_be_set_for_pick_up.getTime());
+                    intent.putExtra("end_date", date_to_be_set_for_drop_off.getTime());
                     startActivity(intent);
                 }
                 else {

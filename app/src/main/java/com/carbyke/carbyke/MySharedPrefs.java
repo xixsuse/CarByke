@@ -37,7 +37,9 @@ public class MySharedPrefs {
 //    date time booking
     private static final String DATE_TIME = "date_time";
     private static final String START_DATE_TIME = "start_date_time";
+    private static final String FULL_FORMAT_START_DATE_TIME = "full_format_start_date_time";
     private static final String END_DATE_TIME = "end_date_time";
+    private static final String FULL_FORMAT_END_DATE_TIME = "full_format_end_date_time";
     private static final String DURATION = "duration";
 
 //    user location lat and long
@@ -162,11 +164,13 @@ public class MySharedPrefs {
     }
 
 //    date time booking ---------------------------------------------------------------------------------------------------
-    public void setDatetimeBooking(String start_date_time, String end_date_time, String duration){
+    public void setDatetimeBooking(String start_date_time, String end_date_time, String full_format_start_date, String full_format_end_date, String duration){
         sharedPreferences = context.getSharedPreferences(DATE_TIME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(START_DATE_TIME, start_date_time);
+        editor.putString(FULL_FORMAT_START_DATE_TIME, full_format_start_date);
         editor.putString(END_DATE_TIME, end_date_time);
+        editor.putString(FULL_FORMAT_END_DATE_TIME, full_format_end_date);
         editor.putString(DURATION, duration);
         editor.apply();
     }
@@ -177,6 +181,14 @@ public class MySharedPrefs {
     public String getEndDateTime() {
         sharedPreferences = context.getSharedPreferences(DATE_TIME, Context.MODE_PRIVATE);
         return sharedPreferences.getString(END_DATE_TIME, "");
+    }
+    public String getFullFormatStartDateTime() {
+        sharedPreferences = context.getSharedPreferences(DATE_TIME, Context.MODE_PRIVATE);
+        return sharedPreferences.getString(FULL_FORMAT_START_DATE_TIME, "");
+    }
+    public String getFullFormatEndDateTime() {
+        sharedPreferences = context.getSharedPreferences(DATE_TIME, Context.MODE_PRIVATE);
+        return sharedPreferences.getString(FULL_FORMAT_END_DATE_TIME, "");
     }
     public String getDuration() {
         sharedPreferences = context.getSharedPreferences(DATE_TIME, Context.MODE_PRIVATE);

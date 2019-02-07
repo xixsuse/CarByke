@@ -292,8 +292,8 @@ public class BookVehicle extends AppCompatActivity implements View.OnClickListen
         try {
             jsonObject.put("general_vehicle_key",general_key);
             jsonObject.put("number_plate_key",number_plate_key);
-            jsonObject.put("start_date", mySharedPrefs.getStartDateTime());
-            jsonObject.put("end_date", mySharedPrefs.getEndDateTime());
+            jsonObject.put("start_date", mySharedPrefs.getFullFormatStartDateTime());
+            jsonObject.put("end_date", mySharedPrefs.getFullFormatEndDateTime());
             jsonObject.put("station_key", mySharedPrefs.getPickLocationKey());
             jsonObject.put("user_UID", uid);
             jsonObject.put("method_of_car_picking", type);

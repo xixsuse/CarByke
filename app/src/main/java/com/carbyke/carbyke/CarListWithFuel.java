@@ -3,12 +3,7 @@ package com.carbyke.carbyke;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.location.Address;
-import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -25,26 +20,19 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.github.ybq.android.spinkit.SpinKitView;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
@@ -75,6 +63,8 @@ public class CarListWithFuel extends Fragment implements EasyPermissions.Permiss
     private static final int DEVICE_LOCATION = 1;
     SpinKitView loading;
     float multiplier = 0.0f;
+    private long start_date_millis, end_date_millis;
+    private int count = 0 , compare = 0;
 
     public CarListWithFuel() {
         // Required empty public constructor
@@ -96,7 +86,10 @@ public class CarListWithFuel extends Fragment implements EasyPermissions.Permiss
         recyclerView.setLayoutManager(mLayoutManager);
 
 //        generate multiplier
-        SetCalculatedDaysOrHours();
+        getMultiplier();
+
+        start_date_millis = getActivity().getIntent().getLongExtra("start_date", 0);
+        end_date_millis = getActivity().getIntent().getLongExtra("end_date", 0);
 
         show();
         new CheckNetworkConnection(getActivity(), new CheckNetworkConnection.OnConnectionCallback() {
@@ -264,9 +257,7 @@ public class CarListWithFuel extends Fragment implements EasyPermissions.Permiss
 
     //    getting list of available cars for booking
     private void getListOfAvailableCars() {
-        final long start_millis;
 
-        start_millis = getActivity().getIntent().getLongExtra("start_date", 0);
         final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("book_vehicle").child("cars");
         databaseReference
                 .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -301,7 +292,7 @@ public class CarListWithFuel extends Fragment implements EasyPermissions.Permiss
                                 booked_end_millis = booked_end_millis1;
 
                                 long t = booked_end_millis + 3600000;
-                                if (start_millis >= t){ // if vehicle is not booked in that time (+3600000 for 1 hour addition)
+                                if (start_date_millis >= t){ // if vehicle is not booked in that time (+3600000 for 1 hour addition)
                                     general_vehicle_key = snapshot.getKey();
                                    // arrayList.add(postshot.getKey());
                                   //  hashMap.put(postshot.getKey(), number_plate);
@@ -314,7 +305,8 @@ public class CarListWithFuel extends Fragment implements EasyPermissions.Permiss
                             // arrayList.clear();
                         } //for 1
 
-                        setData1(NPKGK, GKNP);
+                        checkCurrentVehicleBookings(NPKGK, GKNP);
+                     //   setData1(NPKGK, GKNP);
 
                     } // on data change
 
@@ -324,6 +316,89 @@ public class CarListWithFuel extends Fragment implements EasyPermissions.Permiss
                     }
                 });
     }
+
+
+//    checking current bookings
+    public void checkCurrentVehicleBookings(HashMap<String, String> NPKGK, final HashMap<String, String> GKNP){
+
+        if (NPKGK.isEmpty()){
+            Toast.makeText(getActivity(), "No Car Available", Toast.LENGTH_SHORT).show();
+            dismiss();
+            return;
+        }
+
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("current_vehicle_bookings").child("cars");
+        final HashMap<String, String> FNPKGK = new HashMap<>(); // final number plate key, general key
+        compare = 0;
+        final int size = NPKGK.size();
+        Log.w("dfd4", "size "+size);
+
+        for (Object entry : NPKGK.entrySet()) {
+            final Map.Entry pair = (Map.Entry) entry;
+            final String general_key =  pair.getValue().toString();
+            final String number_plate_key = pair.getKey().toString();
+
+            Log.w("dfd4", "gk "+general_key+" npk "+number_plate_key);
+
+            databaseReference.child(general_key).child(number_plate_key)
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            count = 0;
+                            for (DataSnapshot snapshot : dataSnapshot.getChildren()){ // for
+                                final String booked_start_date = snapshot.child("start_date").getValue(String.class);
+                                final String booked_end_date = snapshot.child("end_date").getValue(String.class);
+
+                                long booked_start_millis, booked_end_millis;
+
+                                @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("EEEE MMM dd yyyy hh:mm a");
+                                try {
+                                    Date date1 = sdf.parse(booked_start_date);
+                                    Date date2 = sdf.parse(booked_end_date);
+                                    booked_start_millis = date1.getTime();
+                                    booked_end_millis = date2.getTime();
+                                } catch (ParseException e) {
+                                    booked_end_millis =booked_start_millis = 0;
+                                    e.printStackTrace();
+                                }
+
+                                Log.w("dfd4", start_date_millis+" "+end_date_millis
+                                        +" "+booked_start_millis+" "+booked_end_millis);
+
+                                if (start_date_millis >= booked_start_millis && // if
+                                        start_date_millis <= booked_end_millis ||
+                                        end_date_millis >= booked_start_millis &&
+                                        end_date_millis <= booked_end_millis ||
+                                        start_date_millis < booked_end_millis + 3600000){
+                                    count = 1;
+                                    break;
+                                } // if
+
+                            } // for
+
+                            compare ++;
+
+                            if (count == 0){
+                                FNPKGK.put(number_plate_key, general_key);
+                            }
+                            Log.w("dfd4", "compare "+compare+" size "+size);
+                            if (compare == size){
+                                setData1(FNPKGK, GKNP);
+                            }
+
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            Toast.makeText(getActivity(), "er "+databaseError, Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        }
+
+    }
+//    checking current bookings
+
+
 
     private void setData1(HashMap<String, String> NPKGK, HashMap<String, String> GKNP) {
 
@@ -343,7 +418,7 @@ public class CarListWithFuel extends Fragment implements EasyPermissions.Permiss
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                            DataForRecyclerView data = dataSnapshot.getValue(DataForRecyclerView.class);
+                            DataForRecyclerView data = dataSnapshot.getValue(DataForRecyclerView.class); // getting all general vehicle details
                             data.setGeneral_vehicle_key(pair.getValue().toString());
                             data.setNumber_plate(number_plate);
                             data.setNumber_plate_key(pair.getKey().toString());
@@ -471,7 +546,7 @@ public class CarListWithFuel extends Fragment implements EasyPermissions.Permiss
         return location.getLongitude();
     }
 
-    private void SetCalculatedDaysOrHours() {
+    private void getMultiplier() {
         MySharedPrefs mySharedPrefs = new MySharedPrefs(getActivity());
         try {
             int time, trip_days, trip_hours, trip_minutes, total_minutes;
