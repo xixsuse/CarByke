@@ -14,11 +14,8 @@
                         <option name="values">
                           <map>
                             <entry key="assetSourceType" value="FILE" />
-                            <entry key="height" value="512" />
-                            <entry key="outputName" value="ic_car_booking" />
-                            <entry key="overrideSize" value="true" />
-                            <entry key="sourceFile" value="C:\Users\Dell\Downloads\key.svg" />
-                            <entry key="width" value="512" />
+                            <entry key="outputName" value="ic_car_placeholder" />
+                            <entry key="sourceFile" value="C:\Users\Dell\Downloads\racing.svg" />
                           </map>
                         </option>
                       </PersistentState>

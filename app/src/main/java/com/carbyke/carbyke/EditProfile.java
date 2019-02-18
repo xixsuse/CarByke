@@ -225,8 +225,7 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
                             gender_radio.setPosition(0);
                         }
                         Glide.with(EditProfile.this)
-                                .applyDefaultRequestOptions(new RequestOptions()
-                                        .centerCrop().error(R.drawable.ic_placeholder_profile_pic))
+                                .applyDefaultRequestOptions(new RequestOptions().error(R.drawable.ic_placeholder_profile_pic))
                                 .load(profile_image_url)
                                 .into(profile_image_iv);
 
@@ -245,12 +244,7 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
 
 //    saving data in shared pref
     private void saveFetchedDataInSharedPrefs(String name, String email, String phone, String gender) {
-//        SharedPreferences.Editor editor = sharedPreferences.edit();
-//        editor.putString(NAME, name);
-//        editor.putString(EMAIL, email);
-//        editor.putString(PHONE_NUMBER, phone);
-//        editor.putString(GENDER, gender);
-//        editor.apply();
+
         MySharedPrefs mySharedPrefs = new MySharedPrefs(EditProfile.this);
         mySharedPrefs.setProfileData(name, email, phone, gender);
     }
@@ -294,8 +288,7 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
                 hashMap.put(NAME, name);
 
                 databaseReference.child(UID).child(PROFILE).setValue(hashMap);
-                //databaseReference.child(UID).child(PROFILE).child(GENDER).setValue(gender);
-                //databaseReference.child(UID).child(PROFILE).child(NAME).setValue(name);
+
                 saveFetchedDataInSharedPrefsAfterUpdate(name, gender);
                 Toast.makeText(this, "profile updated", Toast.LENGTH_SHORT).show();
                 break;

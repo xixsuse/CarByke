@@ -4,13 +4,13 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-public class LocationPager extends FragmentStatePagerAdapter {
+public class ChooseLocationPager extends FragmentStatePagerAdapter {
 
     //integer to count number of tabs
     int tabCount;
 
     //Constructor to the class
-    public LocationPager(FragmentManager fm, int tabCount) {
+    public ChooseLocationPager(FragmentManager fm, int tabCount) {
         super(fm);
         //Initializing tab count
         this.tabCount= tabCount;

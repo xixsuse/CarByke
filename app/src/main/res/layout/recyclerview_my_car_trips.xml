@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:fancy="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/tx_cardView"
+    android:background="@color/white"
+    android:layout_marginTop="8dp"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        >
+
+        <!-- trip status stripe -->
+        <RelativeLayout
+            android:id="@+id/tx_status_stripe_rl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/lightGreen"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:text="ACTIVE"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:padding="5dp"
+                />
+
+        </RelativeLayout>
+
+        <!--car photo relative layout-->
+        <RelativeLayout
+            android:id="@+id/tx_car_image_rl"
+            android:layout_below="@+id/tx_status_stripe_rl"
+            android:layout_width="110dp"
+            android:layout_height="90dp"
+            android:background="@drawable/simple_rectangle"
+            android:layout_marginStart="@dimen/car_list_layout_margin"
+            android:layout_marginTop="@dimen/car_list_layout_margin"
+            android:padding="12dp"
+            >
+            <!--car image-->
+            <ImageView
+                android:id="@+id/tx_car_image_iv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/ic_car_placeholder"
+                />
+
+        </RelativeLayout>
+
+        <!--car name-->
+        <TextView
+            android:id="@+id/tx_car_name_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/tx_car_image_rl"
+            android:layout_alignTop="@+id/tx_car_image_rl"
+            android:layout_marginStart="@dimen/car_list_layout_margin"
+            android:layout_marginEnd="@dimen/car_list_layout_margin"
+            android:hint="car name"
+            style="@style/CustomTextStyle16"
+            />
+
+        <!--seats-->
+        <TextView
+            android:id="@+id/tx_seat_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/tx_car_image_rl"
+            android:layout_below="@+id/tx_car_name_tv"
+            android:layout_marginStart="@dimen/car_list_layout_margin"
+            android:layout_marginEnd="@dimen/car_list_layout_margin"
+            style="@style/CustomTextStyle12"
+            />
+
+        <!--price-->
+        <TextView
+            android:id="@+id/tx_price_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/tx_car_image_rl"
+            android:layout_marginStart="@dimen/car_list_layout_margin"
+            android:layout_marginEnd="@dimen/car_list_layout_margin"
+            android:drawableStart="@drawable/ic_rupee"
+            android:hint="@string/amount_paid"
+            android:textColor="@color/lightGreen"
+            android:textColorHint="@color/black10"
+            android:textStyle="bold"
+            android:layout_alignBottom="@id/tx_car_image_rl"
+            style="@style/CustomTextStyle16"
+            android:drawablePadding="7dp"
+            />
+
+
+        <!--horizontal line-->
+        <View
+            android:id="@+id/tx_divider"
+            android:layout_below="@+id/tx_car_image_rl"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/black50"
+            android:layout_marginTop="8dp"
+            />
+
+        <RelativeLayout
+            android:id="@+id/tx_trip_dates_rl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tx_divider"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:paddingTop="2dp"
+            android:paddingBottom="2dp"
+            android:layout_marginTop="8dp"
+            >
+            <!--start date-->
+            <TextView
+                android:id="@+id/tx_start_date_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:paddingEnd="7dp"
+                android:text="start date"
+                style="@style/CustomTextStyle12"
+                android:textColor="@color/appColor"
+                android:layout_toStartOf="@+id/tx_divider_v"
+                android:textStyle="bold"
+                />
+
+            <ImageButton
+                android:id="@+id/tx_divider_v"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:background="@drawable/ic_right_arrow"
+                android:layout_centerInParent="true"
+                />
+
+            <!--end date-->
+            <TextView
+                android:id="@+id/tx_end_date_tv"
+                android:layout_width="match_parent"
+                android:layout_toEndOf="@+id/tx_divider_v"
+                android:paddingStart="7dp"
+                android:gravity="end"
+                android:layout_height="wrap_content"
+                android:text="end date"
+                android:layout_alignParentEnd="true"
+                style="@style/CustomTextStyle12"
+                android:textColor="@color/appColor"
+                android:textStyle="bold"
+                />
+
+        </RelativeLayout>
+
+        <!--horizontal line-->
+        <View
+            android:id="@+id/tx_divider_1"
+            android:layout_below="@+id/tx_trip_dates_rl"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/black50"
+            android:layout_marginTop="8dp"
+            />
+
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>
+

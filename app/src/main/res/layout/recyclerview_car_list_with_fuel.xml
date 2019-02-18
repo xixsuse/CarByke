@@ -27,7 +27,9 @@
             <ImageView
                 android:id="@+id/rc_car_image_iv"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:background="@drawable/ic_car_placeholder"
+                />
 
         </RelativeLayout>
 

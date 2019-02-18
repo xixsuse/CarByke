@@ -9,7 +9,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageButton;
 
-public class ChooseLocation extends AppCompatActivity implements View.OnClickListener {
+public class MyTrips extends AppCompatActivity implements View.OnClickListener {
 
     //This is our tab layout
     private TabLayout tabLayout;
@@ -22,10 +22,10 @@ public class ChooseLocation extends AppCompatActivity implements View.OnClickLis
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_choose_location);
+        setContentView(R.layout.activity_my_trips);
 
         //Initializing the tab layout
-        tabLayout = (TabLayout) findViewById(R.id.tabLayout);
+        tabLayout = (TabLayout) findViewById(R.id.mt_tabLayout);
 
         //Adding the tabs using addTab() method
         tabLayout.addTab(tabLayout.newTab().setText("Self Pick-up"));
@@ -33,10 +33,10 @@ public class ChooseLocation extends AppCompatActivity implements View.OnClickLis
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         //Initializing viewPager
-        viewPager = (ViewPager) findViewById(R.id.pager);
+        viewPager = (ViewPager) findViewById(R.id.mt_pager);
 
         //Creating our pager adapter
-        ChooseLocationPager adapter = new ChooseLocationPager(getSupportFragmentManager(), tabLayout.getTabCount());
+        MyTripsLocationPager adapter = new MyTripsLocationPager(getSupportFragmentManager(), tabLayout.getTabCount());
 
         //Adding adapter to pager
         viewPager.setAdapter(adapter);
@@ -44,7 +44,7 @@ public class ChooseLocation extends AppCompatActivity implements View.OnClickLis
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(viewPager));
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
 
-       // setupTabIcons();
+        // setupTabIcons();
 
         back_b = findViewById(R.id.cl_back_b);
 
@@ -72,7 +72,7 @@ public class ChooseLocation extends AppCompatActivity implements View.OnClickLis
 
     }
 
-//    on click
+    //    on click
     @Override
     public void onClick(View view) {
         int id = view.getId();
@@ -84,18 +84,7 @@ public class ChooseLocation extends AppCompatActivity implements View.OnClickLis
 //    on click
 
     public void onBackPressed(){
-        MySharedPrefs mySharedPrefs = new MySharedPrefs(ChooseLocation.this);
-        String came_from = mySharedPrefs.getCameFromSOrSl();
-        if (TextUtils.equals(came_from,"searched_list_car")){
-         ChooseLocation.this.finish();
-            Intent intent = new Intent(ChooseLocation.this, SearchedCarList.class);
-            intent.putExtra("start_date",getIntent().getLongExtra("start_date",0));
-            intent.putExtra("duration", getIntent().getStringExtra("duration"));
-            startActivity(intent);
-        }
-        else {
-            ChooseLocation.this.finish();
-        }
+       super.onBackPressed();
     }
 
     //ends

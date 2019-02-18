@@ -285,7 +285,7 @@ public class CarListWithFuel extends Fragment implements EasyPermissions.Permiss
                                 try {
                                     Date mDate = sdf.parse(end_date);
                                     booked_end_millis1 = mDate.getTime();
-                                } catch (ParseException e) {
+                                } catch (Exception e) {
                                     booked_end_millis1 = 0;
                                     e.printStackTrace();
                                 }

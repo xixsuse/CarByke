@@ -60,6 +60,7 @@ public class BookVehicle extends AppCompatActivity implements View.OnClickListen
     private Button proceed_b;
     private FirebaseAuth firebaseAuth;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -322,6 +323,10 @@ public class BookVehicle extends AppCompatActivity implements View.OnClickListen
             jsonObject.put("price_package", mySharedPrefs.getPricePackage());
             jsonObject.put("user_UID", uid);
             jsonObject.put("method_of_car_picking", type);
+            jsonObject.put("fuel_type", "without_fuel");
+            jsonObject.put("latitude", latitude);
+            jsonObject.put("longitude", longitude);
+            jsonObject.put("station_name", pick_up_location_name);
         } catch (JSONException e) {
             e.printStackTrace();
             progressDialog.dismiss();

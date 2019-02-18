@@ -73,4 +73,10 @@
         <item name="android:fontFamily">OpenSans-Regular.ttf</item>
     </style>
 
+    <style name="DrawerIconStyle" parent="Widget.AppCompat.DrawerArrowToggle">
+        <item name="color">@android:color/black</item>
+
+    </style>
+
+
 </resources>
