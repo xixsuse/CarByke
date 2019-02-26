@@ -204,7 +204,7 @@ public class BookVehicle extends AppCompatActivity implements View.OnClickListen
 
         String msg = "";
         if (!TextUtils.isEmpty(days) && !TextUtils.isEmpty(hours) && !TextUtils.isEmpty(minutes)){
-            msg = "For "+days+" "+d+" "+hours+" "+h+" "+minutes+" "+m;
+            msg = "For "+days+" "+d+" "+hours+", "+h+" "+minutes+" "+m;
         }
         else if (!TextUtils.isEmpty(days) && TextUtils.isEmpty(hours) && TextUtils.isEmpty(minutes)){
             msg = "For "+days+" "+d;

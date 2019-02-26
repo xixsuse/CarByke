@@ -3,12 +3,59 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#F3F3F3"
     tools:context=".MyCarTrips">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/ct_recycler_view"
+        android:background="#F3F3F3"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
+
+    <!--empty list display-->
+    <RelativeLayout
+        android:id="@+id/ct_empty_rl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#F3F3F3"
+        android:visibility="gone"
+        android:layout_centerInParent="true"
+        >
+
+        <ImageView
+            android:id="@+id/ct_finish_iv"
+            android:layout_width="152dp"
+            android:layout_height="152dp"
+            android:background="@drawable/ic_finish"
+            android:layout_centerHorizontal="true"
+            />
+
+        <TextView
+            android:id="@+id/ct_finish_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ct_finish_iv"
+            android:layout_marginTop="32dp"
+            style="@style/CustomTextStyle16"
+            android:gravity="center_horizontal"
+            android:textColor="#4c86cc"
+            android:layout_centerHorizontal="true"
+            android:textStyle="bold"
+            android:text="No Trip Available\nTap here to book your first cars."
+            />
+    </RelativeLayout>
+
+    <!--loading view-->
+    <com.github.ybq.android.spinkit.SpinKitView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/ct_spin"
+        style="@style/SpinKitView.Small.Circle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        app:SpinKit_Color="@color/black" />
 
 
 </RelativeLayout>

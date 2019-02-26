@@ -83,4 +83,13 @@
     <string name="car_details">CAR DETAILS</string>
     <string name="other_details">Other Details</string>
     <string name="amount_paid">Amount Paid</string>
+    <string name="helmet">Helmet</string>
+    <string name="insurance">Insurance</string>
+    <string name="registration_certificate">Registration Certificate</string>
+    <string name="pollution">Pollution</string>
+    <string name="knee_elbow_caps_hand_gloves">Knee/ Elbow Caps/ Hand Gloves</string>
+    <string name="accessories">Accessories</string>
+    <string name="starting_kilometers">Starting Kilometers</string>
+    <string name="kilometers">Kilometers</string>
+
 </resources>

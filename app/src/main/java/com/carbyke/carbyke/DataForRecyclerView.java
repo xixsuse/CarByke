@@ -6,12 +6,58 @@ public class DataForRecyclerView {
             , without_fuel_3, seater, latitude
             , longitude, map_location, pickUpLocationKey
             , general_vehicle_key, number_plate_key
-            , number_plate, trip_days, trip_hours, trip_minutes;
+            , number_plate, trip_days, trip_hours, trip_minutes, start_date, end_date, trip_status, booking_key;
+
     float trip_cost_multiplier;
+    Long payable_amount;
 
     DataForRecyclerView(){
         }
 
+    public void setBooking_key(String booking_key) {
+        this.booking_key = booking_key;
+    }
+
+    public String getBooking_key() {
+        return booking_key;
+    }
+
+    public String getTrip_status() {
+        return trip_status;
+    }
+
+    public void setTrip_status(String trip_status) {
+        this.trip_status = trip_status;
+    }
+
+    public String getStart_date() {
+        return start_date;
+    }
+
+    public void setStart_date(String start_date) {
+        this.start_date = start_date;
+    }
+
+    public String getEnd_date() {
+        return end_date;
+    }
+
+    public void setEnd_date(String end_date) {
+        this.end_date = end_date;
+    }
+
+    public void setCar_name(String car_name) {
+        this.car_name = car_name;
+    }
+
+
+    public void setPayable_amount(Long payable_amount) {
+        this.payable_amount = payable_amount;
+    }
+
+    public Long getPayable_amount() {
+        return payable_amount;
+    }
 
     public void setWith_fuel_1(String with_fuel_1) {
         this.with_fuel_1 = with_fuel_1;

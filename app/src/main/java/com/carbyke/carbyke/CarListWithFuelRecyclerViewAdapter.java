@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.squareup.picasso.Picasso;
 
 import java.text.DecimalFormat;
@@ -249,6 +250,7 @@ public class CarListWithFuelRecyclerViewAdapter extends RecyclerView.Adapter<Car
     private void setCarImage(ViewHolder holder, DataForRecyclerView info) {
         Glide.with(context)
                 .load(info.getImage_url())
+                .apply(new RequestOptions().placeholder(R.drawable.ic_car_placeholder).error(R.drawable.ic_car_placeholder))
                 .into(holder.car_image_iv);
     }
     //    setting car image

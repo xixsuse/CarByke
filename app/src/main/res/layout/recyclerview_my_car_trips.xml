@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:fancy="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/tx_cardView"
     android:background="@color/white"
-    android:layout_marginTop="8dp"
+    android:layout_marginTop="14dp"
+    app:cardCornerRadius="7dp"
+    app:cardBackgroundColor="@color/white"
+    app:cardElevation="@dimen/cardview_default_elevation"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <RelativeLayout
@@ -12,44 +15,59 @@
         android:layout_height="match_parent"
         android:background="@color/white"
         >
-
-        <!-- trip status stripe -->
-        <RelativeLayout
-            android:id="@+id/tx_status_stripe_rl"
-            android:layout_width="match_parent"
+        <!--status-->
+        <TextView
+            android:id="@+id/tx_status_tv"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/lightGreen"
-            >
+            android:layout_alignParentEnd="true"
+            android:textColor="@color/appColor"
+            android:textSize="16sp"
+            android:paddingTop="7dp"
+            android:paddingEnd="7dp"
+            android:textStyle="bold"
+            android:drawablePadding="7dp"
+            android:gravity="center_vertical"
+            />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:text="ACTIVE"
-                android:textColor="@color/white"
-                android:textSize="16sp"
-                android:padding="5dp"
-                />
+        <!--trip starts in-->
+        <TextView
+            android:id="@+id/tx_starts_in_tv"
+            android:layout_below="@+id/tx_status_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:layout_marginStart="7dp"
+            android:layout_marginEnd="7dp"
+            android:layout_marginBottom="8dp"
+            style="@style/CustomTextStyle12"
+            android:textColor="@color/appColor"
+            android:textStyle="italic|bold"
+            android:gravity="start"
+            android:visibility="gone"
+            android:padding="7dp"
+            android:background="@drawable/days_left_to_trip_start"
+            />
 
-        </RelativeLayout>
 
         <!--car photo relative layout-->
         <RelativeLayout
             android:id="@+id/tx_car_image_rl"
-            android:layout_below="@+id/tx_status_stripe_rl"
+            android:layout_below="@+id/tx_starts_in_tv"
             android:layout_width="110dp"
             android:layout_height="90dp"
             android:background="@drawable/simple_rectangle"
             android:layout_marginStart="@dimen/car_list_layout_margin"
-            android:layout_marginTop="@dimen/car_list_layout_margin"
-            android:padding="12dp"
+            android:layout_marginTop="4dp"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:paddingBottom="12dp"
             >
             <!--car image-->
             <ImageView
                 android:id="@+id/tx_car_image_iv"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/ic_car_placeholder"
                 />
 
         </RelativeLayout>
@@ -67,9 +85,9 @@
             style="@style/CustomTextStyle16"
             />
 
-        <!--seats-->
+        <!--number plate-->
         <TextView
-            android:id="@+id/tx_seat_tv"
+            android:id="@+id/tx_number_plate_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toEndOf="@+id/tx_car_image_rl"
@@ -79,6 +97,20 @@
             style="@style/CustomTextStyle12"
             />
 
+
+        <!--payable amount-->
+        <TextView
+            android:id="@+id/tx_payable_amount_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/tx_car_image_rl"
+            android:layout_above="@+id/tx_price_tv"
+            android:layout_marginStart="@dimen/car_list_layout_margin"
+            android:layout_marginEnd="@dimen/car_list_layout_margin"
+            style="@style/CustomTextStyle12"
+            android:text="Amount Paid"
+            android:textColor="@color/black50"
+            />
         <!--price-->
         <TextView
             android:id="@+id/tx_price_tv"
@@ -87,13 +119,15 @@
             android:layout_toEndOf="@+id/tx_car_image_rl"
             android:layout_marginStart="@dimen/car_list_layout_margin"
             android:layout_marginEnd="@dimen/car_list_layout_margin"
-            android:drawableStart="@drawable/ic_rupee"
+            android:drawableStart="@drawable/ic_rupee_black_16dp"
             android:hint="@string/amount_paid"
-            android:textColor="@color/lightGreen"
+            android:textColor="@color/appColor"
             android:textColorHint="@color/black10"
             android:textStyle="bold"
             android:layout_alignBottom="@id/tx_car_image_rl"
             style="@style/CustomTextStyle16"
+            android:textSize="20sp"
+            android:gravity="center_vertical"
             android:drawablePadding="7dp"
             />
 
@@ -115,9 +149,8 @@
             android:layout_below="@+id/tx_divider"
             android:paddingStart="12dp"
             android:paddingEnd="12dp"
-            android:paddingTop="2dp"
-            android:paddingBottom="2dp"
-            android:layout_marginTop="8dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
             >
             <!--start date-->
             <TextView
@@ -157,16 +190,6 @@
                 />
 
         </RelativeLayout>
-
-        <!--horizontal line-->
-        <View
-            android:id="@+id/tx_divider_1"
-            android:layout_below="@+id/tx_trip_dates_rl"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/black50"
-            android:layout_marginTop="8dp"
-            />
 
     </RelativeLayout>
 

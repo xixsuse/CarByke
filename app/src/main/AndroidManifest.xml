@@ -35,7 +35,8 @@
         android:theme="@style/MyCustomAppTheme"
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:icon">
-        <activity android:name=".MyTrips"></activity>
+        <activity android:name=".BookingVehicleDetails"></activity>
+        <activity android:name=".MyTrips" />
 
         <meta-data
             android:name="com.google.android.gms.version"

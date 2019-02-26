@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -65,6 +66,7 @@ public class CarListWithFuel extends Fragment implements EasyPermissions.Permiss
     float multiplier = 0.0f;
     private long start_date_millis, end_date_millis;
     private int count = 0 , compare = 0;
+    private RelativeLayout emptyRelativeLayout;
 
     public CarListWithFuel() {
         // Required empty public constructor
@@ -84,6 +86,7 @@ public class CarListWithFuel extends Fragment implements EasyPermissions.Permiss
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         // Setting RecyclerView layout as LinearLayout.
         recyclerView.setLayoutManager(mLayoutManager);
+        emptyRelativeLayout = view.findViewById(R.id.ww_empty_rl);
 
 //        generate multiplier
         getMultiplier();
@@ -405,7 +408,7 @@ public class CarListWithFuel extends Fragment implements EasyPermissions.Permiss
         Log.w("sds3", NPKGK+" "+GKNP);
 
         if (NPKGK.isEmpty()){
-            Toast.makeText(getActivity(), "No Car Available", Toast.LENGTH_SHORT).show();
+            emptyRelativeLayout.setVisibility(View.VISIBLE);
             dismiss();
             return;
         }
@@ -434,7 +437,6 @@ public class CarListWithFuel extends Fragment implements EasyPermissions.Permiss
 
                         @Override
                         public void onCancelled(@NonNull DatabaseError databaseError) {
-                            Toast.makeText(getActivity(), "  "+databaseError, Toast.LENGTH_SHORT).show();
                             dismiss();
                         }
                     });

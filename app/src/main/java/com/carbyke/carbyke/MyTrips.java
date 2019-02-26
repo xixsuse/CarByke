@@ -28,8 +28,8 @@ public class MyTrips extends AppCompatActivity implements View.OnClickListener {
         tabLayout = (TabLayout) findViewById(R.id.mt_tabLayout);
 
         //Adding the tabs using addTab() method
-        tabLayout.addTab(tabLayout.newTab().setText("Self Pick-up"));
-        tabLayout.addTab(tabLayout.newTab().setText("Delivery"));
+        tabLayout.addTab(tabLayout.newTab().setText("CAR"));
+        tabLayout.addTab(tabLayout.newTab().setText("BIKE"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         //Initializing viewPager
@@ -46,7 +46,7 @@ public class MyTrips extends AppCompatActivity implements View.OnClickListener {
 
         // setupTabIcons();
 
-        back_b = findViewById(R.id.cl_back_b);
+        back_b = findViewById(R.id.mt_back_b);
 
         back_b.setOnClickListener(this);
 

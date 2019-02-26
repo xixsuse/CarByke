@@ -1,0 +1,542 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:focusableInTouchMode="true"
+    tools:context=".BookingVehicleDetails">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/vd_appbar"
+        android:layout_width="match_parent"
+        android:layout_height="270dp"
+        >
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/vd_collapsing_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/book_vehicle_background"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            tools:targetApi="lollipop">
+
+
+            <ImageView
+                android:id="@+id/vd_car_image"
+                android:layout_width="190dp"
+                android:layout_height="155dp"
+                app:layout_collapseMode="pin"
+                android:layout_gravity="center_vertical|center_horizontal"
+                />
+
+            <!--qr code generator-->
+            <ImageView
+                android:id="@+id/vd_qr_generated"
+                android:layout_width="52dp"
+                android:layout_height="52dp"
+                android:contentDescription="@string/app_name"
+                android:scaleType="fitCenter"
+                android:layout_gravity="end|bottom"
+                android:layout_marginEnd="12dp"
+                app:layout_collapseMode="pin"
+                android:layout_marginBottom="12dp"
+                />
+
+
+            <TextView
+                android:id="@+id/page_nme"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:height="270dp"
+                app:layout_collapseMode="parallax"/>
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/vd_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@color/appColor"
+                android:elevation="4dp"
+                app:layout_collapseMode="pin"/>
+
+
+            <ImageButton
+                android:id="@+id/vd_back_ib"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:background="@drawable/ic_return_back"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="4dp"
+                />
+
+
+        </android.support.design.widget.CollapsingToolbarLayout>
+    </android.support.design.widget.AppBarLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        >
+
+        <android.support.v4.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+
+
+
+                <!--car name and price-->
+                <android.support.v7.widget.CardView
+                    android:id="@+id/vd_cv1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardElevation="@dimen/cardview_default_elevation"
+                    app:cardBackgroundColor="@color/white"
+                    >
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:padding="8dp"
+                        >
+                        <!--car name-->
+                        <TextView
+                            android:id="@+id/vd_car_name"
+                            android:layout_width="100dp"
+                            android:layout_height="wrap_content"
+                            style="@style/CustomTextStyle14"
+                            android:textStyle="bold"
+                            android:layout_centerVertical="true"
+                            android:gravity="center_vertical"
+                            />
+
+                        <!--price-->
+                        <TextView
+                            android:id="@+id/vd_price"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            style="@style/CustomTextStyle20Headings"
+                            android:textColor="@color/lightGreen"
+                            android:layout_alignParentEnd="true"
+                            android:drawableStart="@drawable/ic_rupee"
+                            android:gravity="bottom"
+                            android:drawablePadding="7dp"
+                            android:textStyle="bold"
+                            />
+                        <!--time period-->
+                        <TextView
+                            android:id="@+id/vd_duration"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            style="@style/CustomTextStyle12"
+                            android:textColor="@color/gray"
+                            android:layout_alignParentEnd="true"
+                            android:layout_below="@+id/vd_price"
+                            android:layout_marginTop="2dp"
+                            />
+
+                    </RelativeLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#70000000"
+                        />
+                </android.support.v7.widget.CardView>
+
+                <!--start and end date time-->
+                <android.support.v7.widget.CardView
+                    android:id="@+id/vd_cv2"
+                    android:layout_below="@+id/vd_cv1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardElevation="@dimen/cardview_default_elevation"
+                    app:cardBackgroundColor="@color/white"
+                    android:layout_marginTop="@dimen/cardview_default_elevation"
+                    >
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        >
+                        <!--start date-->
+                        <TextView
+                            android:id="@+id/vd_start_date_tv1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/from"
+                            style="@style/CustomTextStyle12"
+                            android:textColor="@color/black90"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="8dp"
+                            />
+                        <TextView
+                            android:id="@+id/vd_start_date_tv"
+                            android:layout_below="@+id/vd_start_date_tv1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            style="@style/CustomTextStyle12"
+                            android:layout_marginTop="2dp"
+                            android:textStyle="bold"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginBottom="8dp"
+                            />
+
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_height="50dp"
+                            android:layout_centerInParent="true"
+                            android:background="@color/appColor" />
+
+                        <ImageButton
+                            android:layout_width="26dp"
+                            android:layout_height="26dp"
+                            android:background="@drawable/arrow_next_background"
+                            android:layout_centerInParent="true"
+                            />
+
+
+
+                        <ImageButton
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:background="@drawable/ic_right_arrow"
+                            android:layout_centerInParent="true"
+                            android:tint="@color/appColor"
+                            />
+
+                        <!--start date-->
+                        <TextView
+                            android:id="@+id/vd_end_date_tv1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/until"
+                            style="@style/CustomTextStyle12"
+                            android:textColor="@color/black90"
+                            android:layout_alignParentEnd="true"
+                            android:layout_marginEnd="8dp"
+                            android:layout_marginTop="8dp"
+                            />
+                        <TextView
+                            android:id="@+id/vd_end_date_tv"
+                            android:layout_below="@+id/vd_end_date_tv1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            style="@style/CustomTextStyle12"
+                            android:layout_marginTop="2dp"
+                            android:layout_alignParentEnd="true"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="8dp"
+                            android:layout_marginEnd="8dp"
+                            />
+
+                    </RelativeLayout>
+                </android.support.v7.widget.CardView>
+
+                <RelativeLayout
+                    android:id="@+id/vd_map_rl"
+                    android:layout_below="@+id/vd_cv2"
+                    android:elevation="@dimen/cardview_default_elevation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:ignore="UnusedAttribute">
+                    <!--map location-->
+                    <com.google.android.gms.maps.MapView
+                        android:id="@+id/vd_mapview"
+                        android:layout_width="match_parent"
+                        android:layout_height="160dp"
+                        />
+                    <TextView
+                        android:id="@+id/vd_location_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:padding="@dimen/textViewPadding"
+                        android:background="#90000000"
+                        style="@style/CustomTextStyle14"
+                        android:textColor="@color/white"
+                        android:drawableEnd="@drawable/ic_location_white"
+                        android:drawablePadding="8dp"
+                        android:singleLine="true"
+                        android:maxLines="1"
+                        />
+                </RelativeLayout>
+
+
+                <!--other details-->
+                <TextView
+                    android:id="@+id/vd_vehicle_details_tv"
+                    android:layout_below="@+id/vd_map_rl"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Car Details"
+                    style="@style/CustomTextStyle16"
+                    android:textColor="@color/appColor"
+                    android:textStyle="bold"
+                    android:paddingStart="12dp"
+                    android:paddingBottom="8dp"
+                    android:paddingTop="8dp"
+                    android:background="@drawable/two_side_borders"
+                    />
+
+                <RelativeLayout
+                    android:id="@+id/vd_vehicle_details_rl"
+                    android:layout_below="@+id/vd_vehicle_details_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    >
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Insurance"
+                        android:drawableStart="@drawable/ic_insurance"
+                        android:drawablePadding="7dp"
+                        android:textColor="@color/appColor"
+                        style="@style/CustomTextStyle14"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Tax"
+                        android:drawableStart="@drawable/ic_tax"
+                        android:layout_alignParentEnd="true"
+                        android:drawablePadding="7dp"
+                        android:textColor="@color/appColor"
+                        style="@style/CustomTextStyle14"
+                        />
+                </RelativeLayout>
+
+                <!--other details-->
+                <TextView
+                    android:id="@+id/vd_other_details_tv"
+                    android:layout_below="@+id/vd_vehicle_details_rl"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Other Details"
+                    style="@style/CustomTextStyle16"
+                    android:textStyle="bold"
+                    android:textColor="@color/appColor"
+                    android:paddingStart="12dp"
+                    android:paddingBottom="8dp"
+                    android:paddingTop="8dp"
+                    android:background="@drawable/two_side_borders"
+                    />
+                <RelativeLayout
+                    android:id="@+id/vd_other_details_rl"
+                    android:layout_below="@+id/vd_other_details_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    >
+                    <!--excess km charge-->
+                    <TextView
+                        android:id="@+id/vd_excess_km_tv1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Excess Km Charge"
+                        android:textColor="@color/appColor"
+                        style="@style/CustomTextStyle14"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="15/km"
+                        android:drawableStart="@drawable/ic_rupee_black"
+                        android:layout_alignParentEnd="true"
+                        android:drawablePadding="5dp"
+                        android:textColor="@color/appColor"
+                        style="@style/CustomTextStyle16"
+                        android:gravity="center_vertical"
+                        />
+
+                    <TextView
+                        android:layout_below="@+id/vd_excess_km_tv1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Excess price is charged when you travel more than quota of free kilometers."
+                        android:textColor="@color/black90"
+                        style="@style/CustomTextStyle12"
+                        android:layout_marginTop="3dp"
+                        />
+
+                </RelativeLayout>
+
+
+                <!--module to be hidden in status booking-->
+
+                <RelativeLayout
+                    android:layout_below="@+id/vd_other_details_rl"
+                    android:id="@+id/vd_status_booked_rl"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                <!--check boxes-->
+                <TextView
+                    android:id="@+id/vd_equipments_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/accessories"
+                    style="@style/CustomTextStyle16"
+                    android:textStyle="bold"
+                    android:textColor="@color/appColor"
+                    android:paddingStart="12dp"
+                    android:paddingBottom="8dp"
+                    android:paddingTop="8dp"
+                    android:background="@drawable/two_side_borders"
+                    />
+
+
+                <RelativeLayout
+                    android:id="@+id/vd_checkbox_rl"
+                    android:layout_below="@+id/vd_equipments_tv"
+                    android:layout_marginTop="16dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginEnd="16dp"
+                    android:theme="@style/checkBoxStyle"
+                    >
+
+                    <!--insurance-->
+                    <CheckBox
+                        android:id="@+id/vd_insurance_c"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/insurance"
+                        style="@style/CustomTextStyle14"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginEnd="8dp"
+                        android:enabled="false"
+                        />
+
+                    <!--rc-->
+                    <CheckBox
+                        android:id="@+id/vd_rc_c"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/registration_certificate"
+                        style="@style/CustomTextStyle14"
+                        android:enabled="false"
+                        android:layout_marginStart="8dp"
+                        />
+
+                    <!--pollution-->
+                    <CheckBox
+                        android:id="@+id/vd_pollution_c"
+                        android:layout_below="@+id/vd_insurance_c"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/pollution"
+                        style="@style/CustomTextStyle14"
+                        android:enabled="false"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginEnd="8dp"
+                        />
+
+                    <!--knee-->
+                    <CheckBox
+                        android:id="@+id/vd_knee_c"
+                        android:layout_below="@+id/vd_rc_c"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/knee_elbow_caps_hand_gloves"
+                        style="@style/CustomTextStyle14"
+                        android:enabled="false"
+                        android:layout_marginStart="8dp"
+                        />
+
+                </RelativeLayout>
+
+                <!--starting kilometers-->
+                <TextView
+                    android:id="@+id/vd_starting_km_tv"
+                    android:layout_below="@+id/vd_checkbox_rl"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/starting_kilometers"
+                    style="@style/CustomTextStyle16"
+                    android:textStyle="bold"
+                    android:textColor="@color/appColor"
+                    android:paddingStart="12dp"
+                    android:paddingBottom="8dp"
+                    android:paddingTop="8dp"
+                    android:background="@drawable/two_side_borders"
+                    />
+
+                <EditText
+                    android:id="@+id/vd_starting_km_et"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/vd_starting_km_tv"
+                    android:gravity="start"
+                    android:drawableStart="@drawable/ic_starting_km"
+                    android:inputType="number"
+                    android:maxLength="10"
+                    style="@style/CustomTextStyle16"
+                    android:textStyle="bold"
+                    android:textSize="20sp"
+                    android:textColor="@color/appColor"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="12dp"
+                    android:drawablePadding="16dp"
+                    android:enabled="false"
+                    tools:ignore="LabelFor" />
+
+                <!--starting kilometers-->
+                <TextView
+                    android:id="@+id/vd_ending_km_tv"
+                    android:layout_below="@+id/vd_starting_km_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Ending Kilometers"
+                    style="@style/CustomTextStyle16"
+                    android:textStyle="bold"
+                    android:textColor="@color/appColor"
+                    android:paddingStart="12dp"
+                    android:paddingBottom="8dp"
+                    android:paddingTop="8dp"
+                    android:background="@drawable/two_side_borders"
+                    />
+
+                <EditText
+                    android:id="@+id/vd_ending_km_et"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/vd_ending_km_tv"
+                    android:gravity="start"
+                    android:drawableStart="@drawable/ic_starting_km"
+                    android:inputType="number"
+                    android:maxLength="10"
+                    style="@style/CustomTextStyle16"
+                    android:textStyle="bold"
+                    android:textSize="20sp"
+                    android:textColorHint="@color/appColor"
+                    android:textColor="@color/appColor"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="12dp"
+                    android:drawablePadding="16dp"
+                    android:enabled="false"
+                    />
+
+                </RelativeLayout>
+                <!--module to be hidden in status booking-->
+
+            </RelativeLayout>
+        </android.support.v4.widget.NestedScrollView>
+
+    </RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>

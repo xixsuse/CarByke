@@ -14,6 +14,38 @@
         />
 
 
+    <!--empty list display-->
+    <RelativeLayout
+        android:id="@+id/ww_empty_rl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#F3F3F3"
+        android:visibility="gone"
+        android:layout_centerInParent="true"
+        >
+
+        <ImageView
+            android:id="@+id/ww_finish_text"
+            android:layout_width="152dp"
+            android:layout_height="152dp"
+            android:background="@drawable/ic_finish"
+            android:layout_centerHorizontal="true"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ww_finish_text"
+            android:layout_marginTop="32dp"
+            style="@style/CustomTextStyle16"
+            android:gravity="center_horizontal"
+            android:textColor="#4c86cc"
+            android:layout_centerHorizontal="true"
+            android:textStyle="bold"
+            android:text="No Car Available\nPlease Try to search with different time slots"
+            />
+    </RelativeLayout>
+
     <!--loading view-->
     <com.github.ybq.android.spinkit.SpinKitView
         xmlns:app="http://schemas.android.com/apk/res-auto"
