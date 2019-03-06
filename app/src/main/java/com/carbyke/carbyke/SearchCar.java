@@ -69,6 +69,7 @@ public class SearchCar extends AppCompatActivity implements View.OnClickListener
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        overridePendingTransition(R.anim.enter, R.anim.no_animation);
         setContentView(R.layout.activity_search_car);
 
         background_iv = findViewById(R.id.sc_background_iv);
@@ -191,7 +192,7 @@ public class SearchCar extends AppCompatActivity implements View.OnClickListener
 
 //            back button
             case R.id.sc_back_b:
-                super.onBackPressed();
+                onBackPressed();
                 break;
 
 //                pick up date and time
@@ -458,6 +459,11 @@ public class SearchCar extends AppCompatActivity implements View.OnClickListener
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void onBackPressed(){
+        super.onBackPressed();
+        overridePendingTransition(R.anim.no_animation, R.anim.exit);
     }
 
 //    end

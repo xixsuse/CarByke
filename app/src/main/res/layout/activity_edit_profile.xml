@@ -143,6 +143,8 @@
                 android:drawablePadding="@dimen/textViewPadding"
                 android:inputType="textPersonName"
                 android:lines="1"
+                android:maxLines="1"
+                android:maxLength="30"
                 android:layout_marginStart="@dimen/activity_horizontal_margin"
                 android:layout_marginEnd="@dimen/activity_horizontal_margin"
                 android:layout_marginTop="@dimen/activity_vertical_margin"
@@ -161,6 +163,7 @@
                 android:drawableStart="@drawable/ic_ep_email"
                 android:drawablePadding="@dimen/textViewPadding"
                 android:layout_marginTop="24dp"
+                android:maxLines="1"
                 android:layout_marginStart="@dimen/activity_horizontal_margin"
                 android:layout_marginEnd="@dimen/activity_horizontal_margin"
                 />

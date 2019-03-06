@@ -228,8 +228,8 @@ public class BookingVehicleDetails extends AppCompatActivity implements View.OnC
         mMapView.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap mMap) {
-                Double lat, log;
-                lat = Double.valueOf(latitude);
+                double lat, log;
+                lat = Double.parseDouble(latitude);
                 log = Double.valueOf(longitude);
                 googleMap = mMap;
                 googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
@@ -266,7 +266,7 @@ public class BookingVehicleDetails extends AppCompatActivity implements View.OnC
     @SuppressLint("SetTextI18n")
     private void setCarNamePriceDuration() {
         car_name_tv.setText(car_name + "\n" + number_plate);
-        duration_tv.setText(duration);
+        duration_tv.setText("For "+duration);
     }
 
 

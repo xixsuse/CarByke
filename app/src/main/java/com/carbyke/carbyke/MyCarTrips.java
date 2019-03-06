@@ -18,6 +18,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.github.ybq.android.spinkit.SpinKitView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -26,6 +28,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -66,7 +69,7 @@ public class MyCarTrips extends Fragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_my_car_trips, container, false);
@@ -80,6 +83,8 @@ public class MyCarTrips extends Fragment {
         finish_tv = view.findViewById(R.id.ct_finish_tv);
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(context);
+        mLayoutManager.setReverseLayout(true);
+        mLayoutManager.setStackFromEnd(true);
         recyclerView.setLayoutManager(mLayoutManager);
 
         emptyRelativeLayout = view.findViewById(R.id.ct_empty_rl);
@@ -135,6 +140,10 @@ public class MyCarTrips extends Fragment {
     private void getBookingData() {
         if (booking_keys_al.isEmpty()){
             emptyRelativeLayout.setVisibility(View.VISIBLE);
+            YoYo.with(Techniques.Landing)
+                    .repeat(0)
+                    .duration(700)
+                    .playOn(emptyRelativeLayout);
             dismiss();
         }
 

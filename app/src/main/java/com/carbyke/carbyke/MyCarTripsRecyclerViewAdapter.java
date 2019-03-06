@@ -4,13 +4,10 @@ import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,17 +15,14 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.github.sumimakito.awesomeqr.option.RenderOption;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -37,8 +31,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-
-import mehdi.sakout.fancybuttons.FancyButton;
 
 public class MyCarTripsRecyclerViewAdapter extends RecyclerView.Adapter<MyCarTripsRecyclerViewAdapter.ViewHolder> {
 
@@ -76,18 +68,27 @@ public class MyCarTripsRecyclerViewAdapter extends RecyclerView.Adapter<MyCarTri
         holder.car_name_tv.setText(info.getCar_name());
         holder.number_plate_tv.setText(info.getNumber_plate());
         holder.price_tv.setText(""+addComma(info.getPayable_amount())+"/-");
-        holder.start_date_tv.setText(info.getStart_date().substring(info.getStart_date().length() - 20));
-        holder.end_date_tv.setText(info.getEnd_date().substring(info.getEnd_date().length() - 20));
+        try{
+            holder.start_date_tv.setText(info.getStart_date().substring(info.getStart_date().length() - 20));
+        } catch (Exception e){
+            holder.start_date_tv.setText(info.getStart_date());
+        }
+        try{
+            holder.end_date_tv.setText(info.getEnd_date().substring(info.getEnd_date().length() - 20));
+        } catch (Exception e){
+            holder.end_date_tv.setText(info.getEnd_date());
+        }
 
         if (TextUtils.equals(info.getTrip_status(), "BOOKED")){
             holder.status_tv.setText("STATUS: "+info.getTrip_status());
             holder.status_tv.setTextColor(context.getResources().getColor(R.color.googleYellow));
             holder.relativeLayout.setBackgroundColor(context.getResources().getColor(R.color.googleYellow));
-            setCalculatedDaysOrHours(info.getStart_date(), holder);
+            setCalculatedDaysOrHoursBooked(info.getStart_date(), holder);
         } else if (TextUtils.equals(info.getTrip_status(), "ACTIVE")){
             holder.status_tv.setText("STATUS: "+info.getTrip_status());
             holder.status_tv.setTextColor(context.getResources().getColor(R.color.lightGreen));
             holder.relativeLayout.setBackgroundColor(context.getResources().getColor(R.color.lightGreen));
+            setCalculatedDaysOrHoursActive(info.getEnd_date(), holder);
         }  else if (TextUtils.equals(info.getTrip_status(), "COMPLETED")){
             holder.status_tv.setText("STATUS: "+info.getTrip_status());
             holder.status_tv.setTextColor(context.getResources().getColor(R.color.blue_btn_bg_pressed_color));
@@ -167,7 +168,7 @@ public class MyCarTripsRecyclerViewAdapter extends RecyclerView.Adapter<MyCarTri
     }
 
 
-    private void setCalculatedDaysOrHours(String date, ViewHolder holder){
+    private void setCalculatedDaysOrHoursBooked(String date, ViewHolder holder){
 
         try {
 
@@ -186,7 +187,7 @@ public class MyCarTripsRecyclerViewAdapter extends RecyclerView.Adapter<MyCarTri
             if (TextUtils.equals(minutes, "0")) minutes = null;
 
             holder.starts_in_tv.setVisibility(View.VISIBLE);
-            setTimeLeftFrTrip(days, hours, minutes, holder, date);
+            setTimeLeftFrTripBooked(days, hours, minutes, holder, date);
 
 
         } catch (Exception e) {
@@ -195,7 +196,7 @@ public class MyCarTripsRecyclerViewAdapter extends RecyclerView.Adapter<MyCarTri
     }
 
     @SuppressLint("SetTextI18n")
-    private void setTimeLeftFrTrip(String days, String hours, String minutes, ViewHolder holder, String date) {
+    private void setTimeLeftFrTripBooked(String days, String hours, String minutes, ViewHolder holder, String date) {
 
         String d,h,m;
         if (TextUtils.equals(days, "1")) d = "DAY";
@@ -208,23 +209,149 @@ public class MyCarTripsRecyclerViewAdapter extends RecyclerView.Adapter<MyCarTri
         String msg = "";
         if (!TextUtils.isEmpty(days) && !TextUtils.isEmpty(hours) && !TextUtils.isEmpty(minutes)){
             msg = "Trip Starts in "+days+" "+d+", "+hours+" "+h+" and "+minutes+" "+m;
+            holder.starts_in_tv.setText(msg+"\n("+date+")");
+            if (Integer.parseInt(days) <= 0 || Integer.parseInt(hours) <=0 || Integer.parseInt(minutes) <=0){
+                msg = "You are already late for trip by "+Integer.parseInt(days)*-1+" days, "+Integer.parseInt(hours)*-1
+                        +"hours and "+Integer.parseInt(minutes)*-1+" minutes.\nTrip should have started by ";
+                holder.starts_in_tv.setText(msg+""+date+".");
+                holder.starts_in_tv.setTextColor(context.getResources().getColor(R.color.red));            }
         }
         else if (!TextUtils.isEmpty(days) && TextUtils.isEmpty(hours) && TextUtils.isEmpty(minutes)){
             msg = "Trip Starts in "+days+" "+d;
+            holder.starts_in_tv.setText(msg+"\n("+date+")");
+            if (Integer.parseInt(days) <= 0){
+                msg = "You are already late for trip by "+Integer.parseInt(days)*-1+" days "+".\nTrip should have started by ";
+                holder.starts_in_tv.setText(msg+""+date+".");
+                holder.starts_in_tv.setTextColor(context.getResources().getColor(R.color.red));            }
         }
         else if (TextUtils.isEmpty(days) && !TextUtils.isEmpty(hours) && TextUtils.isEmpty(minutes)){
             msg = "Trip Starts in "+hours+" "+h;
+            holder.starts_in_tv.setText(msg+"\n("+date+")");
+            if (Integer.parseInt(hours) <= 0){
+                msg = "You are already late for trip by "+Integer.parseInt(hours)*-1+" hours "+".\nTrip should have started by ";
+                holder.starts_in_tv.setText(msg+""+date+".");
+                holder.starts_in_tv.setTextColor(context.getResources().getColor(R.color.red));            }
         }
         else if (TextUtils.isEmpty(days) && TextUtils.isEmpty(hours) && !TextUtils.isEmpty(minutes)){
             msg = "Trip Starts in "+minutes+" "+m;
+            holder.starts_in_tv.setText(msg+"\n("+date+")");
+            if (Integer.parseInt(minutes) <= 0){
+                msg = "You are already late for trip by "+Integer.parseInt(minutes)*-1+" minutes "+".\nTrip should have started by ";
+                holder.starts_in_tv.setText(msg+""+date+".");
+                holder.starts_in_tv.setTextColor(context.getResources().getColor(R.color.red));            }
         }
         else if (!TextUtils.isEmpty(days) && !TextUtils.isEmpty(hours) && TextUtils.isEmpty(minutes)){
             msg = "Trip Starts in "+days+" "+d+" and "+hours+" "+h;
+            holder.starts_in_tv.setText(msg+"\n("+date+")");
+            if (Integer.parseInt(days) <=0 || Integer.parseInt(hours) <=0){
+                msg = "You are already late for trip by "+Integer.parseInt(days)*-1+" days and "+Integer.parseInt(hours)*-1+" hours "+".\nTrip should have started by ";
+                holder.starts_in_tv.setText(msg+""+date+".");
+                holder.starts_in_tv.setTextColor(context.getResources().getColor(R.color.red));            }
         }
         else if (TextUtils.isEmpty(days) && !TextUtils.isEmpty(hours) && !TextUtils.isEmpty(minutes)){
             msg = "Trip Starts in "+hours+" "+h+" and "+minutes+" "+m;
+            holder.starts_in_tv.setText(msg+"\n("+date+")");
+            if (Integer.parseInt(hours) <=0 || Integer.parseInt(minutes) <=0){
+                msg = "You are already late for trip by "+Integer.parseInt(hours)*-1+" hours and "+Integer.parseInt(minutes)*-1+" minutes "+".\nTrip should have started by ";
+                holder.starts_in_tv.setText(msg+""+date+".");
+                holder.starts_in_tv.setTextColor(context.getResources().getColor(R.color.red));
+            }
         }
-        holder.starts_in_tv.setText(msg+"\n("+date+")");
+    }
+
+
+
+
+    private void setCalculatedDaysOrHoursActive(String date, ViewHolder holder){
+
+        try {
+
+            Date d1 = Calendar.getInstance().getTime();
+            @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("EEEE MMM dd yyyy hh:mm aaa");
+            Date d2 = sdf.parse(date);
+
+            int time;
+
+            time = (int) TimeUnit.MINUTES.convert(d2.getTime() - d1.getTime(), TimeUnit.MILLISECONDS);
+            String days = String.valueOf(time/(24*60));
+            String hours = String.valueOf((time%(24*60)) / 60);
+            String minutes = String.valueOf((time%(24*60)) % 60);
+            if (TextUtils.equals(days, "0")) days = null;
+            if (TextUtils.equals(hours, "0")) hours = null;
+            if (TextUtils.equals(minutes, "0")) minutes = null;
+
+            holder.starts_in_tv.setVisibility(View.VISIBLE);
+            setTimeLeftFrTripActive(days, hours, minutes, holder, date);
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
+    private void setTimeLeftFrTripActive(String days, String hours, String minutes, ViewHolder holder, String date) {
+
+        String d,h,m;
+        if (TextUtils.equals(days, "1")) d = "DAY";
+        else d = "DAYS";
+        if (TextUtils.equals(hours, "1")) h = "HOUR";
+        else h = "HOURS";
+        if (TextUtils.equals(minutes, "1")) m = "MINUTE";
+        else m = "MINUTES";
+
+        String placeholder = "Trip ends in ";
+        String msg = "";
+        if (!TextUtils.isEmpty(days) && !TextUtils.isEmpty(hours) && !TextUtils.isEmpty(minutes)){
+            msg = placeholder+days+" "+d+", "+hours+" "+h+" and "+minutes+" "+m;
+            holder.starts_in_tv.setText(msg+"\n("+date+")");
+            if (Integer.parseInt(days) <= 0 || Integer.parseInt(hours) <=0 || Integer.parseInt(minutes) <=0){
+                msg = "Trip is ahead end trip time by "+Integer.parseInt(days)*-1+" days, "+Integer.parseInt(hours)*-1
+                        +"hours and "+Integer.parseInt(minutes)*-1+" minutes.\nTrip should have ended by ";
+                holder.starts_in_tv.setText(msg+""+date+".");
+                holder.starts_in_tv.setTextColor(context.getResources().getColor(R.color.red));            }
+        }
+        else if (!TextUtils.isEmpty(days) && TextUtils.isEmpty(hours) && TextUtils.isEmpty(minutes)){
+            msg = placeholder+days+" "+d;
+            holder.starts_in_tv.setText(msg+"\n("+date+")");
+            if (Integer.parseInt(days) <= 0){
+                msg = "Trip is ahead end trip time by "+Integer.parseInt(days)*-1+" days "+".\nTrip should have ended by ";
+                holder.starts_in_tv.setText(msg+""+date+".");
+                holder.starts_in_tv.setTextColor(context.getResources().getColor(R.color.red));            }
+        }
+        else if (TextUtils.isEmpty(days) && !TextUtils.isEmpty(hours) && TextUtils.isEmpty(minutes)){
+            msg = placeholder+hours+" "+h;
+            holder.starts_in_tv.setText(msg+"\n("+date+")");
+            if (Integer.parseInt(hours) <= 0){
+                msg = "Trip is ahead end trip time by "+Integer.parseInt(hours)*-1+" hours "+".\nTrip should have ended by ";
+                holder.starts_in_tv.setText(msg+""+date+".");
+                holder.starts_in_tv.setTextColor(context.getResources().getColor(R.color.red));            }
+        }
+        else if (TextUtils.isEmpty(days) && TextUtils.isEmpty(hours) && !TextUtils.isEmpty(minutes)){
+            msg = placeholder+minutes+" "+m;
+            holder.starts_in_tv.setText(msg+"\n("+date+")");
+            if (Integer.parseInt(minutes) <= 0){
+                msg = "Trip is ahead end trip time by "+Integer.parseInt(minutes)*-1+" minutes "+".\nTrip should have ended by ";
+                holder.starts_in_tv.setText(msg+""+date+".");
+                holder.starts_in_tv.setTextColor(context.getResources().getColor(R.color.red));            }
+        }
+        else if (!TextUtils.isEmpty(days) && !TextUtils.isEmpty(hours) && TextUtils.isEmpty(minutes)){
+            msg = placeholder+days+" "+d+" and "+hours+" "+h;
+            holder.starts_in_tv.setText(msg+"\n("+date+")");
+            if (Integer.parseInt(days) <=0 || Integer.parseInt(hours) <=0){
+                msg = "Trip is ahead end trip time by "+Integer.parseInt(days)*-1+" days and "+Integer.parseInt(hours)*-1+" hours "+".\nTrip should have ended by ";
+                holder.starts_in_tv.setText(msg+""+date+".");
+                holder.starts_in_tv.setTextColor(context.getResources().getColor(R.color.red));            }
+        }
+        else if (TextUtils.isEmpty(days) && !TextUtils.isEmpty(hours) && !TextUtils.isEmpty(minutes)){
+            msg = placeholder+hours+" "+h+" and "+minutes+" "+m;
+            holder.starts_in_tv.setText(msg+"\n("+date+")");
+            if (Integer.parseInt(hours) <=0 || Integer.parseInt(minutes) <=0){
+                msg = "Trip is ahead end trip time by "+Integer.parseInt(hours)*-1+" hours and "+Integer.parseInt(minutes)*-1+" minutes "+".\nTrip should have ended by ";
+                holder.starts_in_tv.setText(msg+""+date+".");
+                holder.starts_in_tv.setTextColor(context.getResources().getColor(R.color.red));
+            }
+        }
     }
 
 
@@ -271,14 +398,14 @@ public class MyCarTripsRecyclerViewAdapter extends RecyclerView.Adapter<MyCarTri
     private void addSpaceAtLast(int position, ViewHolder holder) {
         //adding padding to last card view
 
-        if( position == getItemCount() -1){
+        if( position == 0){
             FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
                     FrameLayout.LayoutParams.WRAP_CONTENT,
                     FrameLayout.LayoutParams.WRAP_CONTENT);
             params.setMargins(0
-                    ,(int) context.getResources().getDimension(R.dimen.dp14)
+                    ,(int) context.getResources().getDimension(R.dimen.dp12)
                     , 0
-                    , (int) context.getResources().getDimension(R.dimen.dp14));
+                    , (int) context.getResources().getDimension(R.dimen.dp12));
             holder.cardView.setLayoutParams(params);
         }
     }

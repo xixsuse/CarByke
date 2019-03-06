@@ -3,6 +3,7 @@ package com.carbyke.carbyke;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.ResultReceiver;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -58,8 +59,6 @@ public class BookVehicle extends AppCompatActivity implements View.OnClickListen
     private ImageButton back_ib;
     private ProgressDialog progressDialog;
     private Button proceed_b;
-    private FirebaseAuth firebaseAuth;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,7 +81,7 @@ public class BookVehicle extends AppCompatActivity implements View.OnClickListen
         progressDialog.setMessage("Please wait...");
         progressDialog.setCancelable(false);
 
-        firebaseAuth = FirebaseAuth.getInstance();
+      //  firebaseAuth = FirebaseAuth.getInstance();
 
 
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -141,8 +140,8 @@ public class BookVehicle extends AppCompatActivity implements View.OnClickListen
         mMapView.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap mMap) {
-                Double lat, log;
-                lat = Double.valueOf(latitude);
+                double lat, log;
+                lat = Double.parseDouble(latitude);
                 log = Double.valueOf(longitude);
                 googleMap = mMap;
                 googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
@@ -161,10 +160,7 @@ public class BookVehicle extends AppCompatActivity implements View.OnClickListen
                 CameraPosition cameraPosition = new CameraPosition.Builder().target(
                         new LatLng(lat, log)).zoom(13).build();
                 googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-                googleMap.getUiSettings().setZoomControlsEnabled(false);
-                googleMap.getUiSettings().setRotateGesturesEnabled(true);
-                googleMap.getUiSettings().setCompassEnabled(false);
-                googleMap.getUiSettings().setScrollGesturesEnabled(false);
+                googleMap.getUiSettings().setAllGesturesEnabled(false);
             }
         });
     }
@@ -278,7 +274,7 @@ public class BookVehicle extends AppCompatActivity implements View.OnClickListen
                     .setTitleText("Confirm?")
                     .setContentText("Please click on confirm \nto book car.")
                     .setConfirmText("Confirm")
-                    .setCustomImage(R.drawable.ic_car_booking)
+                    .setCustomImage(R.drawable.ic_car_placeholder)
                     .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                         @Override
                         public void onClick(SweetAlertDialog sDialog) {
@@ -336,16 +332,24 @@ public class BookVehicle extends AppCompatActivity implements View.OnClickListen
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.w("sds4", response.toString());
                         try {
                             final int status = response.getInt("status");
                             if (status == 1280){ // success
                                 String message = response.getString("message");
-                                new SweetAlertDialog(BookVehicle.this, SweetAlertDialog.SUCCESS_TYPE)
+                                SweetAlertDialog sweetAlertDialog = new SweetAlertDialog(BookVehicle.this, SweetAlertDialog.SUCCESS_TYPE)
                                         .setTitleText(car_name + " Booking Successful")
                                         .setContentText(message)
                                         .setConfirmText("Got it")
-                                        .show();
+                                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                            @Override
+                                            public void onClick(SweetAlertDialog sDialog) {
+                                                sDialog.dismissWithAnimation();
+                                                ((ResultReceiver)getIntent().getParcelableExtra("finish_book_vehicle")).send(1, new Bundle());
+                                                BookVehicle.this.finish();
+                                            }
+                                        });
+                                sweetAlertDialog.setCancelable(false);
+                                sweetAlertDialog.show();
                             }
                             else if (status == 1100 || status == 1700){  //failed or error
                                 final String error = response.getString("error");

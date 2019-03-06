@@ -1,10 +1,13 @@
 package com.carbyke.carbyke;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
+import android.os.Bundle;
+import android.os.ResultReceiver;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
@@ -125,7 +128,14 @@ public class CarListWithFuelRecyclerViewAdapter extends RecyclerView.Adapter<Car
                 intent.putExtra("longitude", mySharedPrefs.getPickLocationLong());
                 intent.putExtra("pick_up_location_name", mySharedPrefs.getPickLocationMapLocation());
 
-                context.startActivity(intent);
+                intent.putExtra("finish_book_vehicle", new ResultReceiver(null) {
+                    @Override
+                    protected void onReceiveResult(int resultCode, Bundle resultData) {
+                        ((Activity)context).finish();
+                    }
+                });
+                ((Activity)context).startActivityForResult(intent,1);
+                //context.startActivity(intent);
             }
         });
 

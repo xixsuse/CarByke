@@ -41,7 +41,8 @@
             android:textColor="#4c86cc"
             android:layout_centerHorizontal="true"
             android:textStyle="bold"
-            android:text="No Trip Available\nTap here to book your first cars."
+            android:textAllCaps="true"
+            android:text="No Trip Available!\n\nTap here\nTo book your first car."
             />
     </RelativeLayout>
 
