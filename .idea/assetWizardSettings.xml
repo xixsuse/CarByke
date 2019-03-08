@@ -14,8 +14,8 @@
                         <option name="values">
                           <map>
                             <entry key="assetSourceType" value="FILE" />
-                            <entry key="outputName" value="ic_starting_km" />
-                            <entry key="sourceFile" value="C:\Users\Dell\Downloads\speedometer.svg" />
+                            <entry key="outputName" value="ic_my_trips" />
+                            <entry key="sourceFile" value="C:\Users\Dell\Downloads\world.svg" />
                           </map>
                         </option>
                       </PersistentState>

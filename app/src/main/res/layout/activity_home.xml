@@ -25,6 +25,13 @@
         app:itemIconTint="@color/black"
         android:background="@color/white"
         app:headerLayout="@layout/nav_header_home"
-        app:menu="@menu/activity_home_drawer" />
+        app:menu="@menu/activity_home_drawer" >
+
+        <include
+            layout="@layout/nav_panel_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </android.support.design.widget.NavigationView>
 
 </android.support.v4.widget.DrawerLayout>

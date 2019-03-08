@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="#EDF0F2"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/hh_rl"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#EDF0F2"
+        android:fitsSystemWindows="true"
+        android:theme="@style/MyCustomAppTheme">
+        <!--sign up layout-->
+        <RelativeLayout
+            android:id="@+id/hh_not_sign_in_rl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#EDF0F2"
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingTop="@dimen/activity_vertical_margin"
+            >
+            <!--demo profile pic-->
+            <ImageView
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:background="@drawable/ic_placeholder_profile_pic"
+                android:layout_centerVertical="true"
+                tools:ignore="ContentDescription" />
+            <!--sign up-->
+            <TextView
+                android:id="@+id/hh_login_sign"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/CustomTextStyle18"
+                android:text="@string/login_or_sign_up"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:textColor="#75828F"
+                />
+
+        </RelativeLayout>
+
+        <!--when signed in-->
+        <RelativeLayout
+            android:id="@+id/hh_signed_in_rl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/activity_vertical_margin"
+            android:visibility="gone"
+            >
+            <!--profile pic-->
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/hh_profile_image_iv"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:background="@drawable/ic_placeholder_profile_pic"
+                />
+
+            <!--name-->
+            <TextView
+                android:id="@+id/hh_name_tv"
+                android:layout_toEndOf="@+id/hh_profile_image_iv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:hint="@string/name"
+                style="@style/CustomTextStyle12"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                />
+
+            <!--email-->
+            <TextView
+                android:id="@+id/hh_email_tv"
+                android:layout_toEndOf="@+id/hh_profile_image_iv"
+                android:layout_below="@+id/hh_name_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="5dp"
+                android:hint="@string/email"
+                style="@style/CustomTextStyle12"
+                android:textSize="14sp"
+                />
+
+            <!--phone-->
+            <TextView
+                android:id="@+id/hh_phone_tv"
+                android:layout_toEndOf="@+id/hh_profile_image_iv"
+                android:layout_below="@+id/hh_email_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="5dp"
+                android:hint="@string/phone_number"
+                style="@style/CustomTextStyle12"
+                android:textSize="14sp"
+                />
+
+
+        </RelativeLayout>
+        </RelativeLayout>
+
+
+    <ListView
+        android:id="@+id/list"
+        android:divider="@color/black"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:layout_below="@id/hh_rl"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:text="BETA 1.0.0"
+        style="@style/CustomTextStyle16"
+        android:gravity="center_horizontal"
+        android:padding="12dp"
+        android:background="@color/appColor"
+        android:textColor="@color/white"
+        android:textStyle="normal"
+        />
+
+</RelativeLayout>
+
